@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import nbformat,fire
 from nbconvert.preprocessors import ExecutePreprocessor
 
