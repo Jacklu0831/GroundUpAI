@@ -11,6 +11,29 @@ import math
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from operations import *
 
+def lin(x, w, b):
+    return x @ w + b
+
+def lin_grad(inp, out, w, b):
+    inp.g = out.g @ w.t()
+    w.g = inp.t() @ out.g
+    b.g = out.g.sum(0)
+
+def relu(x):
+    return x.clamp_min(0.) - 0.5
+
+def relu_grad(inp, out):
+    inp.g = (inp > 0).float() * out.g
+
+def Flatten(inp):
+    return inp.view(-1)
+
+def mse(pred, y):
+    return (pred.squeeze(-1) - y).pow(2).mean()
+
+def mse_grad(inp, tar):
+    inp.g = 2.*(inp.squeeze() - tar).unsqueeze(-1) / inp.shape[0]
+
 def he_init(m, n):
     return torch.randn(m, n) * (2./m)**0.5
 
@@ -18,6 +41,18 @@ def init(m, n, relu):
     if relu:
         return he_init(m, n)
     return torch.randn(m, n) * (1./m)**0.5
+
+def forward_backward(inp, tar):
+    # forward
+    l1 = lin(inp, w1, b1)
+    l2 = relu(l1)
+    out = lin(l2, w2, b2)
+    loss = mse(out, tar)
+    # backward
+    mse_grad(out, tar)
+    lin_grad(l2, out, w2, b2)
+    relu_grad(l1, l2)
+    lin_grad(inp, l1, w1, b1)
 
 class Module():
     def __call__(self, *args):

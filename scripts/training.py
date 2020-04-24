@@ -6,29 +6,97 @@
 import sys
 from os.path import join
 import math
+import matplotlib.pyplot as plt
 
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from operations import *
 from fcn_revised import *
 
-def softmax(inp):
-    # prone to overflow (floating aint precise)
-    return inp.exp() / inp.exp().sum(-1, keepdim=True)
+class Dataset():
+    def __init__(self, x_data, y_data):
+        self.x_data = x_data
+        self.y_data = y_data
 
-def log_sum_exp(inp):
-    e = inp.max(-1)[0]
-    return e + (inp - e[:, None]).exp().sum(-1).log()
+    def __len__(self):
+        return len(self.x_data)
 
-def log_softmax(inp):
-    # LogSumExp trick to avoid floating point error
-    return inp - log_sum_exp(inp).unsqueeze(-1)
+    def __getitem__(self, i):
+        return self.x_data[i], self.y_data[i]
 
-def nll_loss(pre, tar):
-    # use multiple indexing
-    return -pre[range(tar.shape[0]), tar].mean()
+class Sampler():
+    def __init__(self, size, batch_size, shuffle=True):
+        self.size = size
+        self.batch_size = batch_size
+        self.shuffle = shuffle
 
-def cross_entropy(inp, tar):
-    return nll_loss(log_softmax(inp), tar)
+    def __iter__(self):
+        self.idxs = torch.randperm(self.size) if self.shuffle else torch.arange(self.size)
+        for i in range(0, self.size, self.batch_size):
+            yield self.idxs[i: i+self.batch_size]
 
-def accuracy(pre, tar):
+def collate(batch):
+    x_batch, y_batch = zip(*batch)
+    return torch.stack(x_batch), torch.stack(y_batch)
+
+class DataLoader():
+    def __init__(self, dataset, sampler, collate_fn):
+        self.dataset = dataset
+        self.sampler = sampler
+        self.collate_fn = collate_fn
+
+    def __iter__(self):
+        for idxs in self.sampler:
+            yield self.collate_fn([self.dataset[i] for i in idxs])
+
+def compute_accuracy(pre, tar):
     return (torch.argmax(pre, dim=1) == tar).float().mean()
+
+class Optimizer():
+    def __init__(self, parameters, learning_rate):
+        self.parameters = parameters
+        self.learning_rate = learning_rate
+
+    def step(self):
+        for parameter in self.parameters:
+            parameter.step(self.learning_rate)
+
+    def zero_grad(self):
+        for parameter in self.parameters:
+            parameter.zero_grad()
+
+def fit(num_epochs, model, optimizer, loss_fn, train_data, valid_data):
+    accuracies = []
+    losses = []
+
+    for epoch in range(1, num_epochs+1):
+        for x_batch, y_batch in train_data:
+            pred = model(x_batch)
+            loss = loss_fn(pred, y_batch)
+
+            loss_fn.backward()
+            model.backward()
+
+            optimizer.step()
+            optimizer.zero_grad()
+
+        count = accuracy = loss = 0
+        for x_batch, y_batch in valid_data:
+            pred = model(x_batch)
+            accuracy += compute_accuracy(pred, y_batch)
+            loss += loss_fn(pred, y_batch)
+            count += 1
+        accuracy /= count
+        loss /= count
+
+        accuracies.append(accuracy)
+        losses.append(loss)
+        print(f'Epoch {epoch}    Accuracy {round(accuracy.item(), 3)}    Loss {round(loss.item(), 3)}')
+
+    return accuracies, losses
+
+def plot(data, label):
+    plt.plot(list(range(1,len(data)+1)), data)
+    plt.xlabel('epoch')
+    plt.ylabel(label)
+    plt.xticks(list(range(1,len(data)+1)))
+    plt.show()

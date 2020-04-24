@@ -26,7 +26,7 @@ def init_bias_zero(num_hidden):
     return torch.zeros(num_hidden)
 
 def init_bias_uni(num_hidden):
-    return torch.zeros()
+    return torch.randn(num_hidden)
 
 def init_bias(num_hidden, zero=True):
     if zero:
@@ -36,35 +36,40 @@ def init_bias(num_hidden, zero=True):
 
 class Parameter():
     # own data struct instead of acyclic directed graph
-    def __init__(self, data=torch.Tensor(), requires_grad=True):
+    def __init__(self, data, requires_grad=True):
         self.data = data
         self.requires_grad = requires_grad
-        self.grad = 0
+        self.grad = 0.
 
     def __get__(self, instance, owner):
         return self.data
 
-    def step(self, lr):
-        self.data -= lr * self.grad
+    def __repr__(self):
+        return f'shape: {self.data.shape}   grad: {self.requires_grad}'
+
+    def step(self, learning_rate):
+        self.data -= learning_rate * self.grad
 
     def zero_data(self):
-        self.data = torch.zero_()
+        self.data.zero_()
 
     def zero_grad(self):
-        self.grad = 0
+        self.grad = 0.
 
-    def update(self, new_grad):
-        self.grad = new_grad
+    def update(self, grad):
+        self.grad = grad
 
 class Sequential():
     def __init__(self, *args):
         self.layers = list(args)
-        self.train = True
 
     def __call__(self, x):
-        for layer in layers:
+        for layer in self.layers:
             x = layer(x)
         return x
+
+    def __repr__(self):
+        return '\n'.join(f'Layer{i}: {layer}' for i, layer in enumerate(self.layers, 1))
 
     def backward(self):
         for layer in reversed(self.layers):
@@ -76,9 +81,8 @@ class Sequential():
                 yield parameter
 
 class Module():
-    def __init__(self, name=None):
+    def __init__(self):
         self._parameters = {}
-        self.name = name if name else 'unnamed_module'
 
     def __setattr__(self, k, v):
         if isinstance(v, Parameter):
@@ -100,14 +104,36 @@ class Module():
     def backward(self):
         self.bwd(self.out, *self.args)
 
+def softmax(inp):
+    # prone to overflow (floating aint precise)
+    return inp.exp() / inp.exp().sum(-1, keepdim=True)
+
+def log_sum_exp(inp):
+    e = inp.max(-1)[0]
+    return e + (inp - e[:, None]).exp().sum(-1).log()
+
+def log_softmax(inp):
+    # LogSumExp trick to avoid floating point error
+    return inp - log_sum_exp(inp).unsqueeze(-1)
+
+def nll_loss(pre, tar):
+    # use multiple indexing
+    return -pre[range(tar.shape[0]), tar].mean()
+
+def cross_entropy(inp, tar):
+    return nll_loss(log_softmax(inp), tar)
+
 class Linear(Module):
     def __init__(self, in_dim, num_hidden, end=False, require_grad=True):
         super().__init__()
         self.w = Parameter(init_weight(in_dim, num_hidden, end), require_grad)
-        self.b = Parameter(init_bias(num_hidden))
+        self.b = Parameter(init_bias(num_hidden), require_grad)
+
+    def __repr__(self):
+        return f'Linear({self.w.data.shape[0]}, {self.w.data.shape[1]})'
 
     def fwd(self, inp):
-        return inp @ self.w.data + self.b
+        return inp @ self.w.data + self.b.data
 
     def bwd(self, out, inp):
         inp.g = out.g @ self.w.data.t()
@@ -115,8 +141,23 @@ class Linear(Module):
         self.b.update(out.g.sum(0))
 
 class ReLU(Module):
+    def __repr__(self):
+        return f'ReLU()'
+
     def fwd(self, inp):
         return inp.clamp_min(0.) - 0.5
 
     def bwd(self, out, inp):
         inp.g = (inp > 0).float() * out.g
+
+class CrossEntropy(Module):
+    def __repr__(self):
+        return f'CrossEntropy()'
+
+    def fwd(self, inp, tar):
+        return cross_entropy(inp, tar)
+
+    def bwd(self, loss, inp, tar):
+        inp_soft = softmax(inp)
+        inp_soft[range(tar.shape[0]), tar] -= 1
+        inp.g = inp_soft / tar.shape[0]
