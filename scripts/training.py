@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from operations import *
-from fcn_revised import *
+from sequential_model import *
 
 class Dataset():
     def __init__(self, x_data, y_data):
@@ -37,16 +37,6 @@ class Sampler():
 def collate(batch):
     x_batch, y_batch = zip(*batch)
     return torch.stack(x_batch), torch.stack(y_batch)
-
-class DataLoader():
-    def __init__(self, dataset, sampler, collate_fn):
-        self.dataset = dataset
-        self.sampler = sampler
-        self.collate_fn = collate_fn
-
-    def __iter__(self):
-        for idxs in self.sampler:
-            yield self.collate_fn([self.dataset[i] for i in idxs])
 
 def compute_accuracy(pre, tar):
     return (torch.argmax(pre, dim=1) == tar).float().mean()
