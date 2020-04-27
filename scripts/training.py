@@ -17,6 +17,9 @@ class Dataset():
         self.x_data = x_data
         self.y_data = y_data
 
+    def __repr__(self):
+        return f'(Dataset) x: {tuple(self.x_data.shape)}, y: {tuple(self.y_data.shape)}'
+
     def __len__(self):
         return len(self.x_data)
 
@@ -24,7 +27,7 @@ class Dataset():
         return self.x_data[i], self.y_data[i]
 
 class Sampler():
-    def __init__(self, size, batch_size, shuffle=True):
+    def __init__(self, size, batch_size, shuffle):
         self.size = size
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -34,9 +37,50 @@ class Sampler():
         for i in range(0, self.size, self.batch_size):
             yield self.idxs[i: i+self.batch_size]
 
+    def __repr__(self):
+        return f'(Sampler) total: {self.size}, batch_size: {self.batch_size}, shuffle: {self.shuffle}'
+
+    def __len__(self):
+        return self.batch_size
+
 def collate(batch):
     x_batch, y_batch = zip(*batch)
     return torch.stack(x_batch), torch.stack(y_batch)
+
+class DataLoader():
+    def __init__(self, dataset, sampler, collate_fn=collate):
+        self.dataset = dataset
+        self.sampler = sampler
+        self.collate_fn = collate_fn
+
+    def __iter__(self):
+        for idxs in self.sampler:
+            yield self.collate_fn([self.dataset[i] for i in idxs])
+
+    def __repr__(self):
+        return f'(DataLoader) \n\t\t{self.dataset}\n\t\t{self.sampler}'
+
+    def __len__(self):
+        return math.ceil(len(self.dataset) / len(self.sampler))
+
+class DataBunch():
+    def __init__(self, train_dl, valid_dl):
+        self.train_dl = train_dl
+        self.valid_dl = valid_dl
+
+    @property
+    def train_ds(self):
+        return self.train_dl.dataset
+
+    @property
+    def valid_ds(self):
+        return self.valid_dl.dataset
+
+    def __repr__(self):
+        return f'(DataBunch) \n\t{self.train_dl}\n\t{self.valid_dl}'
+
+    def __len__(self):
+        return len(self.train_dl)
 
 def compute_accuracy(pre, tar):
     return (torch.argmax(pre, dim=1) == tar).float().mean()
@@ -46,6 +90,9 @@ class Optimizer():
         self.parameters = parameters
         self.learning_rate = learning_rate
 
+    def __repr__(self):
+        return f'(Optimizer) num_params: {len(self.parameters)}, learning_rate: {self.learning_rate}'
+
     def step(self):
         for parameter in self.parameters:
             parameter.step(self.learning_rate)
@@ -54,26 +101,49 @@ class Optimizer():
         for parameter in self.parameters:
             parameter.zero_grad()
 
-def fit(num_epochs, model, optimizer, loss_fn, train_data, valid_data):
+def get_data_bunch(x_train, y_train, x_valid, y_valid, batch_size):
+    train_ds = Dataset(x_train, y_train)
+    valid_ds = Dataset(x_valid, y_valid)
+    train_dl = DataLoader(train_ds, Sampler(len(train_ds), batch_size, True))
+    valid_dl = DataLoader(valid_ds, Sampler(len(valid_ds), batch_size*2, False)) # twice batch size (no backprop)
+    return DataBunch(train_dl, valid_dl)
+
+def get_model(data_bunch, learning_rate=0.1, num_hidden=50):
+    in_dim = data_bunch.train_ds.x_data.shape[1]
+    out_dim = int(max(data_bunch.train_ds.y_data) + 1)
+    model = Sequential(Linear(in_dim, num_hidden), ReLU(), Linear(num_hidden, out_dim, end=True))
+    return model, Optimizer(list(model.parameters()), learning_rate)
+
+class Learner():
+    def __init__(self, model, optimizer, loss_fn, data_bunch):
+        self.model = model
+        self.optimizer = optimizer
+        self.loss_fn = loss_fn
+        self.data_bunch = data_bunch
+
+    def __repr__(self):
+        return f'{self.data_bunch}\n{self.model}\n{self.loss_fn}\n{self.optimizer}'
+
+def fit(num_epochs, learner):
     accuracies = []
     losses = []
 
     for epoch in range(1, num_epochs+1):
-        for x_batch, y_batch in train_data:
-            pred = model(x_batch)
-            loss = loss_fn(pred, y_batch)
+        for x_batch, y_batch in learner.data_bunch.train_dl:
+            pred = learner.model(x_batch)
+            loss = learner.loss_fn(pred, y_batch)
 
-            loss_fn.backward()
-            model.backward()
+            learner.loss_fn.backward()
+            learner.model.backward()
 
-            optimizer.step()
-            optimizer.zero_grad()
+            learner.optimizer.step()
+            learner.optimizer.zero_grad()
 
         count = accuracy = loss = 0
-        for x_batch, y_batch in valid_data:
-            pred = model(x_batch)
+        for x_batch, y_batch in learner.data_bunch.valid_dl:
+            pred = learner.model(x_batch)
             accuracy += compute_accuracy(pred, y_batch)
-            loss += loss_fn(pred, y_batch)
+            loss += learner.loss_fn(pred, y_batch)
             count += 1
         accuracy /= count
         loss /= count

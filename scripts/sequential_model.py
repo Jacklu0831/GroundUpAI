@@ -45,7 +45,7 @@ class Parameter():
         return self.data
 
     def __repr__(self):
-        return f'shape: {self.data.shape}   grad: {self.requires_grad}'
+        return f'shape: {tuple(self.data.shape)}, grad: {self.requires_grad}'
 
     def step(self, learning_rate):
         self.data -= learning_rate * self.grad
@@ -62,7 +62,7 @@ class Parameter():
 class Sequential():
     def __init__(self, *args):
         self.layers = list(args)
-        self.train = True
+        self.training = True
 
     def __call__(self, x):
         for layer in self.layers:
@@ -70,13 +70,13 @@ class Sequential():
         return x
 
     def __repr__(self):
-        return '\n'.join(f'Layer{i}: {layer}' for i, layer in enumerate(self.layers, 1))
+        return '(Sequential)\n\t' + '\n\t'.join(f'(Layer{i}) {layer}' for i, layer in enumerate(self.layers, 1))
 
     def train(self):
-        self.train = True
+        self.training = True
 
     def eval_(self):
-        self.train = False
+        self.training = False
 
     def backward(self):
         for layer in reversed(self.layers):
@@ -159,7 +159,7 @@ class ReLU(Module):
 
 class CrossEntropy(Module):
     def __repr__(self):
-        return f'CrossEntropy()'
+        return f'(CrossEntropy)'
 
     def fwd(self, inp, tar):
         return cross_entropy(inp, tar)
