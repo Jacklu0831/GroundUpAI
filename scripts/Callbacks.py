@@ -33,21 +33,75 @@ class Callback():
         return re.sub(r'Callback$', '', self.__class__.__name__) or 'callback'
 
     def __repr__(self):
-        return f'(callback) {camel2snake(name)}'
+        return f'(callback) {camel2snake(self.name)}'
+
+class TrainEvalCallback(Callback):
+    def before_train(self):
+        self.model.train()
+
+    def before_valid(self):
+        self.model.eval_()
+
+class ItersStopCallback(Callback):
+    def after_batch(self):
+        print(f'iteration: {self.iters_count}')
+        if self.iters_count >= 10:
+            self.runner.stop = True
+
+class AvgStats():
+    def __init__(self, metrics, training):
+        self.metrics = metrics
+        self.training = training
+
+    def reset(self):
+        self.count = 0
+        self.total_loss = torch.Tensor([0])
+        self.totals = [torch.Tensor([0])] * len(self.metrics)
+
+    @property
+    def all_stats(self): return [self.total_loss] + self.totals
+
+    @property
+    def avg_stats(self): return [s.item()/self.count for s in self.all_stats]
+
+    def __repr__(self):
+        if not self.count:
+            return ''
+        return f"{'train' if self.training else 'valid'} metrics - {self.avg_stats}"
+
+    def accumulate(self, runner):
+        batch_size = runner.x_batch.shape[0]
+        self.count += batch_size
+        self.total_loss = runner.loss * batch_size
+        for i, metric in enumerate(self.metrics):
+            self.totals[i] += metric(runner.pred, runner.y_batch) * batch_size
+
+class StatsLoggingCallback(Callback):
+    def __init__(self, metrics):
+        self.train_stats = AvgStats(metrics, True)
+        self.valid_stats = AvgStats(metrics, False)
+
+    def before_epoch(self):
+        self.train_stats.reset()
+        self.valid_stats.reset()
+
+    def after_loss(self):
+        stats = self.train_stats if self.model.training else self.valid_stats
+        stats.accumulate(self.runner)
+
+    def after_epoch(self):
+        print(f'Epoch - {self.epoch}\n{self.train_stats}\n{self.valid_stats}\n')
 
 class Runner():
-    def __init__(self, learner, callback_fns=[]):
+    def __init__(self, learner, callbacks=[]):
         self.learner = learner
         self.stop = False
-        self.callbacks = [TrainEvalCallback()] + self.get_callbacks(callback_fns)
+        self.callbacks = sorted([TrainEvalCallback()] + callbacks, key=lambda cb: cb.order)
+        for callback in self.callbacks:
+            callback.runner = self
 
-    def get_callbacks(self, callback_fns):
-        callbacks = []
-        for callback_fn in callback_fns:
-            callback = callback_fn()
-            setattr(self, callback.name, callback)
-            callbacks.append(callback)
-        return callbacks
+    def __repr__(self):
+        return f'{self.learner}\n(Callbacks) ' + ' '.join(map(lambda cb: cb.name, self.callbacks))
 
     @property
     def data_bunch(self): return self.learner.data_bunch
@@ -62,29 +116,28 @@ class Runner():
         self.x_batch = x_batch
         self.y_batch = y_batch
 
-        if self('before_batch'): return
+        if self('before_batch'):     return
         self.pred = self.model(self.x_batch)
-        if self('after_pred'): return
+        if self('after_pred'):       return
         self.loss = self.loss_fn(self.pred, self.y_batch)
-        if self('after_loss'): return
-        if not self.model.training: return
-        self.loss.backward()
-        if self('after_loss_back'): return
+        if self('after_loss'):       return
+        if not self.model.training:  return
+        self.loss_fn.backward()
+        if self('after_loss_back'):  return
         self.model.backward()
         if self('after_model_back'): return
-        self.opt.step()
-        if self('after_step'): return
-        self.opt.zero_grad()
+        self.optimizer.step()
+        if self('after_step'):       return
+        self.optimizer.zero_grad()
 
     def all_batches(self):
-        data_loader = self.data_bunch.train_ds if self.model.training else self.data_bunch.valid_ds
+        data_loader = self.data_bunch.train_dl if self.model.training else self.data_bunch.valid_dl
         self.iters_count, self.iters = 0, len(data_loader)
         for x_batch, y_batch in data_loader:
             if self.stop: break
             self.one_batch(x_batch, y_batch)
+            self.iters_count += 1
             self('after_batch')
-        self.iters = 0
-        self.stop = False
 
     def fit(self, num_epochs):
         self.num_epochs = num_epochs
@@ -92,21 +145,21 @@ class Runner():
         for callback in self.callbacks:
             callback.set_runner(self)
 
-        if self('before_fit'): return
-
+        if self('before_fit'):       return
         for epoch in range(1, num_epochs+1):
-            self.curr_epoch = epoch
-            if self('begin_epoch'): return
+            if self.stop: break
+            self.epoch = epoch
+            if self('before_epoch'): return
             if self('before_train'): return
             self.all_batches()
             if self('before_valid'): return
             self.all_batches()
             if self('after_epoch'): break
-
         self('after_fit')
 
     def __call__(self, callback_name):
-        for callback in sorted(self.callbacks, key=lambda x: x.order):
+        for callback in self.callbacks:
             fn = getattr(callback, callback_name, None) # default to None if not inherited (flexible)
-            if fn and fn(): return True
+            if fn and fn():
+                return True
         return False
