@@ -9,7 +9,6 @@ import math
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
-from operations import *
 from sequential_model import *
 
 class Dataset():
