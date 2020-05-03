@@ -8,7 +8,7 @@ from os.path import join
 import math
 
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
-from optimizer import *
+from sub_model import *
 
 def softmax(inp):
     # prone to overflow (floating aint precise)

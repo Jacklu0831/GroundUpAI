@@ -8,7 +8,7 @@ from os.path import join
 import math
 
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
-from batch_norm import *
+from other_layers import *
 
 class Optimizer():
     # vanilla

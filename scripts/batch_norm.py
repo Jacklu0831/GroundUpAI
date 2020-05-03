@@ -10,7 +10,6 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from pooling import *
 
 def weighted_sum(t1, t2, ratio):
-    assert(0 <= ratio <= 1)
     return t1 * ratio + t2 * (1 - ratio)
 
 class BatchNorm(Module):
@@ -55,14 +54,15 @@ class BatchNorm(Module):
 
         inp.g = (2*dv*numer + dm)/n + dLdx/denom
 
-    def __repr__(self): return f'BatchNorm()'
+    def __repr__(self, t=''):
+        return f"{t+'    '}BatchNorm()"
 
 def get_conv_final_model(data_bunch):
     return Sequential(Reshape((1, 28, 28)),
-                      Conv2d(c_in=1, c_out=4, k_s=5, stride=2, pad=1), # 4, 13, 13
-                      AvgPool2d(k_s=2, pad=0), # 4, 12, 12
+                      Conv(c_in=1, c_out=4, k_s=5, stride=2, pad=1), # 4, 13, 13
+                      AvgPool(k_s=2, pad=0), # 4, 12, 12
                       BatchNorm(4),
-                      Conv2d(c_in=4, c_out=16, stride=2, leak=1.), # 16, 5, 5
+                      Conv(c_in=4, c_out=16, stride=2, leak=1.), # 16, 5, 5
                       BatchNorm(16),
                       Flatten(),
                       Linear(400, 64),

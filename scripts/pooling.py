@@ -9,7 +9,7 @@ from os.path import join
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from convolution import *
 
-class MaxPool2d(Module):
+class MaxPool(Module):
     def __init__(self, k_s=3, stride=1, pad=0):
         super().__init__()
         self.k_s = k_s
@@ -47,10 +47,10 @@ class MaxPool2d(Module):
                 dX[:, :, i_s:i_s+k_s, j_s:j_s+k_s] += dL[:,:,i,j][...,None,None] * mask
         padded.g = dX
 
-    def __repr__(self):
-        return f'MaxPool2d(kernel_size: {self.k_s}, stride: {self.stride}, pad: {self.pad})'
+    def __repr__(self, t=''):
+        return f"{t+'    '}MaxPool({self.k_s}, {self.stride})"
 
-class AvgPool2d(Module):
+class AvgPool(Module):
     def __init__(self, k_s=3, stride=1, pad=0):
         super().__init__()
         self.k_s = k_s
@@ -83,5 +83,15 @@ class AvgPool2d(Module):
                 dX[:, :, i_s:i_s+self.k_s, j_s:j_s+self.k_s] += dL[:,:,i,j][...,None,None] / (self.k_s ** 2)
         padded.g = dX
 
-    def __repr__(self):
-        return f'AvgPool2d(kernel: {self.k_s}, stride: {self.stride}, pad: {self.pad})'
+    def __repr__(self, t=''):
+        return f"{t+'    '}AvgPool({self.k_s}, {self.stride})"
+
+def get_conv_pool_model(data_bunch):
+    return Sequential(Reshape((1, 28, 28)),
+                      Conv(c_in=1, c_out=4, k_s=5, stride=2, pad=1), # 4, 13, 13
+                      AvgPool(k_s=2, pad=0), # 4, 12, 12
+                      Conv(c_in=4, c_out=16, stride=2, leak=1.), # 16, 5, 5
+                      Flatten(),
+                      Linear(400, 64),
+                      ReLU(),
+                      Linear(64, 10, True))

@@ -12,16 +12,14 @@ from data_bunch import *
 
 class Sequential():
     def __init__(self, *args):
-        self.layers = list(args)
+        assert args, 'empty model'
+        self.layers = args[0] if isinstance(args[0], list) else list(args)
         self.training = True
 
     def __call__(self, data):
         for layer in self.layers:
             data = layer(data)
         return data
-
-    def __repr__(self):
-        return '(Sequential)\n\t' + '\n\t'.join(f'(Layer{i}) {layer}' for i, layer in enumerate(self.layers, 1))
 
     def train(self):
         self.training = True
@@ -37,3 +35,7 @@ class Sequential():
         for layer in self.layers:
             for parameter in layer.parameters():
                 yield parameter
+
+    def __repr__(self, t=''):
+        header = '(Model)\n' if t == '' else ''
+        return header + ('\n').join(layer.__repr__(t) for layer in self.layers)

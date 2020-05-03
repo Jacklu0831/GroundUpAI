@@ -36,6 +36,6 @@ def fit(num_epochs, data_bunch, model, loss_fn, optimizer):
 
         accuracies.append(accuracy)
         losses.append(loss)
-        print(f'Epoch {epoch}    Accuracy {round(accuracy.item(), 3)}    Loss {round(loss.item(), 3)}')
+        print(f'Epoch {epoch}  Accuracy {round(accuracy.item(), 3)}  Loss {round(loss.item(), 3)}')
 
     return accuracies, losses

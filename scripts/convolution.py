@@ -12,7 +12,7 @@ from torch.nn.functional import pad as torch_pad
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from linear import *
 
-def init_conv_weight(shape, leak=0.):
+def init_3d_weight(shape, leak=1.):
     # default to he init
     assert(shape[2] == shape[3])
     # in channel * receptive field (kernel area)
@@ -35,8 +35,8 @@ class Reshape(Module):
         # simply reverse the fwd
         inp.g = out.g.reshape(-1, reduce(lambda x,y: x*y, self.shape))
 
-    def __repr__(self):
-        return f'Reshape{self.shape}'
+    def __repr__(self, t=''):
+        return f"{t+'    '}Reshape{self.shape}"
 
 class Flatten(Module):
     def __init__(self):
@@ -49,10 +49,10 @@ class Flatten(Module):
     def bwd(self, out, inp):
         inp.g = out.g.view(-1, *self.shape)
 
-    def __repr__(self):
-        return 'Flatten()'
+    def __repr__(self, t=''):
+        return f"{t+'    '}Flatten()"
 
-class Conv2d(Module):
+class Conv(Module):
     def __init__(self, c_in, c_out, k_s=3, stride=1, pad=0, leak=1.):
         super().__init__()
         self.c_in = c_in
@@ -61,7 +61,7 @@ class Conv2d(Module):
         self.stride = stride
         self.pad = pad
 
-        self.w = Parameter(init_conv_weight((c_out, c_in, k_s, k_s), leak))
+        self.w = Parameter(init_3d_weight((c_out, c_in, k_s, k_s), leak))
         self.b = Parameter(torch.zeros(c_out))
 
     def fwd(self, inp):
@@ -104,15 +104,16 @@ class Conv2d(Module):
         self.b.update(dB)
         inp.g = dX if self.pad == 0 else dX[:, :, self.pad: -self.pad, self.pad: -self.pad]
 
-    def __repr__(self): return f'Conv2D(in: {self.c_in}, out: {self.c_out}, kernel: {self.k_s}, stride: {self.stride}, pad: {self.pad})'
+    def __repr__(self, t=''):
+        return f"{t+'    '}Conv({self.c_in}, {self.c_out}, {self.k_s}, {self.stride})"
 
 def get_conv_model(data_bunch):
     in_dim = data_bunch.train_ds.x_data.shape[1]
     out_dim = int(max(data_bunch.train_ds.y_data) + 1)
     assert in_dim == 1 * 28 * 28
     return Sequential(Reshape((1, 28, 28)),
-                      Conv2d(1, 8, 5, stride=4, pad=2, leak=0.), # 8, 7, 7
+                      Conv(1, 8, 5, stride=4, pad=2, leak=0.), # 8, 7, 7
                       ReLU(),
-                      Conv2d(8, 16, 3, stride=2, pad=1, leak=1.), # 16, 4, 4
+                      Conv(8, 16, 3, stride=2, pad=1, leak=1.), # 16, 4, 4
                       Flatten(),
                       Linear(256, out_dim, True))

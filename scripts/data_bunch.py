@@ -16,8 +16,8 @@ class Dataset():
         self.x_data = x_data
         self.y_data = y_data
 
-    def __repr__(self):
-        return f'(Dataset) x: {tuple(self.x_data.shape)}, y: {tuple(self.y_data.shape)}'
+    def __repr__(self, t=''):
+        return f'{t}(Dataset) x: {tuple(self.x_data.shape)}, y: {tuple(self.y_data.shape)}'
 
     def __len__(self):
         return len(self.x_data)
@@ -36,8 +36,8 @@ class Sampler():
         for i in range(0, self.size, self.batch_size):
             yield self.idxs[i: i+self.batch_size]
 
-    def __repr__(self):
-        return f'(Sampler) total: {self.size}, batch_size: {self.batch_size}, shuffle: {self.shuffle}'
+    def __repr__(self, t=''):
+        return f'{t}(Sampler) total: {self.size}, batch_size: {self.batch_size}, shuffle: {self.shuffle}'
 
     def __len__(self):
         return self.batch_size
@@ -56,8 +56,9 @@ class DataLoader():
         for idxs in self.sampler:
             yield self.collate_fn([self.dataset[i] for i in idxs])
 
-    def __repr__(self):
-        return f'(DataLoader) \n\t\t{self.dataset}\n\t\t{self.sampler}'
+    def __repr__(self, t=''):
+        tt = t + '    '
+        return f'{t}(DataLoader) \n{self.dataset.__repr__(tt)}\n{self.sampler.__repr__(tt)}'
 
     def __len__(self):
         return math.ceil(len(self.dataset) / len(self.sampler))
@@ -75,8 +76,9 @@ class DataBunch():
     def valid_ds(self):
         return self.valid_dl.dataset
 
-    def __repr__(self):
-        return f'(DataBunch) \n\t{self.train_dl}\n\t{self.valid_dl}'
+    def __repr__(self, t=''):
+        tt = t + '    '
+        return f'{t}(DataBunch) \n{self.train_dl.__repr__(tt)}\n{self.valid_dl.__repr__(tt)}'
 
     def __len__(self):
         return len(self.train_dl)

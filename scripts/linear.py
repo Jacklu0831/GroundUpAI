@@ -65,8 +65,8 @@ class Module():
         return self.out
 
     def parameters(self):
-        for p in self._parameters.values():
-            yield p
+        for param in self._parameters.values():
+            yield param
 
     def forward(self):
         raise NotImplementedError('Module.forward')
@@ -80,9 +80,6 @@ class Linear(Module):
         self.w = Parameter(init_weight(in_dim, num_hidden, end), require_grad)
         self.b = Parameter(init_bias(num_hidden), require_grad)
 
-    def __repr__(self):
-        return f'Linear({self.w.data.shape[0]}, {self.w.data.shape[1]})'
-
     def fwd(self, inp):
         return inp @ self.w.data + self.b.data
 
@@ -91,20 +88,20 @@ class Linear(Module):
         self.w.update(inp.t() @ out.g)
         self.b.update(out.g.sum(0))
 
-class ReLU(Module):
-    def __repr__(self):
-        return f'ReLU()'
+    def __repr__(self, t=''):
+        return f"{t+'    '}Linear({self.w.data.shape[0]}, {self.w.data.shape[1]})"
 
+class ReLU(Module):
     def fwd(self, inp):
         return inp.clamp_min(0.) - 0.5
 
     def bwd(self, out, inp):
         inp.g = (inp > 0).float() * out.g
 
-class CrossEntropy(Module):
-    def __repr__(self):
-        return f'(CrossEntropy)'
+    def __repr__(self, t=''):
+        return f"{t+'    '}ReLU()"
 
+class CrossEntropy(Module):
     def fwd(self, inp, tar):
         return cross_entropy(inp, tar)
 
@@ -112,6 +109,9 @@ class CrossEntropy(Module):
         inp_soft = softmax(inp)
         inp_soft[range(tar.shape[0]), tar] -= 1
         inp.g = inp_soft / tar.shape[0]
+
+    def __repr__(self):
+        return '(CrossEntropy)'
 
 def get_lin_model(data_bunch, num_hidden=50):
     in_dim = data_bunch.train_ds.x_data.shape[1]
