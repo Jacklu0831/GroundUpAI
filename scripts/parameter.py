@@ -4,10 +4,8 @@
 # edit notebooks/01_parameter.ipynb and run generate_all.py
 
 import sys
-from os.path import join
-import math
-
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
+
 from utils import *
 
 class Parameter():

@@ -4,7 +4,6 @@
 # edit notebooks/00_utils.ipynb and run generate_all.py
 
 from fastai import datasets
-from pathlib import Path
 import torch
 import gzip
 import pickle
@@ -41,7 +40,7 @@ def process_mnist(xt, yt, xv, yv):
     xt, xv = normalize(xt, mean, std), normalize(xv, mean, std)
     return xt, yt, xv, yv
 
-def show_image(imgs):
+def show_random_image(imgs):
     img = random.choice(imgs)
     if len(img.shape) == 1:
         size = int(img.shape[0] ** 0.5)
