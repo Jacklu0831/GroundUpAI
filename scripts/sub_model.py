@@ -9,6 +9,7 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from other_layers import *
 
 class SubModel(Module):
+    '''Wrapper class around model to allow models to branch off into sub models (used in ResNet)'''
     def __init__(self):
         super().__init__()
 
@@ -16,11 +17,8 @@ class SubModel(Module):
         for param in self.sub_model.parameters():
             yield param
 
-    def fwd(self, inp):
-        return self.sub_model(inp)
+    def fwd(self, inp): return self.sub_model(inp)
 
-    def bwd(self, out, inp):
-        self.sub_model.backward()
+    def bwd(self, out, inp): self.sub_model.backward()
 
-    def __repr__(self, t):
-        return self.sub_model.__repr__(t+'    ')
+    def __repr__(self, t): return self.sub_model.__repr__(t+'    ')

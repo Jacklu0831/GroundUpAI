@@ -7,14 +7,16 @@ import sys
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 
 from functools import reduce
-import torch.nn as nn
+import torch.nn as nn # imported for testing my convolution layer
 from torch.nn.functional import pad as torch_pad
 from linear import *
 
 def pad_tensor(inp, pad, value=0):
+    '''Util function for padding inp tensor'''
     return torch_pad(inp, [pad]*4, 'constant', value)
 
 class Reshape(Module):
+    '''Reshape layer'''
     def __init__(self, shape):
         super().__init__()
         self.shape = shape
@@ -30,6 +32,7 @@ class Reshape(Module):
         return f"{t+'    '}Reshape{self.shape}"
 
 class Flatten(Module):
+    '''Flatten layer'''
     def __init__(self):
         super().__init__()
 
@@ -44,6 +47,7 @@ class Flatten(Module):
         return f"{t+'    '}Flatten()"
 
 class Conv(Module):
+    '''Convolutional layer'''
     def __init__(self, c_in, c_out, k_s=3, stride=1, pad=0, leak=1.):
         super().__init__()
         self.c_in = c_in
@@ -52,7 +56,7 @@ class Conv(Module):
         self.stride = stride
         self.pad = pad
 
-        self.w = Parameter(init_3d_weight((c_out, c_in, k_s, k_s), leak))
+        self.w = Parameter(init_4d_weight((c_out, c_in, k_s, k_s), leak))
         self.b = Parameter(torch.zeros(c_out))
 
     def fwd(self, inp):
@@ -99,6 +103,7 @@ class Conv(Module):
         return f"{t+'    '}Conv({self.c_in}, {self.c_out}, {self.k_s}, {self.stride})"
 
 def get_conv_model(data_bunch):
+    '''Util function to get convolutional model based on data bunch shape'''
     in_dim = data_bunch.train_ds.x_data.shape[1]
     out_dim = int(max(data_bunch.train_ds.y_data) + 1)
     assert in_dim == 1 * 28 * 28

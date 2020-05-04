@@ -9,6 +9,7 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from stateful_optim import *
 
 class ResLayer(Module):
+    '''Get ResLayer (almost a ResBlock but not including the final activation)'''
     def __init__(self, i, o, s, bottleneck):
         super().__init__()
         self.i, self.o, self.s, self.bottleneck = i, o, s, bottleneck
@@ -33,7 +34,7 @@ class ResLayer(Module):
                 yield param
 
 class ResBlock(SubModel):
-    # just to add an activation
+    '''ResBlock (ResLayer + Activation)'''
     def __init__(self, i, o, s, bottleneck):
         super().__init__()
         self.i, self.o, self.s, self.bottleneck = i, o, s, bottleneck

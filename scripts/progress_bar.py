@@ -11,8 +11,7 @@ from fastprogress.fastprogress import format_time
 from early_stopping import *
 
 class ProgressViewer(Callback):
-    order = -1
-
+    '''Callback utilizing FastAI frontend lib to display neat looking training progress'''
     def before_fit(self):
         self.mbar = master_bar(range(self.num_epochs))
         self.mbar.on_iter_begin()

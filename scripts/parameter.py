@@ -9,25 +9,20 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from utils import *
 
 class Parameter():
+    '''Model parameter class with tensor data and gradient to imitate a basic pytorch tensor'''
     def __init__(self, data, requires_grad=True):
         self.data = data if data != None else torch.Tensor()
         self.requires_grad = requires_grad
         self.grad = 0.
 
-    def __get__(self, instance, owner):
-        return self.data
+    def __get__(self, instance, owner): return self.data
 
-    def __repr__(self):
-        return f'shape: {tuple(self.data.shape)}, grad: {self.requires_grad}'
+    def step(self, learning_rate): self.data -= learning_rate * self.grad
 
-    def step(self, learning_rate):
-        self.data -= learning_rate * self.grad
+    def zero_data(self): self.data.zero_()
 
-    def zero_data(self):
-        self.data.zero_()
+    def zero_grad(self): self.grad = 0.
 
-    def zero_grad(self):
-        self.grad = 0.
+    def update(self, grad): self.grad = grad
 
-    def update(self, grad):
-        self.grad = grad
+    def __repr__(self): return f'shape: {tuple(self.data.shape)}, grad: {self.requires_grad}'

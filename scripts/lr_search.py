@@ -9,24 +9,28 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from progress_bar import *
 
 class LearningRateSearch(Callback):
-    def __init__(self, msax_iter=1000, min_lr=1e-4, max_lr=1):
+    '''Callback to search for optimal learning rate before actual training'''
+    def __init__(self, max_iter=1000, min_lr=1e-4, max_lr=1):
         self.max_iter = max_iter
-        self.min_lr = min_lr
-        self.max_lr = max_lr
+        self.min_lr, self.max_lr = min_lr, max_lr
+        self.cur_lr, self.best_lr = min_lr, min_lr
         self.best_loss = float('inf')
 
     def before_batch(self):
         if not self.model.training: return
         position = self.iters_count / self.iters
-        learning_rate = self.min_lr * (self.max_lr/self.min_lr)**position
-        self.optimizer.hyper_params['learning_rate'] = learning_rate
+        self.cur_lr = self.min_lr * (self.max_lr/self.min_lr)**position
+        self.optimizer.hyper_params['learning_rate'] = self.cur_lr
 
     def after_step(self):
         if self.iters_count >= self.max_iter or self.loss > self.best_loss*10:
             raise CancelTrainException()
-        self.best_loss = min(self.best_loss, self.loss)
+        if self.loss < self.best_loss:
+            self.best_loss = self.loss
+            self.best_lr = self.cur_lr
 
 def plot_lr_loss(LearningRateSearch):
+    '''Util function for plotting relationship of loss vs. learning rate'''
     losses = [l.item() for l in LearningRateSearch.losses]
     learning_rates = LearningRateSearch.parameters['learning_rate']
     plt.xscale('log')

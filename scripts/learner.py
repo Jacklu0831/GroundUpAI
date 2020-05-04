@@ -9,14 +9,24 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from callback import *
 
 class EpochLogger(Callback):
+    '''Most simple callback to just log epoch'''
     def before_epoch(self):
         print(f'Epoch {self.epoch}')
 
-class CancelTrainException(Exception): pass
-class CancelEpochException(Exception): pass
-class CancelBatchException(Exception): pass
+class CancelTrainException(Exception):
+    '''Exception class for early stopping training'''
+    pass
+
+class CancelEpochException(Exception):
+    '''Exception class for early stopping epoch'''
+    pass
+
+class CancelBatchException(Exception):
+    '''Exception class for early stopping batch'''
+    pass
 
 class Learner():
+    '''Learner class containing data bunch, model, loss function, optimizer, and callbacks for flexible training procedures'''
     def __init__(self, data_bunch, model, loss_fn, optimizer, callbacks=[]):
         self.data_bunch = data_bunch
         self.model = model

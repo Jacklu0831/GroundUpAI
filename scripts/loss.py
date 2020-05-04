@@ -6,26 +6,29 @@
 import sys
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 
-from sub_model import *
+from initialization import *
 
 def softmax(inp):
-    # prone to overflow (floating aint precise)
+    '''naive softmax fn. Prone to large floating point errors'''
     return inp.exp() / inp.exp().sum(-1, keepdim=True)
 
 def log_sum_exp(inp):
+    '''LogSumExp trick (https://en.wikipedia.org/wiki/LogSumExp)'''
     e = inp.max(-1)[0]
     return e + (inp - e[:, None]).exp().sum(-1).log()
 
 def log_softmax(inp):
-    # LogSumExp trick to avoid floating point error
+    '''log softmax fn using logSumExp trick to avoid large floating point errors'''
     return inp - log_sum_exp(inp).unsqueeze(-1)
 
 def nll_loss(pre, tar):
-    # use multiple indexing
+    '''Negative log-likelihood'''
     return -pre[range(tar.shape[0]), tar].mean()
 
-def cross_entropy(inp, tar):
-    return nll_loss(log_softmax(inp), tar)
+def cross_entropy(pre, tar):
+    '''Cross entropy loss'''
+    return nll_loss(log_softmax(pre), tar)
 
 def compute_accuracy(pre, tar):
+    '''Accuracy'''
     return (torch.argmax(pre, dim=1) == tar).float().mean()

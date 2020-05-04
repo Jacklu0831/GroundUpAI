@@ -6,24 +6,23 @@
 import sys
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 
-from augmentation import *
+from loss import *
 
 class Sequential():
+    '''Sequential Model with stored layers and training status'''
     def __init__(self, *args):
         assert args, 'empty model'
         self.layers = args[0] if isinstance(args[0], list) else list(args)
         self.training = True
 
-    def __call__(self, data):
+    def __call__(self, inp):
         for layer in self.layers:
-            data = layer(data)
-        return data
+            inp = layer(inp)
+        return inp
 
-    def train(self):
-        self.training = True
+    def train(self): self.training = True
 
-    def eval_(self):
-        self.training = False
+    def eval_(self): self.training = False
 
     def backward(self):
         for layer in reversed(self.layers):

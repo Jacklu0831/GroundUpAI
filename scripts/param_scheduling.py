@@ -11,61 +11,55 @@ from stats_logging import *
 from functools import partial
 
 def annealer(fn):
+    '''Decorator function to produce partial function of param schedule'''
     return lambda start, end: partial(fn, start, end)
 
 @annealer
 def schedule_lin(start, end, position):
+    '''Linear param schedule'''
     return start + position * (end - start)
 
 @annealer
 def schedule_cos(start, end, position):
+    '''Cosine param schedule'''
     return start + (1+math.cos(math.pi*(1-position))) * (end-start)/2
 
 @annealer
 def schedule_none(start, end, position):
+    '''No param schedule (param values stay at start)'''
     return start
 
 @annealer
 def schedule_exp(start, end, position):
+    '''Exponential param schedule'''
     return start * (end/start)**position
 
 def combine_schedules(segments, ranges):
+    '''Combine multiple schedules with they respective segments and ranges'''
     assert(sum(segments) == 1.)
     segments = tensor([0] + segments)
     assert(torch.all(segments >= 0))
     segments = torch.cumsum(segments, 0)
 
-    def inner(pos):
+    def _inner(pos):
         i = (pos >= segments).nonzero().max()
         actual_pos = (pos - segments[i]) / (segments[i+1] - segments[i])
         return ranges[i](actual_pos)
-    return inner
 
-def plot_schedules(schedule):
+    return _inner
+
+def plot_schedule(schedule):
+    '''Util function for plotting param schedule'''
     a = torch.arange(0, 100)
     p = torch.linspace(0.01, 1, 100)
     plt.plot(a, [schedule(n) for n in p])
 
 def one_cycle_cos(start, upper, end):
+    '''Wrapper function to create 1-cycle-training param schedule'''
     return [schedule_cos(start, upper), schedule_cos(upper, end)]
 
-class DynamicOpt():
-    def __init__(self, parameters, **hyper_params):
-        self.parameters = parameters
-        self.hyper_params = dict(hyper_params)
-
-    def __repr__(self):
-        return f'(DynamicOpt) num_params: {len(self.parameters)}, hyper_params: {list(self.hyper_params)}'
-
-    def step(self):
-        for parameter in self.parameters:
-            parameter.step(self.hyper_params['learning_rate'])
-
-    def zero_grad(self):
-        for parameter in self.parameters:
-            parameter.zero_grad()
-
 class Recorder(Callback):
+    '''Callback for recording specified hyper parameters (good for debugging param scheduler)'''
     def __init__(self, param_names=['learning_rate']):
         self.parameters = {name: [] for name in param_names}
 
@@ -89,6 +83,7 @@ class Recorder(Callback):
         plt.xlabel('batch')
 
 class ParamScheduler(Callback):
+    '''Callback for scheduling hyper parameter value each epoch'''
     def __init__(self, param_name, schedule_fn):
         self.param_name = param_name
         self.schedule_fn = schedule_fn

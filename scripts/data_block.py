@@ -21,6 +21,7 @@ image_exts = set(k for k,v in mimetypes.types_map.items() if v.startswith('image
 from collections import OrderedDict
 
 def listify(inp):
+    '''Convert input of different types to a list'''
     if inp is None: return []
     if isinstance(inp, list): return inp
     if isinstance(inp, str): return [inp]
@@ -28,15 +29,18 @@ def listify(inp):
     return [inp]
 
 def setify(inp):
+    '''Convert input of different types to a set'''
     return inp if isinstance(inp, set) else set(listify(inp))
 
 def uniqueify(items, sort=False):
+    '''Convert input of different types to a unique, optionally sorted list with no duplicates'''
     res = list(OrderedDict.fromkeys(items).keys())
     return res.sort() if sort else res
 
 def get_files(path, exts=None, recurse=False, include=None):
-    def get_file_paths(path, files, exts=None):
-        # filenames -> PosixPaths filtered by extensions
+    '''Get files of wanted extensions in specified path'''
+    def _get_file_paths(path, files, exts=None):
+        '''Convert filenames to PosixPaths filtered by extensions'''
         path = Path(path)
         in_exts = lambda o: (not exts) or (f".{o.split('.')[-1].lower()}" in exts)
         return [path/f for f in files if not is_hidden(f) and in_exts(f)]
@@ -51,13 +55,14 @@ def get_files(path, exts=None, recurse=False, include=None):
                 d[:] = [o for o in d if o in include]
             else:
                 d[:] = [o for o in d if not is_hidden(o)]
-            files += get_file_paths(p, f, exts)
+            files += _get_file_paths(p, f, exts)
     else:
         filenames = [o.name for o in os.scandir(path) if o.is_file()]
-        files = get_file_paths(path, filenames, exts)
+        files = _get_file_paths(path, filenames, exts)
     return files
 
 class ListContainer():
+    '''Imitated numpy list with multi-index select and boolean masking'''
     def __init__(self, items): self.items = listify(items)
 
     def __getitem__(self, idx):
@@ -70,17 +75,13 @@ class ListContainer():
             return [o for m, o in zip(idx, self.items) if m]
         return [self.items[i] for i in idx]
 
-    def __len__(self):
-        return len(self.items)
+    def __len__(self): return len(self.items)
 
-    def __iter__(self):
-        return iter(self.items)
+    def __iter__(self):  return iter(self.items)
 
-    def __setitem__(self, i, o):
-        self.items[i] = o
+    def __setitem__(self, i, o): self.items[i] = o
 
-    def __delitem__(self, i):
-        del(self.items[i])
+    def __delitem__(self, i): del(self.items[i])
 
     def __repr__(self):
         res = f'{self.__class__.__name__} ({len(self)} items)\n{self.items[:10]}'
@@ -89,27 +90,26 @@ class ListContainer():
         return res
 
 def compose(item, fns, *args, order_key='_order', **kwargs):
+    '''Apply multiple functions on input items in predefined order'''
     key = lambda o: getattr(o, order_key, 0)
     for fn in sorted(listify(fns), key=key):
         item = fn(item, **kwargs)
     return item
 
 class ItemList(ListContainer):
+    '''List container with option to apply transformation to data'''
     def __init__(self, items, path='.', transforms=None):
         super().__init__(items)
         self.path = Path(path)
         self.transforms = transforms
 
     def new(self, items, cls=None):
-        # used for train/valid split
         cls = cls if cls else self.__class__
         return cls(items, self.path, self.transforms)
 
-    def get(self, i): # subclassed for method of accessing
-        return i
+    def get(self, i): return i
 
-    def _get(self, i): # apply additional transforms
-        return compose(self.get(i), self.transforms)
+    def _get(self, i): return compose(self.get(i), self.transforms)
 
     def __getitem__(self, i):
         items = super().__getitem__(i)
@@ -130,9 +130,11 @@ class ImageList(ItemList):
         return PIL.Image.open(fn)
 
 class Transform():
+    '''General transformation class'''
     _order = 0
 
 class ResizeFixed(Transform):
+    '''Resize transformation class'''
     _order = 10
     def __init__(self, size):
         self.size = (size, size) if isinstance(size, int) else size
@@ -140,19 +142,19 @@ class ResizeFixed(Transform):
     def __call__(self, item):
         return item.resize(self.size, PIL.Image.BILINEAR)
 
-def to_black_white(item):
-    return item
-
 def to_byte_tensor(item):
+    '''Item to byte tensor transformation class'''
     w, h = item.size
     byte_tensor = torch.ByteTensor(torch.ByteStorage.from_buffer(item.tobytes()))
     # channel first
     return byte_tensor.view(h, w, -1).permute(2, 0, 1)
 
 def to_float_tensor(item):
+    '''Item to float tensor transformation class (expect item to be byte tensor)'''
     return item.float().div_(255.)
 
 def make_rgb(item):
+    '''Item to RGB image transformation class'''
     return item.convert('RGB')
 
 make_rgb._order = 0
@@ -160,27 +162,26 @@ to_byte_tensor._order = 20
 to_float_tensor._order = 30
 
 def split_grandparent(filepath, train_name='train', valid_name='valid'):
+    '''Determine data type by grandparent name'''
     ret = {valid_name: False, train_name: True}
     return ret.get(filepath.parent.parent.name, None)
 
 def split_by_fn(item_list, fn):
+    '''Split item list with custom function output (expected to be binary) '''
     mask = [fn(o) for o in item_list]
     true  = [o for o, m in zip(item_list, mask) if m == True]
     false = [o for o, m in zip(item_list, mask) if m == False]
     return true, false
 
 class SplitData():
+    '''Splitted Data class with train and valid data'''
     def __init__(self, train, valid):
         self.train = train
         self.valid = valid
 
-    def __getattr__(self, k):
-        # delegate getattr
-        return getattr(self.train, k)
+    def __getattr__(self, k): return getattr(self.train, k)
 
-    def __setstate__(self, data: Any):
-        # for pickling
-        self.__dict__.update(data)
+    def __setstate__(self, data: Any): self.__dict__.update(data)
 
     @classmethod
     def split_by_fn(cls, item_list, fn):
@@ -192,10 +193,12 @@ class SplitData():
         return f'{self.__class__.__name__}\n\nTRAIN:\n{self.train}\n\nVALID:\n{self.valid}\n'
 
 class Processor():
+    '''General data processor class'''
     def process(self, items):
         return items
 
 class CategoryProcessor(Processor):
+    '''Categorical data processor to labels'''
     def __init__(self):
         self.vocab = None
 
@@ -216,23 +219,24 @@ class CategoryProcessor(Processor):
         return [self.deproc(i) for i in idxs]
 
 def p_name(filepath):
+    '''Util function for file parent name'''
     return filepath.parent.name
 
 def gp_name(filepath):
+    '''Util function for file grandparent name'''
     return filepath.parent.parent.name
 
 class LabeledData():
+    '''Labeled Data class with data and processed data'''
     def __init__(self, x, y, proc_x, proc_y):
         self.x = self.process(x, proc_x)
         self.y = self.process(y, proc_y)
         self.proc_x = proc_x
         self.proc_y = proc_y
 
-    def __getitem__(self, i):
-        return self.x[i], self.y[i]
+    def __getitem__(self, i): return self.x[i], self.y[i]
 
-    def __len__(self):
-        return len(self.x)
+    def __len__(self): return len(self.x)
 
     def __repr__(self):
         return f'{self.__class__.__name__}\nx data: {self.x}\ny data: {self.y}\n'
@@ -247,11 +251,9 @@ class LabeledData():
             item = proc.deproc(item) if isint else proc.deprocess(item)
         return item
 
-    def x_obj(self, i):
-        return self.obj(self.x, i, self.proc_x)
+    def x_obj(self, i): return self.obj(self.x, i, self.proc_x)
 
-    def y_obj(self, i):
-        return self.obj(self.y, i, self.proc_y)
+    def y_obj(self, i): return self.obj(self.y, i, self.proc_y)
 
     @classmethod
     def label_by_fn(cls, item_list, fn, proc_x=None, proc_y=None):
@@ -260,11 +262,13 @@ class LabeledData():
         return cls(item_list, labels, proc_x, proc_y)
 
 def label_by_fn(splitted_data, fn, proc_x=None, proc_y=None):
+    '''Util function for labelling both train and valid data'''
     train = LabeledData.label_by_fn(splitted_data.train, fn, proc_x, proc_y)
     valid = LabeledData.label_by_fn(splitted_data.valid, fn, proc_x, proc_y)
     return SplitData(train, valid)
 
 def show_image(img, figsize=(3, 3)):
+    '''Show input image with matplotlib'''
     plt.figure(figsize=figsize)
     plt.axis('off')
     plt.imshow(img.permute(1, 2, 0))

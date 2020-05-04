@@ -6,16 +6,12 @@
 import sys
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 
-from loss import *
+from sub_model import *
 
 class Optimizer():
-    # vanilla
+    '''Vanilla optimizer with basic methods'''
     def __init__(self, parameters, learning_rate):
-        self.parameters = parameters
-        self.learning_rate = learning_rate
-
-    def __repr__(self):
-        return f'(Optimizer) learning_rate: {self.learning_rate}'
+        self.parameters, self.learning_rate = parameters, learning_rate
 
     def step(self):
         for parameter in self.parameters:
@@ -25,14 +21,14 @@ class Optimizer():
         for parameter in self.parameters:
             parameter.zero_grad()
 
+    def __repr__(self):
+        return f'(Optimizer) learning_rate: {self.learning_rate}'
+
 class DynamicOpt():
-    # for things like param scheduling or having multiple hyper params
+    '''Dynamic optimizer to allow multiple hyper parameters and param scheduling'''
     def __init__(self, parameters, **hyper_params):
         self.parameters = parameters
         self.hyper_params = dict(hyper_params)
-
-    def __repr__(self):
-        return f'(DynamicOpt) hyper_params: {list(self.hyper_params)}'
 
     def step(self):
         for parameter in self.parameters:
@@ -41,3 +37,6 @@ class DynamicOpt():
     def zero_grad(self):
         for parameter in self.parameters:
             parameter.zero_grad()
+
+    def __repr__(self):
+        return f'(DynamicOpt) hyper_params: {list(self.hyper_params)}'

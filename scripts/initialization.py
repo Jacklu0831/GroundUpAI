@@ -6,35 +6,41 @@
 import sys
 sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 
-from model import *
+from augmentation import *
 
 def init_weight_he(d1, d2):
+    '''He init for linear layer weight'''
     return torch.randn(d1, d2) * (2./d1) ** 0.5
 
 def init_weight_norm(d1, d2):
-    return torch.randn(d1, d2) * (2./d1) ** 0.5
-
-def init_weight(d1, d2, end=False):
-    return init_weight_norm(d1, d2) if end else init_weight_he(d1, d2)
+    '''init weight with N(0, 1) distribution (not suitable for relu activation)'''
+    return torch.randn(d1, d2) / d1 ** 0.5
 
 def init_bias_zero(d):
+    '''init bias with zeros'''
     return torch.zeros(d)
 
 def init_bias_uni(d):
+    '''init bias with N(0, 1) distribution'''
     return torch.randn(d)
 
+def init_weight(d1, d2, end=False):
+    '''initialize linear layer weight based on whether it is follwed by ReLU activation'''
+    return init_weight_norm(d1, d2) if end else init_weight_he(d1, d2)
+
 def init_bias(d, zero=True):
+    '''initialize linear layer bias, default to 0 initialization'''
     return init_bias_zero(d) if zero else init_bias_uni(d)
 
 def init_2d_weight(shape, leak=1.):
-    # default to he init
+    '''init 2d weight'''
     assert len(shape) == 2
     fan = shape[0]
     gain_sq = 2.0 / (1 + leak**2)
     return torch.randn(*shape) * (gain_sq / fan)**0.5
 
-def init_3d_weight(shape, leak=1.):
-    # default to he init
+def init_4d_weight(shape, leak=1.):
+    '''init 4d weight'''
     assert(shape[2] == shape[3])
     # in channel * receptive field (kernel area)
     fan = shape[1] * shape[2] * shape[3]

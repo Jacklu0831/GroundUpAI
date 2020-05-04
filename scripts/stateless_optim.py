@@ -10,17 +10,20 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from lr_search import *
 
 def sgd(param, learning_rate, **kwargs):
+    '''Basic stochastic gradient descent'''
     param.data -= learning_rate * param.grad
 
 def l2_reg(param, weight_decay, **kwargs):
+    '''L2 regularization'''
     param.grad += weight_decay * param.data
 
 def compose_inplace(item, fns, **hyper_params):
+    '''Simplified compose function that modifies input item in-place'''
     for fn in fns:
         fn(item, **hyper_params)
 
 class StatelessOpt():
-    # allow different hyper param for each layer
+    '''Improve dynamicOpt that allows different layers to have different hyperparameters'''
     def __init__(self, params, steppers=None, **hyper_params):
         # list of list of params
         self.params = [params] if isinstance(params, list) else [[params]]
@@ -42,6 +45,7 @@ class StatelessOpt():
         return f'(StatelessOpt) steppers: {[stepper.__name__ for stepper in self.steppers]}'
 
 class Recorder(Callback):
+    '''Callback for recording specified hyper parameters (good for debugging param scheduler)'''
     def __init__(self, param_names=['learning_rate']):
         self.parameters = {name: [] for name in param_names}
 
@@ -65,25 +69,29 @@ class Recorder(Callback):
         plt.xlabel('batch')
 
 class LearningRateSearch(Callback):
+    '''Callback to search for optimal learning rate before actual training'''
     def __init__(self, max_iter=1000, min_lr=1e-4, max_lr=1):
         self.max_iter = max_iter
-        self.min_lr = min_lr
-        self.max_lr = max_lr
+        self.min_lr, self.max_lr = min_lr, max_lr
+        self.cur_lr, self.best_lr = min_lr, min_lr
         self.best_loss = float('inf')
 
     def before_batch(self):
         if self.model.training:
             position = self.iters_count / self.iters
-            learning_rate = self.min_lr * (self.max_lr / self.min_lr) ** position
+            self.cur_lr = self.min_lr * (self.max_lr / self.min_lr) ** position
             for hp in self.optimizer.hypers:
-                hp['learning_rate'] = learning_rate
+                hp['learning_rate'] = self.cur_lr
 
     def after_step(self):
         if self.iters_count >= self.max_iter or self.loss > self.best_loss*10:
             raise CancelTrainException()
-        self.best_loss = min(self.best_loss, self.loss)
+        if self.loss < self.best_loss:
+            self.best_loss = self.loss
+            self.best_lr = self.cur_lr
 
 class ParamScheduler(Callback):
+    '''Callback for scheduling hyper parameter value each epoch'''
     def __init__(self, param_name, schedule_fn):
         self.param_name = param_name
         self.schedule_fn = schedule_fn

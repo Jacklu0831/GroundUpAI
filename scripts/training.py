@@ -9,6 +9,7 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from optimizer import *
 
 def fit(num_epochs, data_bunch, model, loss_fn, optimizer):
+    '''Basic training loop'''
     accuracies, losses = [], []
 
     for epoch in range(1, num_epochs+1):

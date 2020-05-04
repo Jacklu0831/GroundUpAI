@@ -9,9 +9,9 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from learner import *
 
 class AvgStats():
+    '''Class for keeping track of average loss and other methods'''
     def __init__(self, metrics, training):
-        self.metrics = metrics
-        self.training = training
+        self.metrics, self.training = metrics, training
 
     def reset(self):
         self.count = 0
@@ -25,8 +25,7 @@ class AvgStats():
     def avg_stats(self): return [s.item()/self.count for s in self.all_stats]
 
     def __repr__(self):
-        if not self.count:
-            return ''
+        if not self.count: return ''
         return f"{'train' if self.training else 'valid'} metrics - {self.avg_stats}"
 
     def accumulate(self, learner):
@@ -37,6 +36,7 @@ class AvgStats():
             self.totals[i] += metric(learner.pred, learner.y_batch) * batch_size
 
 class StatsLogging(Callback):
+    '''Callback for print out loss and other metrics for each training epoch'''
     def __init__(self, metrics=[compute_accuracy]):
         self.train_stats = AvgStats(metrics, True)
         self.valid_stats = AvgStats(metrics, False)

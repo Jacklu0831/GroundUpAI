@@ -10,15 +10,18 @@ import random
 from data_bunch import *
 
 def get_image_list(transforms):
+    '''Util function for getting image list from path with optional transformation'''
     return ImageList.from_files(path, transforms=transforms)
 
 def show_image_sub(img, ax=None, figsize=(3, 3)):
+    '''Util function for subplotting image in given figure'''
     if ax == None:
         _, ax = plt.subplots(1, 1, figsize=figsize)
     ax.axis('off')
     ax.imshow(img.permute(1,2,0))
 
 def show_image_batch(batch, c=4, r=None, figsize=None):
+    '''Util function for plotting batch of images with customizable dimentions of subplot and figure size'''
     bs = len(batch)
     r = r if r != None else int(math.ceil(bs/c))
     figsize = figsize if figsize != None else (c*3, r*3)
@@ -27,9 +30,11 @@ def show_image_batch(batch, c=4, r=None, figsize=None):
         show_image_sub(im, ax)
 
 class PilTransform(Transform):
+    '''General PIL library transformation class'''
     _order=11
 
 class PilRandomFlipH(PilTransform):
+    '''Horizontal flip transformation class'''
     def __init__(self, p=0.5):
         self.p = p
 
@@ -39,6 +44,7 @@ class PilRandomFlipH(PilTransform):
         return img
 
 class PilRandomAllRotations(PilTransform):
+    '''Random rotation transformation class'''
     def __init__(self, p=0.75):
         self.p = p * 7/8
 
@@ -51,6 +57,7 @@ class PilRandomAllRotations(PilTransform):
 from random import randint
 
 def process_size(size):
+    '''Util function to ensure size is two dimensional tuple'''
     if isinstance(size, (list, tuple)):
         assert(len(size) == 2)
         return tuple(size)
@@ -58,25 +65,26 @@ def process_size(size):
         return tuple([size, size])
 
 def default_crop_size(w, h):
+    '''Util function to obtain crop size from given width and height'''
     return [w, w] if w < h else [h, h]
 
 class GeneralCrop(PilTransform):
+    '''General crop transformation class'''
     def __init__(self, size, crop_size=None, resample=PIL.Image.BILINEAR):
         self.resample = resample
         self.size = process_size(size)
         self.crop_size = None if crop_size == None else process_size(crop_size)
 
-    def default_crop_size(self, w, h):
-        return default_crop_size(w, h)
+    def default_crop_size(self, w, h): return default_crop_size(w, h)
 
     def __call__(self, img):
         crop_size = self.default_crop_size(*img.size) if self.crop_size == None else self.crop_size
         return img.transform(self.size, PIL.Image.EXTENT, self.get_corners(*img.size, *crop_size), resample=self.resample)
 
-    def get_corners(self, w, h):
-        return (0, 0, w, h)
+    def get_corners(self, w, h): return (0, 0, w, h)
 
 class CenterCrop(GeneralCrop):
+    '''Center crop transformation class'''
     def __init__(self, size, scale=1.14, resample=PIL.Image.BILINEAR):
         super().__init__(size, resample=resample)
         self.scale = scale
@@ -88,6 +96,7 @@ class CenterCrop(GeneralCrop):
         return ((w-wc)//2, (h-hc)//2, (w-wc)//2+wc, (h-hc)//2+hc)
 
 class RandomResizedCrop(GeneralCrop):
+    '''Randomized crop transformation class (common used on ImageNet data)'''
     def __init__(self, size, scale=(0.08, 1.0), ratio=(3./4., 4./3.), resample=PIL.Image.BILINEAR):
         super().__init__(size, resample=resample)
         self.scale = scale
@@ -120,6 +129,7 @@ from torch import FloatTensor
 # https://web.archive.org/web/20150222120106/xenia.media.mit.edu/~cwren/interpolator/
 
 def find_coeffs(src, tar):
+    '''Util function for obtaining warp coefficients with source and target coordinates'''
     M = []
     for p1, p2 in zip(tar, src):
         M.append([p1[0], p1[1], 1, 0, 0, 0, -p2[0]*p1[0], -p2[0]*p1[1]])
@@ -129,15 +139,18 @@ def find_coeffs(src, tar):
     return list(torch.solve(B, A)[0][:, 0])
 
 def warp(img, size, src, resample=PIL.Image.BILINEAR):
+    '''Warp image by source coordinates and size'''
     w, h = size
     tar = ((0,0), (0,h), (w,h), (w,0))
     coeffs = find_coeffs(src, tar)
     return img.transform(size, PIL.Image.PERSPECTIVE, list(coeffs), resample=resample)
 
 def uniform(a, b):
+    '''Util function to sample from from uniform distribution'''
     return a + (b-a)*random.random()
 
 class WarpRandomCrop(PilTransform):
+    '''Random Warp transformation class'''
     def __init__(self, size, crop_size=None, magnitude=0., resample=PIL.Image.BILINEAR):
         self.size = process_size(size)
         self.crop_size = None if crop_size is None else process_size(crop_size)
