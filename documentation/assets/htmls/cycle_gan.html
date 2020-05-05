@@ -1,0 +1,176 @@
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">TConvNReLU</span></td>
+                                            <td class="expand"><span class="params">(i, o, norm, k=3, s=2, b=True)</span></td>
+                                        </table>
+                                        <p><span class="desc">Tranpose convolutional layer + normalization layer + ReLU activation</span></p>
+                                        <ul class="list">
+                                           <li>i: </li>
+                                           <li>o: </li>
+                                           <li>norm: </li>
+                                           <li>k: </li>
+                                           <li>s: </li>
+                                           <li>b: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">PadConvNReLU</span></td>
+                                            <td class="expand"><span class="params">(i, o, norm, pad_mode, k=3, s=1, p=1, b=True, act=True, init=nn.init.kaiming_normal_)</span></td>
+                                        </table>
+                                        <p><span class="desc">PaddedConvolutional layer + normalization layer + ReLU activation</span></p>
+                                        <ul class="list">
+                                           <li>i: </li>
+                                           <li>o: </li>
+                                           <li>norm: </li>
+                                           <li>pad_mode: </li>
+                                           <li>k: </li>
+                                           <li>s: </li>
+                                           <li>p: </li>
+                                           <li>b: </li>
+                                           <li>act: </li>
+                                           <li>init: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">ResnetBlock(nn.Module)</span></td>
+                                            <td class="expand"><span class="params">(d, pad_mode, norm=None, dropout=0., b=True)</span></td>
+                                        </table>
+                                        <p><span class="desc">ResBlock ( y = F(x) + x)</span></p>
+                                        <ul class="list">
+                                           <li>d: </li>
+                                           <li>pad_mode: </li>
+                                           <li>norm: </li>
+                                           <li>dropout: </li>
+                                           <li>b: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">generator</span></td>
+                                            <td class="expand"><span class="params">(i, o, c=64, norm=None, dropout=0., depth=6, pad_mode='reflection')</span></td>
+                                        </table>
+                                        <p><span class="desc">Generator of GAN</span></p>
+                                        <ul class="list">
+                                           <li>i: </li>
+                                           <li>o: </li>
+                                           <li>c: </li>
+                                           <li>norm: </li>
+                                           <li>dropout: </li>
+                                           <li>depth: </li>
+                                           <li>pad_mode: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">ConvNLReLU</span></td>
+                                            <td class="expand"><span class="params">(i, o, norm, k=3, s=1, p=1, b=True, act=True, slope=0.2, init=nn.init.kaiming_normal_)</span></td>
+                                        </table>
+                                        <p><span class="desc">Convolutional layer + normalization layer + ReLU activation</span></p>
+                                        <ul class="list">
+                                           <li>i: </li>
+                                           <li>o: </li>
+                                           <li>norm: </li>
+                                           <li>k: </li>
+                                           <li>s: </li>
+                                           <li>p: </li>
+                                           <li>b: </li>
+                                           <li>act: </li>
+                                           <li>slope: </li>
+                                           <li>init: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">discriminator</span></td>
+                                            <td class="expand"><span class="params">(i, c=64, norm=None, n_layer=3, act=False)</span></td>
+                                        </table>
+                                        <p><span class="desc">Discriminator of GAN</span></p>
+                                        <ul class="list">
+                                           <li>i: </li>
+                                           <li>c: </li>
+                                           <li>norm: </li>
+                                           <li>n_layer: </li>
+                                           <li>act: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">CycleGAN(nn.Module)</span></td>
+                                            <td class="expand"><span class="params">(i, o, c=64, norm=None, gen_layers=6, dis_layers=3, dropout=0., lsgan=True)</span></td>
+                                        </table>
+                                        <p><span class="desc">Cycle GAN with two generators and discriminators</span></p>
+                                        <ul class="list">
+                                           <li>i: </li>
+                                           <li>o: </li>
+                                           <li>c: </li>
+                                           <li>norm: </li>
+                                           <li>gen_layers: </li>
+                                           <li>dis_layers: </li>
+                                           <li>dropout: </li>
+                                           <li>lsgan: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">AdaptiveLoss(nn.Module)</span></td>
+                                            <td class="expand"><span class="params">(critic)</span></td>
+                                        </table>
+                                        <p><span class="desc">Critic wrapper for creating binary target tensors for loss computation</span></p>
+                                        <ul class="list">
+                                           <li>critic: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">CycleGANLoss(nn.Module)</span></td>
+                                            <td class="expand"><span class="params">(cycleGAN, w1=10., w2=10., wi=0.5, lsgan=True)</span></td>
+                                        </table>
+                                        <p><span class="desc">Cycle GAN loss layer with identity loss, generator loss, and discriminator loss</span></p>
+                                        <ul class="list">
+                                           <li>cycleGAN: </li>
+                                           <li>w1: </li>
+                                           <li>w2: </li>
+                                           <li>wi: </li>
+                                           <li>lsgan: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">CycleGANTrainer(LearnerCallback)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback for the special training procedure of Cycle GAN</span></p>
+                                    </div>
+                                </div>

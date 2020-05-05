@@ -1,0 +1,204 @@
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_image_list</span></td>
+                                            <td class="expand"><span class="params">(transforms)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function for getting image list from path with optional transformation</span></p>
+                                        <ul class="list">
+                                           <li>transforms: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">show_image_sub</span></td>
+                                            <td class="expand"><span class="params">(img, ax=None, figsize=(3, 3))</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function for subplotting image in given figure</span></p>
+                                        <ul class="list">
+                                           <li>img: </li>
+                                           <li>ax: </li>
+                                           <li>figsize: </li>
+                                           <li>3): </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">show_image_batch</span></td>
+                                            <td class="expand"><span class="params">(batch, c=4, r=None, figsize=None)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function for plotting batch of images with customizable dimentions of subplot and figure size</span></p>
+                                        <ul class="list">
+                                           <li>batch: </li>
+                                           <li>c: </li>
+                                           <li>r: </li>
+                                           <li>figsize: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">PilTransform(Transform)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
+                                        </table>
+                                        <p><span class="desc">General PIL library transformation class</span></p>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">PilRandomAllRotations(PilTransform)</span></td>
+                                            <td class="expand"><span class="params">(p=0.75)</span></td>
+                                        </table>
+                                        <p><span class="desc">Random rotation transformation class</span></p>
+                                        <ul class="list">
+                                           <li>p: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">process_size</span></td>
+                                            <td class="expand"><span class="params">(size)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function to ensure size is two dimensional tuple</span></p>
+                                        <ul class="list">
+                                           <li>size: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">default_crop_size</span></td>
+                                            <td class="expand"><span class="params">(w, h)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function to obtain crop size from given width and height</span></p>
+                                        <ul class="list">
+                                           <li>w: </li>
+                                           <li>h: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">GeneralCrop(PilTransform)</span></td>
+                                            <td class="expand"><span class="params">(size, crop_size=None, resample=PIL.Image.BILINEAR)</span></td>
+                                        </table>
+                                        <p><span class="desc">General crop transformation class</span></p>
+                                        <ul class="list">
+                                           <li>size: </li>
+                                           <li>crop_size: </li>
+                                           <li>resample: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">CenterCrop(GeneralCrop)</span></td>
+                                            <td class="expand"><span class="params">(size, scale=1.14, resample=PIL.Image.BILINEAR)</span></td>
+                                        </table>
+                                        <p><span class="desc">Center crop transformation class</span></p>
+                                        <ul class="list">
+                                           <li>size: </li>
+                                           <li>scale: </li>
+                                           <li>resample: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">RandomResizedCrop(GeneralCrop)</span></td>
+                                            <td class="expand"><span class="params">(size, scale=(0.08, 1.0), ratio=(3./4., 4./3.), resample=PIL.Image.BILINEAR)</span></td>
+                                        </table>
+                                        <p><span class="desc">Randomized crop transformation class (common used on ImageNet data)</span></p>
+                                        <ul class="list">
+                                           <li>size: </li>
+                                           <li>scale: </li>
+                                           <li>1.0): </li>
+                                           <li>ratio: </li>
+                                           <li>4./3.): </li>
+                                           <li>resample: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">find_coeffs</span></td>
+                                            <td class="expand"><span class="params">(src, tar)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function for obtaining warp coefficients with source and target coordinates</span></p>
+                                        <ul class="list">
+                                           <li>src: </li>
+                                           <li>tar: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">warp</span></td>
+                                            <td class="expand"><span class="params">(img, size, src, resample=PIL.Image.BILINEAR)</span></td>
+                                        </table>
+                                        <p><span class="desc">Warp image by source coordinates and size</span></p>
+                                        <ul class="list">
+                                           <li>img: </li>
+                                           <li>size: </li>
+                                           <li>src: </li>
+                                           <li>resample: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">uniform</span></td>
+                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function to sample from from uniform distribution</span></p>
+                                        <ul class="list">
+                                           <li>a: </li>
+                                           <li>b: </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">WarpRandomCrop(PilTransform)</span></td>
+                                            <td class="expand"><span class="params">(size, crop_size=None, magnitude=0., resample=PIL.Image.BILINEAR)</span></td>
+                                        </table>
+                                        <p><span class="desc">Random Warp transformation class</span></p>
+                                        <ul class="list">
+                                           <li>size: </li>
+                                           <li>crop_size: </li>
+                                           <li>magnitude: </li>
+                                           <li>resample: </li>
+                                        </ul>
+                                    </div>
+                                </div>
