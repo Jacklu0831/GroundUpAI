@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <title>GroundUpAI Documentation</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">    
+    <link rel="shortcut icon" href="assets/favicon.ico">  
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script defer src="assets/fontawesome/js/all.js"></script>
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">   
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <link rel="stylesheet" href="assets/plugins/lightbox/dist/ekko-lightbox.css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+</head> 
+
+<body class="body-gray">
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <span aria-hidden="true" class="icon_documents_alt icon"></span>
+                        <span class="text-bold">GroundUp</span><span class="text-bold-highlight">AI</span>
+                    </h1>
+                </div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Quick Start</li>
+                </ol>
+            </div><!--//container-->
+        </header><!--//header-->
+        
+        <div class="doc-wrapper">
+            <div class="container">
+                <div id="doc-header" class="doc-header text-center">
+                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i> Quick Start</h1>
+                    <div class="meta"><i class="far fa-clock"></i>&nbsp; Last updated: May 2<sup>nd</sup>, 2020</div>
+                </div><!--//doc-header-->
+                <div class="doc-body row">
+                    <div class="doc-content col-md-9 col-12 order-1">
+                        <div class="content-inner">
+                            <section id="download-and-use" class="doc-section">
+                                <h2 class="section-title">Download and Use</h2>
+                                <div class="section-block">
+                                    <a href="assets/files/GroundUpAI_scripts.zip" class="btn btn-green" target="_blank"><i class="fas fa-download"></i> Download GroundUpAI</a>
+                                </div>
+                                <div>
+                                    <p>Download python scripts above and unzip <i>scripts.zip</i>. You should find the following files in the <i>scripts</i> directory.</p>
+                                    <h3>files</h3>
+                                    <pre><output class="language-none folded">utils.py
+parameter.py
+data_block.py
+data_bunch.py
+augmentation.py
+initialization.py
+loss.py
+model.py
+linear.py
+convolution.py
+pooling.py
+batch_norm.py
+other_layers.py
+sub_model.py
+optimizer.py
+training.py
+callback.py
+learner.py
+stats_logging.py
+param_scheduling.py
+early_stopping.py
+progress_bar.py
+lr_search.py
+stateless_optim.py
+resnet.py
+lstm.py
+gru.py
+bleu_score.py
+cycle_gan.py
+transformer.py
+bert.py</output></pre>
+                                </div>
+                            </section><!--//doc-section-->
+
+                            <section id="making-contribution" class="doc-section">
+                                <h2 class="section-title">Making Contribution</h2>
+                                <br>
+                                <div>
+                                    <h3>The GitHub stuff</h3>
+                                    <p>Here is the <a href="">GitHub repository</a> of GroundUpAI. Please follow <a href="https://akrabat.com/the-beginners-guide-to-contributing-to-a-github-project/">this thorough guide</a> from forking to PR reviews.</p>
+                                    <h3>Development steps</h3>
+                                    <ol>
+                                        <li>Modify files in the <i>notebooks</i> directory and and make sure to add <code class="language-python inline">#export</code> at the top of the notebook cells you want to add to the script</li>
+                                        <li>Run <code class="language-none inline">python3 generate_scripts.py</code> to reflect your changes in the scripts</li>
+                                        <li>Make sure the tests in other notebooks are successful following your change.</li>
+                                    </ol>
+                                </div>
+                                <p>Below are the mapping from notebook to scripts</p>
+                                <pre><output class="language-none folded">notebooks/00_utils.ipynb            -> scripts/utils.py
+notebooks/01_parameter.ipynb        -> scripts/parameter.py
+notebooks/02_data_block.ipynb       -> scripts/data_block.py
+notebooks/03_data_bunch.ipynb       -> scripts/data_bunch.py
+notebooks/04_augmentation.ipynb     -> scripts/augmentation.py
+notebooks/05_initialization.ipynb   -> scripts/initialization.py
+notebooks/06_loss.ipynb             -> scripts/loss.py
+notebooks/07_model.ipynb            -> scripts/model.py
+notebooks/08_linear.ipynb           -> scripts/linear.py
+notebooks/09_convolution.ipynb      -> scripts/convolution.py
+notebooks/10_pooling.ipynb          -> scripts/pooling.py
+notebooks/11_batch_norm.ipynb       -> scripts/batch_norm.py
+notebooks/12_other_layers.ipynb     -> scripts/other_layers.py
+notebooks/13_sub_model.ipynb        -> scripts/sub_model.py
+notebooks/14_optimizer.ipynb        -> scripts/optimizer.py
+notebooks/15_training.ipynb         -> scripts/training.py
+notebooks/16_callback.ipynb         -> scripts/callback.py
+notebooks/17_learner.ipynb          -> scripts/learner.py
+notebooks/18_stats_logging.ipynb    -> scripts/stats_logging.py
+notebooks/19_param_scheduling.ipynb -> scripts/param_scheduling.py
+notebooks/20_early_stopping.ipynb   -> scripts/early_stopping.py
+notebooks/21_progress_bar.ipynb     -> scripts/progress_bar.py
+notebooks/22_lr_search.ipynb        -> scripts/lr_search.py
+notebooks/23_stateless_optim.ipynb  -> scripts/stateless_optim.py
+notebooks/25_resnet.ipynb           -> scripts/resnet.py
+notebooks/26_lstm.ipynb             -> scripts/lstm.py
+notebooks/27_gru.ipynb              -> scripts/gru.py
+notebooks/28_bleu_score.ipynb       -> scripts/bleu_score.py
+notebooks/29_cycle_gan.ipynb        -> scripts/cycle_gan.py
+notebooks/30_transformer.ipynb      -> scripts/transformer.py
+notebooks/31_bert.ipynb             -> scripts/bert.py</output></pre>
+                            </section><!--//doc-section-->
+
+                        </div><!--//content-inner-->
+                    </div><!--//doc-content-->
+                    <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                        <div id="doc-nav" class="doc-nav">
+                            <nav id="doc-menu" class="nav doc-menu flex-column sticky">
+                                <a class="nav-link scrollto" href="#download-and-use">Download and Use</a>
+                                <a class="nav-link scrollto" href="#making-contribution">Making Contribution</a>
+                            </nav><!--//doc-menu-->
+                        </div>
+                    </div><!--//doc-sidebar-->
+                </div><!--//doc-body-->              
+            </div><!--//container-->
+        </div><!--//doc-wrapper-->
+        
+    </div><!--//page-wrapper-->
+    
+    
+    <footer id="footer" class="footer text-center">
+        <div class="container">
+            <small class="copyright">&copy; Documentation template designed by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a></small>
+        </div><!--//container-->
+    </footer><!--//footer-->
+    
+    <!-- Main Javascript -->          
+    <script type="text/javascript" src="assets/plugins/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>    
+    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>  
+    <script type="text/javascript" src="assets/plugins/lightbox/dist/ekko-lightbox.min.js"></script>   
+    <script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
+    
+</body>
+</html> 

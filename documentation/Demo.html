@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <title>GroundUpAI Documentation</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">    
+    <link rel="shortcut icon" href="assets/favicon.ico">  
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script defer src="assets/fontawesome/js/all.js"></script>
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">   
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <link rel="stylesheet" href="assets/plugins/lightbox/dist/ekko-lightbox.css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+</head> 
+
+<body class="body-gray">
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <span aria-hidden="true" class="icon_documents_alt icon"></span>
+                        <span class="text-bold">GroundUp</span><span class="text-bold-highlight">AI</span>
+                    </h1>
+                </div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Demo</li>
+                </ol>
+            </div><!--//container-->
+        </header><!--//header-->
+        
+        <div class="doc-wrapper">
+            <div class="container">
+                <div id="doc-header" class="doc-header text-center">
+                    <h1 class="doc-title"><span aria-hidden="true" class="icon icon_datareport_alt"></span> Demo</h1>
+                    <div class="meta"><i class="far fa-clock"></i>&nbsp; Last updated: May 2<sup>nd</sup>, 2020</div>
+                </div><!--//doc-header-->
+                <div class="doc-body row">
+                    <div class="doc-content col-md-9 col-12 order-1">
+                        <div class="content-inner">
+                            <section id="building-your-model" class="doc-section">
+                                <h2 class="section-title">Building Your Model</h2>
+                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/00_building_your_model.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <div class="section-block">
+                                    <h3 class="block-title">1. Import</h3>
+                                    <pre><code class="language-python">from batch_norm import *</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">2. Layers</h3>
+                                    <pre><code class="language-python">model = Sequential(Reshape((1, 28, 28)),
+                   Conv(c_in=1, c_out=4, k_s=5, stride=2, pad=1), # 4, 13, 13
+                   AvgPool(k_s=2, pad=0), # 4, 12, 12
+                   BatchNorm(4),
+                   Conv(c_in=4, c_out=16, stride=2, leak=1.), # 16, 5, 5
+                   BatchNorm(16),
+                   Flatten(),
+                   Linear(400, 64), # 16 * 5 * 5 -> 400
+                   ReLU(),
+                   Linear(64, 10, True))</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">3. Display Model</h3>
+                                    <pre><code class="language-python">model</code></pre>
+                                    <pre><output class="language-none">(Model)
+    Reshape(1, 28, 28)
+    Conv(1, 4, 5, 2)
+    AvgPool(2, 1)
+    BatchNorm()
+    Conv(4, 16, 3, 2)
+    BatchNorm()
+    Flatten()
+    Linear(400, 64)
+    ReLU()
+    Linear(64, 10)</output></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">4. Display Parameters</h3>
+                                    <pre><code class="language-python">for p in model.parameters():
+    print(p)</code></pre>
+                                    <pre><output class="language-none">shape: (4, 1, 5, 5), grad: True
+shape: (4,), grad: True
+shape: (1, 4, 1, 1), grad: True
+shape: (1, 4, 1, 1), grad: True
+shape: (16, 4, 3, 3), grad: True
+shape: (16,), grad: True
+shape: (1, 16, 1, 1), grad: True
+shape: (1, 16, 1, 1), grad: True
+shape: (400, 64), grad: True
+shape: (64,), grad: True
+shape: (64, 10), grad: True
+shape: (10,), grad: True</output></pre>
+                                    <pre><code class="language-python">print(f'layer2: {model.layers[1]}\n')
+for p in model.layers[1].parameters():
+    print(p)</code></pre>
+                                    <pre><output class="language-none">layer2:     Conv(1, 4, 5, 2)
+
+shape: (4, 1, 5, 5), grad: True
+shape: (4,), grad: True</output></pre>
+                                </div><!--//section-block-->
+                            </section><!--//doc-section-->
+                            
+
+                            <section id="making-a-callback" class="doc-section">
+                                <h2 class="section-title">Making a Callback</h2>
+                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/00_building_your_model.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <div class="section-block">
+                                    <h3 class="block-title">1. Import</h3>
+                                    <pre><code class="language-python">from callback import *</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">2. Layers</h3>
+                                    <pre><code class="language-python">#export
+class LearningRateSearch(Callback):
+    def __init__(self, max_iter=1000, min_lr=1e-4, max_lr=1):
+        self.max_iter = max_iter
+        self.min_lr, self.max_lr = min_lr, max_lr
+        self.cur_lr, self.best_lr = min_lr, min_lr
+        self.best_loss = float('inf')
+        
+    def before_batch(self): 
+        if not self.model.training: return
+        position = self.iters_count / self.iters
+        self.cur_lr = self.min_lr * (self.max_lr/self.min_lr)**position
+        self.optimizer.hyper_params['learning_rate'] = self.cur_lr
+            
+    def after_step(self):
+        if self.iters_count >= self.max_iter or self.loss > self.best_loss*10:
+            raise CancelTrainException()
+        if self.loss < self.best_loss:
+            self.best_loss = self.loss
+            self.best_lr = self.cur_lr</code></pre>
+                                </div><!--//section-block-->
+                            </section><!--//doc-section-->
+                            
+
+                            <section id="lr-search" class="doc-section">
+                                <h2 class="section-title">Learning Rate Search</h2>
+                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/02_lr_search_n_training.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <div class="section-block">
+                                    <h3 class="block-title">1. Import</h3>
+                                    <pre><code class="language-python">from stateful_optim import *</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">2. Data Bunch, Loss Function</h3>
+                                    <pre><code class="language-python">data_bunch = get_data_bunch(*get_mnist_data(), batch_size=64)
+loss_fn = CrossEntropy()</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">3. Model, Adam, Callbacks, Learner</h3>
+                                    <pre><code class="language-python">model = get_conv_final_model(data_bunch)
+optimizer = adam_opt(model, learning_rate=1e-3, weight_decay=1e-4)
+callbacks = [LearningRateSearch(min_lr=1e-5, max_lr=1e-2), Recorder()]</code></pre>
+                                    <pre><code class="language-python">learner = Learner(data_bunch, model, loss_fn, optimizer, callbacks)
+print(learner)</code></pre>
+                                    <pre><output class="language-python">(DataBunch) 
+    (DataLoader) 
+        (Dataset) x: (50000, 784), y: (50000,)
+        (Sampler) total: 50000, batch_size: 64, shuffle: True
+    (DataLoader) 
+        (Dataset) x: (10000, 784), y: (10000,)
+        (Sampler) total: 10000, batch_size: 128, shuffle: False
+(Model)
+    Reshape(1, 28, 28)
+    Conv(1, 4, 5, 2)
+    AvgPool(2, 1)
+    BatchNorm()
+    Conv(4, 16, 3, 2)
+    BatchNorm()
+    Flatten()
+    Linear(400, 64)
+    ReLU()
+    Linear(64, 10)
+(CrossEntropy)
+(StatefulOpt) steppers: ['adam', 'l2_reg'], stats: ['ExpWeightedGrad', 'ExpWeightedSqrGrad', 'StepCount']
+(Callbacks) ['TrainEval', 'LearningRateSearch', 'Recorder']</output></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">4. One Epoch Fit</h3>
+                                    <pre><code class="language-python">learner.fit(1)</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">5. Display Loss vs. Learning Rate</h3>
+                                    <pre><code class="language-python">plot_lr_loss(learner.callbacks[2])</code></pre>
+                                    <img class="img-fluid imgout" src="assets/images/demo/loss_vs_lr.png" alt="screenshot" />
+                                    <pre><code class="language-python">lr = learner.callbacks[1].lr
+print(f'learning rate found: {lr}')</code></pre>
+                                </div><!--//section-block-->
+                            </section><!--//doc-section-->
+
+
+                            <section id="model-training" class="doc-section">
+                                <h2 class="section-title">Model Training</h2>
+                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/02_lr_search_n_training.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <div class="section-block">
+                                    <h3 class="block-title">1. Import</h3>
+                                    <pre><code class="language-python">from stateful_optim import *</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">2. Data Bunch, Loss Function</h3>
+                                    <pre><code class="language-python">data_bunch = get_data_bunch(*get_mnist_data(), batch_size=64)
+loss_fn = CrossEntropy()</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">3. Cosine Parameter Scheduling</h3>
+                                    <pre><code class="language-python">schedule = combine_schedules([0.4, 0.6], one_cycle_cos(lr/3, lr*3, lr/3))</code></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">4. Model, Adam, Callbacks, Learner</h3>
+                                    <pre><code class="language-python">model = get_conv_final_model(data_bunch)
+optimizer = adam_opt(model, learning_rate=lr, weight_decay=1e-4)
+callbacks = [ParamScheduler('learning_rate', schedule), StatsLogging(), Recorder()]</code></pre>
+                                    <pre><code class="language-python">learner = Learner(data_bunch, model, loss_fn, optimizer, callbacks)
+print(learner)</code></pre>
+                                    <pre><output class="language-none">(DataBunch) 
+    (DataLoader) 
+        (Dataset) x: (50000, 784), y: (50000,)
+        (Sampler) total: 50000, batch_size: 64, shuffle: True
+    (DataLoader) 
+        (Dataset) x: (10000, 784), y: (10000,)
+        (Sampler) total: 10000, batch_size: 128, shuffle: False
+(Model)
+    Reshape(1, 28, 28)
+    Conv(1, 4, 5, 2)
+    AvgPool(2, 1)
+    BatchNorm()
+    Conv(4, 16, 3, 2)
+    BatchNorm()
+    Flatten()
+    Linear(400, 64)
+    ReLU()
+    Linear(64, 10)
+(CrossEntropy)
+(StatefulOpt) steppers: ['adam', 'l2_reg'], stats: ['ExpWeightedGrad', 'ExpWeightedSqrGrad', 'StepCount']
+(Callbacks) ['TrainEval', 'ParamScheduler', 'StatsLogging', 'Recorder']</output></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">5. Train Model</h3>
+                                    <pre><code class="language-python">learner.fit(3)</code></pre>
+                                    <pre><output class="language-python">Epoch - 1
+train metrics - [5.624208450317383e-06, 0.89082]
+valid metrics - [2.2692584991455077e-05, 0.9622]
+
+Epoch - 2
+train metrics - [6.513986587524414e-06, 0.95746]
+valid metrics - [2.0359230041503905e-05, 0.9706]
+
+Epoch - 3
+train metrics - [6.942987442016601e-06, 0.96688]
+valid metrics - [1.5890932083129882e-05, 0.9731]</output></pre>
+                                </div><!--//section-block-->
+                                <div class="section-block">
+                                    <h3 class="block-title">6. Loss and Learning Rate</h3>
+                                    <pre><code class="language-python">learner.callbacks[3].plot_losses()</code></pre>
+                                    <img class="img-fluid imgout" src="assets/images/demo/loss.png" alt="screenshot" />
+                                    <pre><code class="language-python">learner.callbacks[3].plot_parameter('learning_rate')</code></pre>
+                                    <img class="img-fluid imgout" src="assets/images/demo/lr.png" alt="screenshot" />
+                                </div><!--//section-block-->
+                            </section><!--//doc-section-->
+
+                        </div><!--//content-inner-->
+                    </div><!--//doc-content-->
+                    <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                        <div id="doc-nav" class="doc-nav">
+                            <nav id="doc-menu" class="nav doc-menu flex-column sticky">
+                                <a class="nav-link scrollto" href="#building-your-model">Building Your Model</a>
+                                <a class="nav-link scrollto" href="#making-a-callback">Making a Callback</a>
+                                <a class="nav-link scrollto" href="#lr-search">Learning Rate Search</a>
+                                <a class="nav-link scrollto" href="#model-training">Model Training</a>
+                            </nav><!--//doc-menu-->
+                        </div>
+                    </div><!--//doc-sidebar-->
+                </div><!--//doc-body-->              
+            </div><!--//container-->
+        </div><!--//doc-wrapper-->
+    </div><!--//page-wrapper-->
+    
+    
+    <footer id="footer" class="footer text-center">
+        <div class="container">
+            <small class="copyright">&copy; Documentation template designed by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a></small>
+        </div><!--//container-->
+    </footer><!--//footer-->
+    
+    <!-- Main Javascript -->          
+    <script type="text/javascript" src="assets/plugins/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>    
+    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>  
+    <script type="text/javascript" src="assets/plugins/lightbox/dist/ekko-lightbox.min.js"></script>   
+    <script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
+    
+</body>
+</html> 

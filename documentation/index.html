@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <title>GroundUpAI Documentation</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">    
+    <link rel="shortcut icon" href="assets/favicon.ico">  
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script defer src="assets/fontawesome/js/all.js"></script>
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">   
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <link rel="stylesheet" href="assets/plugins/lightbox/dist/ekko-lightbox.css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+</head> 
+
+<body class="landing-page">
+    <div class="page-wrapper">
+        <header class="header text-center">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <span aria-hidden="true" class="icon_documents_alt icon"></span>
+                        <span class="text-bold">GroundUp</span><span class="text-bold-highlight">AI</span>
+                    </h1>
+                </div>
+                <div class="tagline">
+                    <p>A deep learning framework built from basic operations to complex architectures</p>
+                    <br>
+                </div>
+                <div class="social-container">
+                    <a class="btn btn-primary" href="https://github.com/Jacklu0831/GroundUpAI" target="_blank"><i class="fab fa-github"></i> Source Code</a>
+                </div>
+            </div>
+        </header>
+        
+        <section class="cards-section text-center">
+            <div class="container">
+
+                <h2 class="title">About</h2>
+                <div class="home-intro">
+                    <p>GroundUpAI is a <b>simplistic</b>, <b>pythonic</b> deep learning framework. It is entirely implemented <b>from scratch</b> (even <a href="">backpropagation</a>) without the help from other frameworks with the exception of <a href="https://pytorch.org/docs/stable/tensors.html">torch.Tensor</a> due to the subpar FLOPS of plain python, hence the name "ground up".</p>
+                </div>
+
+                <h2 class="title">Key Features</h2>
+                <div class="intro">
+                    Key features of GroundUpAI include simplicity in making custom <a href="">callbacks</a>, <a href="">generic optimizer</a>, <a href="">minimized boilerplate</a>, and <a href="">more</a>! If you are familiar with the implementation of <a href="https://github.com/pytorch/pytorch">PyTorch</a> and <a href="https://github.com/fastai/fastai2">fastai</a>, you would also likely spot numerous places where some great OOP practices are inspired by their source code.</p> 
+                </div>
+
+                <div id="cards-wrapper" class="cards-wrapper row">
+                    <div class="item item-gray col-lg-4 col-6">
+                        <div class="item-inner">
+                            <div class="icon-holder">
+                                <i class="icon fa fa-paper-plane"></i>
+                            </div><!--//icon-holder-->
+                            <h3 class="title">Quick Start</h3>
+                            <p class="intro">Steps to get started</p>
+                            <a class="link" href="QuickStart.html"></a>
+                        </div><!--//item-inner-->
+                    </div>
+
+                    <div class="item item-gray col-lg-4 col-6">
+                        <div class="item-inner">
+                            <div class="icon-holder">
+                                <span aria-hidden="true" class="icon icon_datareport_alt"></span>
+                            </div><!--//icon-holder-->
+                            <h3 class="title">Demo</h3>
+                            <p class="intro">A simple demo to show how the building blocks all come together</p>
+                            <a class="link" href="Demo.html"></a>
+                        </div><!--//item-inner-->
+                    </div><!--//item-->
+
+                    <div class="item item-gray col-lg-4 col-6">
+                        <div class="item-inner">
+                            <div class="icon-holder">
+                                <span aria-hidden="true" class="icon icon_puzzle_alt"></span>
+                            </div><!--//icon-holder-->
+                            <h3 class="title">Building Blocks</h3>
+                            <p class="intro">Explain my progress of going from MatMul to training precedures with dynamic hyperparams, callbacks, and stateful optimizer, etc</p>
+                            <a class="link" href="BuildingBlocks.html"></a>
+                        </div><!--//item-inner-->
+                    </div><!--//item-->
+
+                    <div class="item item-gray col-lg-4 col-6">
+                        <div class="item-inner">
+                            <div class="icon-holder">
+                                <span aria-hidden="true" class="icon icon_house"></span>
+                            </div><!--//icon-holder-->
+                            <h3 class="title">Modern Architectures</h3>
+                            <p class="intro">Time to build the <b>SOTAs</b>! Featuring ResNet, CycleGAN, Transformers, and BERT</p>
+                            <a class="link" href="ModernArchitectures.html"></a>
+                        </div><!--//item-inner-->
+                    </div><!--//item-->
+
+                    <div class="item item-gray col-lg-4 col-6">
+                        <div class="item-inner">
+                            <div class="icon-holder">
+                                <span aria-hidden="true" class="icon icon_info"></span>
+                            </div><!--//icon-holder-->
+                            <h3 class="title">Other Info</h3>
+                            <p class="intro">Miscellaneous info</p>
+                            <a class="link" href="OtherInfo.html"></a>
+                        </div><!--//item-inner-->
+                    </div><!--//item-->
+
+                    <div class="item item-gray col-lg-4 col-6">
+                        <div class="item-inner">
+                            <div class="icon-holder">
+                                <span aria-hidden="true" class="icon icon_document"></span>
+                            </div><!--//icon-holder-->
+                            <h3 class="title">Acknowledgements</h3>
+                            <p class="intro">Credits and Academic papers that helped along the way</p>
+                            <a class="link" href="Acknowledgements.html"></a>
+                        </div><!--//item-inner-->
+                    </div><!--//item-->
+
+                </div><!--//cards-->
+
+            </div><!--//container-->
+        </section><!--//cards-section-->
+    </div><!--//page-wrapper-->
+    
+
+    <footer id="footer" class="footer text-center">
+        <div class="container">
+            <small class="copyright">&copy; Documentation template designed by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a></small>
+        </div><!--//container-->
+    </footer><!--//footer-->
+    
+    <!-- Main Javascript -->          
+    <script type="text/javascript" src="assets/plugins/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>    
+    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>  
+    <script type="text/javascript" src="assets/plugins/lightbox/dist/ekko-lightbox.min.js"></script>   
+    <script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
+    
+</body>
+</html> 
