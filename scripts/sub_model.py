@@ -9,8 +9,8 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from other_layers import *
 
 class SubModel(Module):
-    '''Wrapper class around model to allow models to branch off into sub models (used in ResNet)'''
     def __init__(self):
+        '''Wrapper class around model to allow models to branch off into sub models (used in ResNet).'''
         super().__init__()
 
     def parameters(self):

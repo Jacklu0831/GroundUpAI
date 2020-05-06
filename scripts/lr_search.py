@@ -9,8 +9,12 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from progress_bar import *
 
 class LearningRateSearch(Callback):
-    '''Callback to search for optimal learning rate before actual training'''
     def __init__(self, max_iter=1000, min_lr=1e-4, max_lr=1):
+        '''Callback to search for optimal learning rate before actual training.
+            max_iter: max number of learning rates to try
+            min_lr: lowest candidate learning rate
+            max_lr: highest candidate learning rate
+        '''
         self.max_iter = max_iter
         self.min_lr, self.max_lr = min_lr, max_lr
         self.cur_lr, self.best_lr = min_lr, min_lr
@@ -30,7 +34,9 @@ class LearningRateSearch(Callback):
             self.best_lr = self.cur_lr
 
 def plot_lr_loss(LearningRateSearch):
-    '''Util function for plotting relationship of loss vs. learning rate'''
+    '''Util function for plotting relationship of loss vs. learning rate.
+        LearningRateSearch: learning rate search callback
+    '''
     losses = [l.item() for l in LearningRateSearch.losses]
     learning_rates = LearningRateSearch.parameters['learning_rate']
     plt.xscale('log')

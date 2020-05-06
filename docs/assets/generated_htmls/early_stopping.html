@@ -1,0 +1,40 @@
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">ItersStopper(Callback)</span></td>
+                                            <td class="expand"><span class="params">(end_iter=10)</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback to stop on specified batch/iteration (good for debugging training loop).</span></p>
+                                        <ul class="list">
+                                           <li>end_iter: number of batches to train on</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">EpochsStopper(Callback)</span></td>
+                                            <td class="expand"><span class="params">(end_epoch=10)</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback for stopping at specified epoch.</span></p>
+                                        <ul class="list">
+                                           <li>end_epoch: number of epoches to train on</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">AccuracyStopper(Callback)</span></td>
+                                            <td class="expand"><span class="params">(patience=5, verbose=True)</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback for stopping training after model does not receive improvement in specific number of epochs.</span></p>
+                                        <ul class="list">
+                                           <li>patience: allowed number of epochs of no improvement in accuracy on valid data</li>
+                                           <li>verbose: whether to print out epoch and accruacy measures while training</li>
+                                        </ul>
+                                    </div>
+                                </div>

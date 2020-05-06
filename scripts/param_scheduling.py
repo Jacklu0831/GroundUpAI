@@ -11,31 +11,38 @@ from stats_logging import *
 from functools import partial
 
 def annealer(fn):
-    '''Decorator function to produce partial function of param schedule'''
-    return lambda start, end: partial(fn, start, end)
+    '''Decorator function to produce partial function of param schedule.
+        fn: input schedule function with parameters (start, end, position)
+    '''
+    def _inner(start, end):
+        '''Param schedule partial function (linear, cosine, none, or exponential)
+            start: starting value of parameter
+            end: ending value of parameter
+        '''
+        return partial(fn, start, end)
+    return _inner
 
 @annealer
 def schedule_lin(start, end, position):
-    '''Linear param schedule'''
     return start + position * (end - start)
 
 @annealer
 def schedule_cos(start, end, position):
-    '''Cosine param schedule'''
     return start + (1+math.cos(math.pi*(1-position))) * (end-start)/2
 
 @annealer
 def schedule_none(start, end, position):
-    '''No param schedule (param values stay at start)'''
     return start
 
 @annealer
 def schedule_exp(start, end, position):
-    '''Exponential param schedule'''
     return start * (end/start)**position
 
 def combine_schedules(segments, ranges):
-    '''Combine multiple schedules with they respective segments and ranges'''
+    '''Combine multiple schedules with they respective segments and ranges.
+        segments: separation values (must add up to 1)
+        ranges: range value for each separation value
+    '''
     assert(sum(segments) == 1.)
     segments = tensor([0] + segments)
     assert(torch.all(segments >= 0))
@@ -49,18 +56,20 @@ def combine_schedules(segments, ranges):
     return _inner
 
 def plot_schedule(schedule):
-    '''Util function for plotting param schedule'''
+    '''Util function for plotting param schedule.'''
     a = torch.arange(0, 100)
     p = torch.linspace(0.01, 1, 100)
     plt.plot(a, [schedule(n) for n in p])
 
 def one_cycle_cos(start, upper, end):
-    '''Wrapper function to create 1-cycle-training param schedule'''
+    '''Wrapper function to create 1-cycle-training param schedule.'''
     return [schedule_cos(start, upper), schedule_cos(upper, end)]
 
 class Recorder(Callback):
-    '''Callback for recording specified hyper parameters (good for debugging param scheduler)'''
     def __init__(self, param_names=['learning_rate']):
+        '''Callback for recording specified hyper parameters (good for debugging param scheduler).
+            param_name: names of hyper parameters to be recorded
+        '''
         self.parameters = {name: [] for name in param_names}
 
     def before_fit(self):
@@ -83,8 +92,10 @@ class Recorder(Callback):
         plt.xlabel('batch')
 
 class ParamScheduler(Callback):
-    '''Callback for scheduling hyper parameter value each epoch'''
     def __init__(self, param_name, schedule_fn):
+        '''Callback for scheduling hyper parameter value each epoch.
+            param_name: names of hyper parameters to be recorded
+        '''
         self.param_name = param_name
         self.schedule_fn = schedule_fn
 

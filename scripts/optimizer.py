@@ -9,8 +9,10 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from sub_model import *
 
 class Optimizer():
-    '''Vanilla optimizer with basic methods'''
     def __init__(self, parameters, learning_rate):
+        '''Vanilla optimizer with basic methods.
+            parameters: model parameters
+        '''
         self.parameters, self.learning_rate = parameters, learning_rate
 
     def step(self):
@@ -25,8 +27,11 @@ class Optimizer():
         return f'(Optimizer) learning_rate: {self.learning_rate}'
 
 class DynamicOpt():
-    '''Dynamic optimizer to allow multiple hyper parameters and param scheduling'''
     def __init__(self, parameters, **hyper_params):
+        '''Dynamic optimizer to allow multiple hyper parameters and param scheduling.
+            parameters: model parameters
+            hyper_params: dictionary of hyper parameters optimizer keeps track of
+        '''
         self.parameters = parameters
         self.hyper_params = dict(hyper_params)
 

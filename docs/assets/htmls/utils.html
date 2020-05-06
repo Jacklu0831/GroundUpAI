@@ -3,14 +3,12 @@
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">process_mnist</span></td>
-                                            <td class="expand"><span class="params">(xt, yt, xv, yv)</span></td>
+                                            <td class="expand"><span class="params">(xt, yt)</span></td>
                                         </table>
-                                        <p><span class="desc">Process mnist data with normalization</span></p>
+                                        <p><span class="desc">Process mnist data with normalization.</span></p>
                                         <ul class="list">
-                                           <li>xt: </li>
-                                           <li>yt: </li>
-                                           <li>xv: </li>
-                                           <li>yv: </li>
+                                           <li>xt: x (input) validation data: </li>
+                                           <li>yt: y (label) validation data: </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -22,189 +20,150 @@
                                             <td><span class="name">get_mnist_data</span></td>
                                             <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Get mnist dataset</span></p>
+                                        <p><span class="desc">Get mnist dataset.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">get_data</span></td>
-                                            <td class="expand"><span class="params">(name)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Get dataset by name</span></p>
-                                        <ul class="list">
-                                           <li>name: </li>
-                                        </ul>
+                                        <p><span class="desc">Get dataset by name.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">show_random_image</span></td>
-                                            <td class="expand"><span class="params">(imgs)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Show random image from a batch with matplotlib</span></p>
-                                        <ul class="list">
-                                           <li>imgs: </li>
-                                        </ul>
+                                        <p><span class="desc">Show random image from a batch of images with matplotlib.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">plot_by_epoch</span></td>
-                                            <td class="expand"><span class="params">(data, label)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Plot data by epoch and label data with given name</span></p>
-                                        <ul class="list">
-                                           <li>data: </li>
-                                           <li>label: </li>
-                                        </ul>
+                                        <p><span class="desc">Plot data vs. epoch and name data with given label.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">test</span></td>
-                                            <td class="expand"><span class="params">(a, b, cmp, cname=None)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">General two value test with selectable comparison function</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                           <li>cmp: </li>
-                                           <li>cname: </li>
-                                        </ul>
+                                        <p><span class="desc">General two value test with selectable comparison function.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">near</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Function to assert tensor similarity</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Function to assert tensor similarity.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">test_near</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Test whether two tensors are near each other to account for floating point errors</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Test whether two tensors are near each other to account for floating point errors.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">test_near_zero</span></td>
-                                            <td class="expand"><span class="params">(a, tol=1e-3)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Test whether tensor is near the zero tensor of it's size</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>tol: </li>
-                                        </ul>
+                                        <p><span class="desc">Test whether tensor is near zero tensor size.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">test_eq</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Test whether two tensors are exactly equal</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Test whether two tensors are exactly equal.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">matmul_naive</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Brute force matmul with 3 levels of for loop</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Brute force matmul with 3 levels of for loop.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">matmul_element</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Sped up matmul_naive by dot producting 1d vectors</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Sped up matmul_naive by dot producting 1d vectors.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">matmul_broadcast</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Sped up matmul_element by leveraging pytorch tensor broadcasting</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Sped up matmul_element by leveraging pytorch tensor broadcasting.</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">matmul_einsum</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Sped up matmul_broadcast by using pytorch built-in function (einstein sum notation)</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Sped up matmul_broadcast by using pytorch built-in function (einstein sum notation).</span></p>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">matmul_torch</span></td>
-                                            <td class="expand"><span class="params">(a, b)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
                                         </table>
-                                        <p><span class="desc">Sped up matmul_broadcast by using pytorch built-in function (@ operator)</span></p>
-                                        <ul class="list">
-                                           <li>a: </li>
-                                           <li>b: </li>
-                                        </ul>
+                                        <p><span class="desc">Sped up matmul_broadcast by using pytorch built-in function (the @ operator).</span></p>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -212,13 +171,12 @@
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">normalize</span></td>
-                                            <td class="expand"><span class="params">(x, m=None, s=None)</span></td>
+                                            <td class="expand"><span class="params">(m, s)</span></td>
                                         </table>
-                                        <p><span class="desc">Normalize input x with optional mean and std</span></p>
+                                        <p><span class="desc">Normalize data.</span></p>
                                         <ul class="list">
-                                           <li>x: </li>
-                                           <li>m: </li>
-                                           <li>s: </li>
+                                           <li>m: mean (default to x.mean()): </li>
+                                           <li>s: std (default to x.std()): </li>
                                         </ul>
                                     </div>
                                 </div>

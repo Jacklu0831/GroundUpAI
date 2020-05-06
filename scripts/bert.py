@@ -10,8 +10,12 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from transformer import *
 
 class BERTEmbLayer(nn.Module):
-    '''BERT embedding layer (position + token + segment)'''
     def __init__(self, vocab_size, emb_size, seq_len):
+        '''BERT embedding layer (position + token + segment)
+            vocab_size: vocabulary size
+            emb_size: embedding size
+            seq_len: max length of sentence (sequence)
+        '''
         super().__init__()
         self.pos_emb = nn.Embedding(seq_len, emb_size)
         self.tok_emb = nn.Embedding(vocab_size, emb_size)
@@ -22,10 +26,25 @@ class BERTEmbLayer(nn.Module):
         return self.pos_emb(tokens_ph) + self.tok_emb(inp) + self.seg_emb(inp)
 
 class BERT(nn.Module):
-    '''BERT model'''
     def __init__(self, vocab_size, emb_size, seq_len, n_layers=6, num_head=8, model_dim=256,
                 head_dim=32, inner_dim=1024, drop_res=0.1, drop_att=0.1, drop_ff=0.1,
                 bias=True, scale=True, double_drop=True):
+        '''BERT model
+            vocab_size: vocabulary size
+            emb_size: embedding size
+            seq_len: max length of sentence (sequence)
+            n_layers: number of transformer encoders
+            num_head: number of attention head
+            model_dim: input dimension input feedforward nn
+            head_dim: dimension of each attention head
+            inner_dim: number of hidden units in the first linear layer in feedforward nn
+            drop_res: dropout factor (0 to 1) for output of attentions
+            drop_att: dropout factor (0 to 1) for attention layers
+            drop_ff:  dropout factor (0 to 1) for feedforward layers
+            bias: whether to allow bias for linear layers
+            scale: scaling factor for attention scores
+            double_drop: whether to have dropout layer after first linear layer in feedforward nn
+        '''
         super().__init__()
         self.emb_layer = BERTEmbLayer(vocab_size, emb_size, seq_len)
 

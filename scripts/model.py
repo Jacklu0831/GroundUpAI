@@ -9,8 +9,10 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from loss import *
 
 class Sequential():
-    '''Sequential Model with stored layers and training status'''
     def __init__(self, *args):
+        '''Sequential Model with stored layers and training status.
+        args: model layers
+        '''
         assert args, 'empty model'
         self.layers = args[0] if isinstance(args[0], list) else list(args)
         self.training = True

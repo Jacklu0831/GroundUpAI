@@ -1,0 +1,87 @@
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">sgd</span></td>
+                                            <td class="expand"><span class="params">(param, learning_rate, **kwargs)</span></td>
+                                        </table>
+                                        <p><span class="desc">Basic stochastic gradient descent.</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">l2_reg</span></td>
+                                            <td class="expand"><span class="params">(param, weight_decay, **kwargs)</span></td>
+                                        </table>
+                                        <p><span class="desc">L2 regularization.</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">compose_inplace</span></td>
+                                            <td class="expand"><span class="params">(item, fns, **hyper_params)</span></td>
+                                        </table>
+                                        <p><span class="desc">Simplified compose function that modifies input item in-place.</span></p>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">StatelessOpt()</span></td>
+                                            <td class="expand"><span class="params">(params, steppers=None, **hyper_params)</span></td>
+                                        </table>
+                                        <p><span class="desc">Improved dynamicOpt that allows different layers to have different hyperparameters.</span></p>
+                                        <ul class="list">
+                                           <li>steppers: list of stepper functions</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">Recorder(Callback)</span></td>
+                                            <td class="expand"><span class="params">(param_names=['learning_rate'])</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback for recording specified hyper parameters (good for debugging param scheduler).</span></p>
+                                        <ul class="list">
+                                           <li>param_name: names of hyper parameters to be recorded</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">LearningRateSearch(Callback)</span></td>
+                                            <td class="expand"><span class="params">(max_iter=1000, min_lr=1e-4, max_lr=1)</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback to search for optimal learning rate before actual training.</span></p>
+                                        <ul class="list">
+                                           <li>max_iter: max number of learning rates to try</li>
+                                           <li>min_lr: lowest candidate learning rate</li>
+                                           <li>max_lr: highest candidate learning rate</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">ParamScheduler(Callback)</span></td>
+                                            <td class="expand"><span class="params">(param_name, schedule_fn)</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback for scheduling hyper parameter value each epoch.</span></p>
+                                        <ul class="list">
+                                           <li>param_name: names of hyper parameters to be recorded</li>
+                                        </ul>
+                                    </div>
+                                </div>

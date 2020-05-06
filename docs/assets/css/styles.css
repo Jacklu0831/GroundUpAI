@@ -91,7 +91,8 @@ output {
 }
 
 .small-notice {
-  font-size:12px;
+  color: #b0b0b0;
+  font-size: 12px;
 }
 
 .folded {
@@ -293,7 +294,7 @@ select {
 }
 
 .header a {
-  color: #fff;
+  color: #ffffff;
 }
 
 .header .container {
@@ -1343,7 +1344,7 @@ select {
 }
 
 .landing-page .header a {
-  color: #fff;
+  color: #ffffff;
 }
 
 .landing-page .branding {

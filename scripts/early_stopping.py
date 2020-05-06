@@ -9,8 +9,10 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from param_scheduling import *
 
 class ItersStopper(Callback):
-    '''Callback to stop on specified batch/iteration (good for debugging training loop)'''
     def __init__(self, end_iter=10):
+        '''Callback to stop on specified batch/iteration (good for debugging training loop).
+            end_iter: number of batches to train on
+        '''
         self.end_iter = end_iter
 
     def after_step(self):
@@ -22,8 +24,10 @@ class ItersStopper(Callback):
         print(f'Training cancelled at the end of iteration {self.end_iter}')
 
 class EpochsStopper(Callback):
-    '''Callback for stopping at specified epoch'''
     def __init__(self, end_epoch=10):
+        '''Callback for stopping at specified epoch.
+            end_epoch: number of epoches to train on
+        '''
         self.end_epoch = end_epoch
 
     def before_epoch(self):
@@ -34,8 +38,11 @@ class EpochsStopper(Callback):
         print(f'Training cancelled at the end of epoch {self.end_epoch}')
 
 class AccuracyStopper(Callback):
-    '''Callback for stopping training after model does not receive improvement in specific number of epochs'''
     def __init__(self, patience=5, verbose=True):
+        '''Callback for stopping training after model does not receive improvement in specific number of epochs.
+            patience: allowed number of epochs of no improvement in accuracy on valid data
+            verbose: whether to print out epoch and accruacy measures while training
+        '''
         self.valid_stats = AvgStats([compute_accuracy], False)
         self.patience = patience
         self.verbose = verbose

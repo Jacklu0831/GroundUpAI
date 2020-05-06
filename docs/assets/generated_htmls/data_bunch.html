@@ -1,3 +1,4 @@
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -5,11 +6,7 @@
                                             <td><span class="name">Dataset()</span></td>
                                             <td class="expand"><span class="params">(x_data, y_data)</span></td>
                                         </table>
-                                        <p><span class="desc">Dataset class to store data and labels</span></p>
-                                        <ul class="list">
-                                           <li>x_data: </li>
-                                           <li>y_data: </li>
-                                        </ul>
+                                        <p><span class="desc">Dataset class to store data and labels.</span></p>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -19,14 +16,13 @@
                                             <td><span class="name">Sampler()</span></td>
                                             <td class="expand"><span class="params">(size, batch_size, shuffle)</span></td>
                                         </table>
-                                        <p><span class="desc">Simple indices generator with option to randomly sample input data</span></p>
+                                        <p><span class="desc">Simple indices generator with option to randomly sample input data.</span></p>
                                         <ul class="list">
-                                           <li>size: </li>
-                                           <li>batch_size: </li>
-                                           <li>shuffle: </li>
+                                           <li>size: total size of data</li>
                                         </ul>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -34,10 +30,7 @@
                                             <td><span class="name">collate</span></td>
                                             <td class="expand"><span class="params">(batch)</span></td>
                                         </table>
-                                        <p><span class="desc">Util function to stack batches of x and y data</span></p>
-                                        <ul class="list">
-                                           <li>batch: </li>
-                                        </ul>
+                                        <p><span class="desc">Util function to stack batches of x and y data.</span></p>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -47,11 +40,11 @@
                                             <td><span class="name">DataLoader()</span></td>
                                             <td class="expand"><span class="params">(dataset, sampler, collate_fn=collate)</span></td>
                                         </table>
-                                        <p><span class="desc">Data loader class with data/label data and sampler to batch generation</span></p>
+                                        <p><span class="desc">Data loader class with data/label data and sampler to batch generation.</span></p>
                                         <ul class="list">
-                                           <li>dataset: </li>
-                                           <li>sampler: </li>
-                                           <li>collate_fn: </li>
+                                           <li>dataset: Dataset class with x and y data</li>
+                                           <li>sampler: Sampler class</li>
+                                           <li>collate_fn: collate function for sampled batches</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -62,13 +55,14 @@
                                             <td><span class="name">DataBunch()</span></td>
                                             <td class="expand"><span class="params">(train_dl, valid_dl)</span></td>
                                         </table>
-                                        <p><span class="desc">Data bunch class with both training and validation data loaders </span></p>
+                                        <p><span class="desc">Data bunch class with both training and validation data loaders.</span></p>
                                         <ul class="list">
-                                           <li>train_dl: </li>
-                                           <li>valid_dl: </li>
+                                           <li>train_dl: data loader for training data</li>
+                                           <li>valid_dl: data loader for validation data</li>
                                         </ul>
                                     </div>
                                 </div>
+
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -76,13 +70,6 @@
                                             <td><span class="name">get_data_bunch</span></td>
                                             <td class="expand"><span class="params">(x_train, y_train, x_valid, y_valid, batch_size)</span></td>
                                         </table>
-                                        <p><span class="desc">Util function for converting existing data to data bunch class for training</span></p>
-                                        <ul class="list">
-                                           <li>x_train: </li>
-                                           <li>y_train: </li>
-                                           <li>x_valid: </li>
-                                           <li>y_valid: </li>
-                                           <li>batch_size: </li>
-                                        </ul>
+                                        <p><span class="desc">Util function for converting existing data to data bunch class for training.</span></p>
                                     </div>
                                 </div>

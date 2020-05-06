@@ -17,7 +17,12 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 def process_mnist(xt, yt, xv, yv):
-    '''Process mnist data with normalization'''
+    '''Process mnist data with normalization.
+        xt: x (input) training data
+        yt: y (label) training data
+        xt: x (input) validation data
+        yt: y (label) validation data
+    '''
     xt, yt, xv, yv = map(tensor, (xt, yt, xv, yv))
     xt, xv = xt.float(), xv.float()
     mean, std = xt.mean(), xt.std()
@@ -30,11 +35,11 @@ name2url = {'mnist': 'http://deeplearning.net/data/mnist/mnist.pkl'}
 name2fn = {'mnist': process_mnist}
 
 def get_mnist_data():
-    '''Get mnist dataset'''
+    '''Get mnist dataset.'''
     return get_data('mnist')
 
 def get_data(name):
-    '''Get dataset by name'''
+    '''Get dataset by name.'''
     if name not in name2url or name not in name2fn:
         raise Exception('Unrecognized dataset')
 
@@ -45,7 +50,7 @@ def get_data(name):
     return name2fn[name](xt, yt, xv, yv)
 
 def show_random_image(imgs):
-    '''Show random image from a batch with matplotlib'''
+    '''Show random image from a batch of images with matplotlib.'''
     img = random.choice(imgs)
     if len(img.shape) == 1:
         size = int(img.shape[0] ** 0.5)
@@ -55,7 +60,7 @@ def show_random_image(imgs):
     plt.imshow(img.view(shape))
 
 def plot_by_epoch(data, label):
-    '''Plot data by epoch and label data with given name'''
+    '''Plot data vs. epoch and name data with given label.'''
     plt.plot(list(range(1,len(data)+1)), data)
     plt.xlabel('epoch')
     plt.ylabel(label)
@@ -63,27 +68,27 @@ def plot_by_epoch(data, label):
     plt.show()
 
 def test(a, b, cmp, cname=None):
-    '''General two value test with selectable comparison function'''
+    '''General two value test with selectable comparison function.'''
     assert cmp(a, b), f"{cname or cmp.__name__}: \n{a}\n{b}"
 
 def near(a, b):
-    '''Function to assert tensor similarity'''
+    '''Function to assert tensor similarity.'''
     return torch.allclose(a, b, rtol=1e-3, atol=1e-5)
 
 def test_near(a, b):
-    '''Test whether two tensors are near each other to account for floating point errors'''
+    '''Test whether two tensors are near each other to account for floating point errors.'''
     test(a, b, near)
 
 def test_near_zero(a, tol=1e-3):
-    '''Test whether tensor is near the zero tensor of it's size'''
+    '''Test whether tensor is near zero tensor size.'''
     assert a.abs() < tol, f"Near zero: {a}"
 
 def test_eq(a, b):
-    '''Test whether two tensors are exactly equal'''
+    '''Test whether two tensors are exactly equal.'''
     return test(a, b, operator.eq)
 
 def matmul_naive(a, b):
-    '''Brute force matmul with 3 levels of for loop'''
+    '''Brute force matmul with 3 levels of for loop.'''
     ar,ac = a.shape
     br,bc = b.shape
     assert ac==br
@@ -95,7 +100,7 @@ def matmul_naive(a, b):
     return c
 
 def matmul_element(a, b):
-    '''Sped up matmul_naive by dot producting 1d vectors'''
+    '''Sped up matmul_naive by dot producting 1d vectors.'''
     ar,ac = a.shape
     br,bc = b.shape
     assert ac==br
@@ -106,7 +111,7 @@ def matmul_element(a, b):
     return c
 
 def matmul_broadcast(a, b):
-    '''Sped up matmul_element by leveraging pytorch tensor broadcasting'''
+    '''Sped up matmul_element by leveraging pytorch tensor broadcasting.'''
     ar,ac = a.shape
     br,bc = b.shape
     assert ac==br
@@ -116,13 +121,16 @@ def matmul_broadcast(a, b):
     return c
 
 def matmul_einsum(a, b):
-    '''Sped up matmul_broadcast by using pytorch built-in function (einstein sum notation)'''
+    '''Sped up matmul_broadcast by using pytorch built-in function (einstein sum notation).'''
     return torch.einsum('ik,kj->ij', a, b)
 
 def matmul_torch(a, b):
-    '''Sped up matmul_broadcast by using pytorch built-in function (@ operator)'''
+    '''Sped up matmul_broadcast by using pytorch built-in function (the @ operator).'''
     return a@b
 
 def normalize(x, m=None, s=None):
-    '''Normalize input x with optional mean and std'''
+    '''Normalize data.
+    m: mean (default to x.mean())
+    s: std (default to x.std())
+    '''
     return (x - (m if m else x.mean())) / (s if s else x.std())

@@ -9,38 +9,46 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from augmentation import *
 
 def init_weight_he(d1, d2):
-    '''He init for linear layer weight'''
+    '''He init used for linear layer weight initialization before relu activation.'''
     return torch.randn(d1, d2) * (2./d1) ** 0.5
 
 def init_weight_norm(d1, d2):
-    '''init weight with N(0, 1) distribution (not suitable for relu activation)'''
+    '''init weight with N(0, 1) distribution (not suitable for relu activation).'''
     return torch.randn(d1, d2) / d1 ** 0.5
 
 def init_bias_zero(d):
-    '''init bias with zeros'''
+    '''init bias with zeros.'''
     return torch.zeros(d)
 
-def init_bias_uni(d):
-    '''init bias with N(0, 1) distribution'''
+def init_bias_norm(d):
+    '''init bias with N(0, 1) distribution.'''
     return torch.randn(d)
 
 def init_weight(d1, d2, end=False):
-    '''initialize linear layer weight based on whether it is follwed by ReLU activation'''
+    '''initialize linear layer weight based on whether it is follwed by ReLU activation.
+        end: boolean indicating whether layer is end of model (not followedb y ReLU activation)
+    '''
     return init_weight_norm(d1, d2) if end else init_weight_he(d1, d2)
 
 def init_bias(d, zero=True):
-    '''initialize linear layer bias, default to 0 initialization'''
-    return init_bias_zero(d) if zero else init_bias_uni(d)
+    '''initialize linear layer bias, default to 0 initialization.
+        zero: whether to simply use zero tensor for initial bias
+    '''
+    return init_bias_zero(d) if zero else init_bias_norm(d)
 
 def init_2d_weight(shape, leak=1.):
-    '''init 2d weight'''
+    '''initialize 2d weight.
+        leak: LReLU parameter for computing gain factor for shaping a good std
+    '''
     assert len(shape) == 2
     fan = shape[0]
     gain_sq = 2.0 / (1 + leak**2)
     return torch.randn(*shape) * (gain_sq / fan)**0.5
 
 def init_4d_weight(shape, leak=1.):
-    '''init 4d weight'''
+    '''initialize 4d weight.
+        leak: LReLU parameter used for computing gain factor for shaping a good std
+    '''
     assert(shape[2] == shape[3])
     # in channel * receptive field (kernel area)
     fan = shape[1] * shape[2] * shape[3]

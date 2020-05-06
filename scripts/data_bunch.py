@@ -10,8 +10,8 @@ import math
 from data_block import *
 
 class Dataset():
-    '''Dataset class to store data and labels'''
     def __init__(self, x_data, y_data):
+        '''Dataset class to store data and labels.'''
         self.x_data = x_data
         self.y_data = y_data
 
@@ -23,8 +23,10 @@ class Dataset():
     def __getitem__(self, i): return self.x_data[i], self.y_data[i]
 
 class Sampler():
-    '''Simple indices generator with option to randomly sample input data'''
     def __init__(self, size, batch_size, shuffle):
+        '''Simple indices generator with option to randomly sample input data.
+            size: total size of data
+        '''
         self.size = size
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -40,13 +42,17 @@ class Sampler():
     def __len__(self): return self.batch_size
 
 def collate(batch):
-    '''Util function to stack batches of x and y data'''
+    '''Util function to stack batches of x and y data.'''
     x_batch, y_batch = zip(*batch)
     return torch.stack(x_batch), torch.stack(y_batch)
 
 class DataLoader():
-    '''Data loader class with data/label data and sampler to batch generation'''
     def __init__(self, dataset, sampler, collate_fn=collate):
+        '''Data loader class with data/label data and sampler to batch generation.
+            dataset: Dataset class with x and y data
+            sampler: Sampler class
+            collate_fn: collate function for sampled batches
+        '''
         self.dataset = dataset
         self.sampler = sampler
         self.collate_fn = collate_fn
@@ -63,8 +69,11 @@ class DataLoader():
         return math.ceil(len(self.dataset) / len(self.sampler))
 
 class DataBunch():
-    '''Data bunch class with both training and validation data loaders '''
     def __init__(self, train_dl, valid_dl):
+        '''Data bunch class with both training and validation data loaders.
+            train_dl: data loader for training data
+            valid_dl: data loader for validation data
+        '''
         self.train_dl = train_dl
         self.valid_dl = valid_dl
 
@@ -81,7 +90,7 @@ class DataBunch():
     def __len__(self): return len(self.train_dl)
 
 def get_data_bunch(x_train, y_train, x_valid, y_valid, batch_size):
-    '''Util function for converting existing data to data bunch class for training'''
+    '''Util function for converting existing data to data bunch class for training.'''
     train_ds = Dataset(x_train, y_train)
     valid_ds = Dataset(x_valid, y_valid)
     train_dl = DataLoader(train_ds, Sampler(len(train_ds), batch_size, True))

@@ -12,12 +12,14 @@ from torch.nn.functional import pad as torch_pad
 from linear import *
 
 def pad_tensor(inp, pad, value=0):
-    '''Util function for padding inp tensor'''
+    '''Util function for padding inp tensor.'''
     return torch_pad(inp, [pad]*4, 'constant', value)
 
 class Reshape(Module):
-    '''Reshape layer'''
     def __init__(self, shape):
+        '''Reshape layer.
+            shape: output shape
+        '''
         super().__init__()
         self.shape = shape
 
@@ -32,8 +34,8 @@ class Reshape(Module):
         return f"{t+'    '}Reshape{self.shape}"
 
 class Flatten(Module):
-    '''Flatten layer'''
     def __init__(self):
+        '''Flatten layer.'''
         super().__init__()
 
     def fwd(self, inp):
@@ -47,8 +49,15 @@ class Flatten(Module):
         return f"{t+'    '}Flatten()"
 
 class Conv(Module):
-    '''Convolutional layer'''
     def __init__(self, c_in, c_out, k_s=3, stride=1, pad=0, leak=1.):
+        '''Convolutional layer.
+            c_in: channel in
+            c_out: channel out
+            k_s: square kernel size
+            stride: stride size
+            pad: padding size
+            leak: initialization parameter
+        '''
         super().__init__()
         self.c_in = c_in
         self.c_out = c_out
@@ -103,7 +112,9 @@ class Conv(Module):
         return f"{t+'    '}Conv({self.c_in}, {self.c_out}, {self.k_s}, {self.stride})"
 
 def get_conv_model(data_bunch):
-    '''Util function to get convolutional model based on data bunch shape'''
+    '''Util function to get convolutional model based on data bunch shape.
+        data_bunch: data bunch with training and validation data
+    '''
     in_dim = data_bunch.train_ds.x_data.shape[1]
     out_dim = int(max(data_bunch.train_ds.y_data) + 1)
     assert in_dim == 1 * 28 * 28

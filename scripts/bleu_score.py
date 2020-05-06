@@ -12,8 +12,10 @@ from gru import *
 import numpy as np
 
 class NGram():
-    '''NGram class for preprocess texts'''
     def __init__(self, n_gram, vocab_size=5000):
+        '''NGram class for preprocess texts.
+            n_gram: gram size
+        '''
         self.n_gram, self.vocab_size = n_gram, vocab_size
 
     def __eq__(self, other):
@@ -27,11 +29,14 @@ class NGram():
         return f'{self.n_gram}'
 
 def get_grams(inp, n, vocab_size=5000):
-    '''Util function for grabbing multiple input NGrams of varying sizes'''
+    '''Util function for grabbing multiple input NGrams of varying sizes.'''
     return [NGram(inp[i:i+n], vocab_size) for i in range(len(inp)-n+1)]
 
 def get_correct_n_grams(pre, tar, n, vocab_size=5000):
-    '''Compute number of matching n-grams between two sentences'''
+    '''Compute number of matching n-grams between two sentences.
+        pre: predicted sentence
+        tar: label sentence
+    '''
     pre_grams = get_grams(pre, n, vocab_size)
     tar_grams = get_grams(tar, n, vocab_size)
     c_pre = Counter(pre_grams)
@@ -39,14 +44,21 @@ def get_correct_n_grams(pre, tar, n, vocab_size=5000):
     return sum([min(c_pre[g], c_tar[g]) for g in c_pre]), len(pre_grams)
 
 def bleu(pre, tar, max_grams=4, vocab_size=5000):
-    '''Compute BLEU score between two sentences with length penalty'''
+    '''Compute BLEU score between two sentences with length penalty.
+        pre: predicted sentence
+        tar: label sentence
+    '''
     corrects = [get_correct_n_grams(pre, tar, n+1, vocab_size) for n in range(max_grams)]
     precision = reduce(lambda x,y: x*y, [p/l for p,l in corrects])
     len_penalty = exp(1 - len(tar)/len(pre)) if len(pre) < len(tar) else 1
     return len_penalty * precision ** 0.25
 
 def corpus_bleu_score(pres, tars, max_grams=4, vocab_size=5000):
-    '''Compute BLEU score between two list of sentences (corpus) with length penalty'''
+    '''Compute BLEU score between two list of sentences (corpus) with length penalty.
+        pres: predicted sentences
+        tars: label sentences
+        max_grams: max gram size to compare
+    '''
     pre_len, tar_len = 0, 0
     precisions, lengths = [0] * max_grams, [0] * max_grams
     for pre, tar in zip(pres, tars):
@@ -61,8 +73,10 @@ def corpus_bleu_score(pres, tars, max_grams=4, vocab_size=5000):
     return len_penalty * precision ** 0.25
 
 class BLEUScore(Callback):
-    '''Callback to compute BLEU score for training NLP models'''
     def __init__(self, max_grams=4, vocab_size=5000):
+        '''Callback to compute BLEU score for training NLP models.
+            max_grams: max gram size to compare
+        '''
         self.vocab_size = vocab_size
         self.max_grams = max_grams
         self.bleu_scores = []

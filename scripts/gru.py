@@ -10,18 +10,21 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from lstm import *
 
 class GRUCell(nn.Module):
-    '''GRU cell'''
-    def __init__(self, i_dim, h_dim):
+    def __init__(self, i, h):
+        '''GRU cell.
+            i: input data dimension
+            h: number of hidden units in the gru cell
+        '''
         super().__init__()
-        self.i_dim, self.h_dim = i_dim, h_dim
-        self.Wz = nn.Parameter(init_2d_weight((i_dim, h_dim)))
-        self.Wr = nn.Parameter(init_2d_weight((i_dim, h_dim)))
-        self.Wh = nn.Parameter(init_2d_weight((i_dim, h_dim)))
-        self.Uz = nn.Parameter(init_2d_weight((h_dim, h_dim)))
-        self.Ur = nn.Parameter(init_2d_weight((h_dim, h_dim)))
-        self.Uh = nn.Parameter(init_2d_weight((h_dim, h_dim)))
-        self.bz = nn.Parameter(torch.zeros(h_dim))
-        self.br = nn.Parameter(torch.zeros(h_dim))
+        self.i, self.h = i, h
+        self.Wz = nn.Parameter(init_2d_weight((i, h)))
+        self.Wr = nn.Parameter(init_2d_weight((i, h)))
+        self.Wh = nn.Parameter(init_2d_weight((i, h)))
+        self.Uz = nn.Parameter(init_2d_weight((h, h)))
+        self.Ur = nn.Parameter(init_2d_weight((h, h)))
+        self.Uh = nn.Parameter(init_2d_weight((h, h)))
+        self.bz = nn.Parameter(torch.zeros(h))
+        self.br = nn.Parameter(torch.zeros(h))
 
     def forward(self, x, h):
         z =   (x @ self.Wz + h @ self.Uz).sigmoid()
@@ -31,10 +34,13 @@ class GRUCell(nn.Module):
         return h
 
 class GRULayer(nn.Module):
-    '''Wrapper for passing different input timestamps into GRU cell'''
-    def __init__(self, i_dim, h_dim):
+    def __init__(self, i, h):
+        '''Wrapper for passing different input timestamps into GRU cell
+            i: input data dimension
+            h: number of hidden units in the lstm cell
+        '''
         super().__init__()
-        self.cell = GRUCell(i_dim, h_dim)
+        self.cell = GRUCell(i, h)
 
     def forward(self, inps, h):
         outputs = []

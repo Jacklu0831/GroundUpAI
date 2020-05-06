@@ -9,8 +9,8 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from model import *
 
 class Module():
-    '''Similar to pytorch Module, parent class to layers'''
     def __init__(self):
+        '''Similar to pytorch Module, parent class to layers.'''
         self._parameters = {}
 
     def __setattr__(self, k, v):
@@ -32,8 +32,12 @@ class Module():
     def backward(self): self.bwd(self.out, *self.args)
 
 class Linear(Module):
-    '''Linear layer'''
     def __init__(self, in_dim, num_hidden, end=False, require_grad=True):
+        '''Linear layer.
+            in_dim: input dimension
+            num_hidden: number of hidden units
+            end: whether linear layer is not followed by ReLU activation
+        '''
         super().__init__()
         self.w = Parameter(init_weight(in_dim, num_hidden, end), require_grad)
         self.b = Parameter(init_bias(num_hidden), require_grad)
@@ -50,7 +54,10 @@ class Linear(Module):
         return f"{t+'    '}Linear({self.w.data.shape[0]}, {self.w.data.shape[1]})"
 
 class ReLU(Module):
-    '''ReLU activation function (as a module)'''
+    def __init__(self):
+        '''ReLU activation function (as a module).'''
+        super().__init__()
+
     def fwd(self, inp):
         return inp.clamp_min(0.) - 0.5
 
@@ -61,7 +68,10 @@ class ReLU(Module):
         return f"{t+'    '}ReLU()"
 
 class CrossEntropy(Module):
-    '''Cross Entropy loss function (as a module)'''
+    def __init__(self):
+        '''Cross Entropy loss function (as a module).'''
+        super().__init__()
+
     def fwd(self, inp, tar):
         return cross_entropy(inp, tar)
 
@@ -74,7 +84,10 @@ class CrossEntropy(Module):
         return '(CrossEntropy)'
 
 def get_lin_model(data_bunch, num_hidden=50):
-    '''Util function for obtaining two (linear) layer fully connected model'''
+    '''Util function for obtaining two (linear) layer fully connected model.
+        data_bunch: data bunch with training and validation data
+        num_hidden: number of hidden units in the first linear layer
+    '''
     in_dim = data_bunch.train_ds.x_data.shape[1]
     out_dim = int(max(data_bunch.train_ds.y_data) + 1)
     return Sequential(Linear(in_dim, num_hidden),

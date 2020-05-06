@@ -10,21 +10,23 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from lr_search import *
 
 def sgd(param, learning_rate, **kwargs):
-    '''Basic stochastic gradient descent'''
+    '''Basic stochastic gradient descent.'''
     param.data -= learning_rate * param.grad
 
 def l2_reg(param, weight_decay, **kwargs):
-    '''L2 regularization'''
+    '''L2 regularization.'''
     param.grad += weight_decay * param.data
 
 def compose_inplace(item, fns, **hyper_params):
-    '''Simplified compose function that modifies input item in-place'''
+    '''Simplified compose function that modifies input item in-place.'''
     for fn in fns:
         fn(item, **hyper_params)
 
 class StatelessOpt():
-    '''Improve dynamicOpt that allows different layers to have different hyperparameters'''
     def __init__(self, params, steppers=None, **hyper_params):
+        '''Improved dynamicOpt that allows different layers to have different hyperparameters.
+            steppers: list of stepper functions
+        '''
         # list of list of params
         self.params = [params] if isinstance(params, list) else [[params]]
         # set of hyperparams for each param
@@ -45,8 +47,10 @@ class StatelessOpt():
         return f'(StatelessOpt) steppers: {[stepper.__name__ for stepper in self.steppers]}'
 
 class Recorder(Callback):
-    '''Callback for recording specified hyper parameters (good for debugging param scheduler)'''
     def __init__(self, param_names=['learning_rate']):
+        '''Callback for recording specified hyper parameters (good for debugging param scheduler).
+            param_name: names of hyper parameters to be recorded
+        '''
         self.parameters = {name: [] for name in param_names}
 
     def before_fit(self):
@@ -69,8 +73,12 @@ class Recorder(Callback):
         plt.xlabel('batch')
 
 class LearningRateSearch(Callback):
-    '''Callback to search for optimal learning rate before actual training'''
     def __init__(self, max_iter=1000, min_lr=1e-4, max_lr=1):
+        '''Callback to search for optimal learning rate before actual training.
+            max_iter: max number of learning rates to try
+            min_lr: lowest candidate learning rate
+            max_lr: highest candidate learning rate
+        '''
         self.max_iter = max_iter
         self.min_lr, self.max_lr = min_lr, max_lr
         self.cur_lr, self.best_lr = min_lr, min_lr
@@ -91,8 +99,10 @@ class LearningRateSearch(Callback):
             self.best_lr = self.cur_lr
 
 class ParamScheduler(Callback):
-    '''Callback for scheduling hyper parameter value each epoch'''
     def __init__(self, param_name, schedule_fn):
+        '''Callback for scheduling hyper parameter value each epoch.
+            param_name: names of hyper parameters to be recorded
+        '''
         self.param_name = param_name
         self.schedule_fn = schedule_fn
 

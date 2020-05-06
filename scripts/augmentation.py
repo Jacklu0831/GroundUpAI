@@ -10,18 +10,22 @@ import random
 from data_bunch import *
 
 def get_image_list(transforms):
-    '''Util function for getting image list from path with optional transformation'''
+    '''Util function for getting image list from path with optional transformation.'''
     return ImageList.from_files(path, transforms=transforms)
 
 def show_image_sub(img, ax=None, figsize=(3, 3)):
-    '''Util function for subplotting image in given figure'''
+    '''Util function for subplotting image in given figure.'''
     if ax == None:
         _, ax = plt.subplots(1, 1, figsize=figsize)
     ax.axis('off')
     ax.imshow(img.permute(1,2,0))
 
 def show_image_batch(batch, c=4, r=None, figsize=None):
-    '''Util function for plotting batch of images with customizable dimentions of subplot and figure size'''
+    '''Util function for plotting batch of images with customizable dimentions of subplot and figure size.
+        batch: container of images
+        c: number of subplot columns
+        r: number of subplot rows
+    '''
     bs = len(batch)
     r = r if r != None else int(math.ceil(bs/c))
     figsize = figsize if figsize != None else (c*3, r*3)
@@ -30,12 +34,15 @@ def show_image_batch(batch, c=4, r=None, figsize=None):
         show_image_sub(im, ax)
 
 class PilTransform(Transform):
-    '''General PIL library transformation class'''
     _order=11
 
+    def __init__(self):
+        '''General PIL library transformation class.'''
+        pass
+
 class PilRandomFlipH(PilTransform):
-    '''Horizontal flip transformation class'''
     def __init__(self, p=0.5):
+        '''Horizontal flip transformation class.'''
         self.p = p
 
     def __call__(self, img):
@@ -44,20 +51,19 @@ class PilRandomFlipH(PilTransform):
         return img
 
 class PilRandomAllRotations(PilTransform):
-    '''Random rotation transformation class'''
     def __init__(self, p=0.75):
+        '''Random rotation transformation class.'''
         self.p = p * 7/8
 
     def __call__(self, x):
          # transpose(n) has 8 options of rotation
-        if random.random() > self.p:
-            return x
+        if random.random() > self.p: return x
         return x.transpose(random.randint(0, 6))
 
 from random import randint
 
 def process_size(size):
-    '''Util function to ensure size is two dimensional tuple'''
+    '''Util function to ensure size is two dimensional tuple.'''
     if isinstance(size, (list, tuple)):
         assert(len(size) == 2)
         return tuple(size)
@@ -65,12 +71,15 @@ def process_size(size):
         return tuple([size, size])
 
 def default_crop_size(w, h):
-    '''Util function to obtain crop size from given width and height'''
+    '''Util function to obtain crop size from given width and height.'''
     return [w, w] if w < h else [h, h]
 
 class GeneralCrop(PilTransform):
-    '''General crop transformation class'''
     def __init__(self, size, crop_size=None, resample=PIL.Image.BILINEAR):
+        '''General crop transformation class.
+            size: image size
+            crop_size: desired crop size (maximum square by default)
+        '''
         self.resample = resample
         self.size = process_size(size)
         self.crop_size = None if crop_size == None else process_size(crop_size)
@@ -84,8 +93,11 @@ class GeneralCrop(PilTransform):
     def get_corners(self, w, h): return (0, 0, w, h)
 
 class CenterCrop(GeneralCrop):
-    '''Center crop transformation class'''
     def __init__(self, size, scale=1.14, resample=PIL.Image.BILINEAR):
+        '''Center crop transformation class.
+            size: image size
+            cropping scale: scale
+        '''
         super().__init__(size, resample=resample)
         self.scale = scale
 
@@ -96,8 +108,12 @@ class CenterCrop(GeneralCrop):
         return ((w-wc)//2, (h-hc)//2, (w-wc)//2+wc, (h-hc)//2+hc)
 
 class RandomResizedCrop(GeneralCrop):
-    '''Randomized crop transformation class (common used on ImageNet data)'''
     def __init__(self, size, scale=(0.08, 1.0), ratio=(3./4., 4./3.), resample=PIL.Image.BILINEAR):
+        '''Randomized crop transformation class (common used on ImageNet data).
+            size: image size
+            scale: uniform distribution boundary for sampling scale
+            ratio: uniform distribution boundary for sampling ratio
+        '''
         super().__init__(size, resample=resample)
         self.scale = scale
         self.ratio = ratio
@@ -115,7 +131,6 @@ class RandomResizedCrop(GeneralCrop):
                 top  = random.randint(0, h - new_h)
                 return (left, top, left + new_w, top + new_h)
 
-        # cropped
         r = w/h
         if r < self.ratio[0]:
             size = (w, int(w / self.ratio[0]))
@@ -129,7 +144,7 @@ from torch import FloatTensor
 # https://web.archive.org/web/20150222120106/xenia.media.mit.edu/~cwren/interpolator/
 
 def find_coeffs(src, tar):
-    '''Util function for obtaining warp coefficients with source and target coordinates'''
+    '''Util function for obtaining warp coefficients with source and target coordinates.'''
     M = []
     for p1, p2 in zip(tar, src):
         M.append([p1[0], p1[1], 1, 0, 0, 0, -p2[0]*p1[0], -p2[0]*p1[1]])
@@ -139,19 +154,23 @@ def find_coeffs(src, tar):
     return list(torch.solve(B, A)[0][:, 0])
 
 def warp(img, size, src, resample=PIL.Image.BILINEAR):
-    '''Warp image by source coordinates and size'''
+    '''Warp image by source coordinates and size.'''
     w, h = size
     tar = ((0,0), (0,h), (w,h), (w,0))
     coeffs = find_coeffs(src, tar)
     return img.transform(size, PIL.Image.PERSPECTIVE, list(coeffs), resample=resample)
 
 def uniform(a, b):
-    '''Util function to sample from from uniform distribution'''
+    '''Util function to sample from from uniform distribution.'''
     return a + (b-a)*random.random()
 
 class WarpRandomCrop(PilTransform):
-    '''Random Warp transformation class'''
     def __init__(self, size, crop_size=None, magnitude=0., resample=PIL.Image.BILINEAR):
+        '''Random Warp transformation class.
+            size: image size
+            cropping scale: scale
+            magnitude: maximum magnitude for warping
+        '''
         self.size = process_size(size)
         self.crop_size = None if crop_size is None else process_size(crop_size)
         self.magnitude = magnitude

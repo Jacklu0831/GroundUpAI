@@ -1,0 +1,62 @@
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">Module()</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
+                                        </table>
+                                        <p><span class="desc">Similar to pytorch Module, parent class to layers.</span></p>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">Linear(Module)</span></td>
+                                            <td class="expand"><span class="params">(in_dim, num_hidden, end=False, require_grad=True)</span></td>
+                                        </table>
+                                        <p><span class="desc">Linear layer.</span></p>
+                                        <ul class="list">
+                                           <li>in_dim: input dimension</li>
+                                           <li>num_hidden: number of hidden units</li>
+                                           <li>end: whether linear layer is not followed by ReLU activation</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">ReLU(Module)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
+                                        </table>
+                                        <p><span class="desc">ReLU activation function (as a module).</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">CrossEntropy(Module)</span></td>
+                                            <td class="expand"><span class="params">()</span></td>
+                                        </table>
+                                        <p><span class="desc">Cross Entropy loss function (as a module).</span></p>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_lin_model</span></td>
+                                            <td class="expand"><span class="params">(data_bunch, num_hidden=50)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function for obtaining two (linear) layer fully connected model.</span></p>
+                                        <ul class="list">
+                                           <li>data_bunch: data bunch with training and validation data</li>
+                                           <li>num_hidden: number of hidden units in the first linear layer</li>
+                                        </ul>
+                                    </div>
+                                </div>

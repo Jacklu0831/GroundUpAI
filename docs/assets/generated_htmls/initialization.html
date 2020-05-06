@@ -1,0 +1,96 @@
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_weight_he</span></td>
+                                            <td class="expand"><span class="params">(d1, d2)</span></td>
+                                        </table>
+                                        <p><span class="desc">He init used for linear layer weight initialization before relu activation.</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_weight_norm</span></td>
+                                            <td class="expand"><span class="params">(d1, d2)</span></td>
+                                        </table>
+                                        <p><span class="desc">init weight with N(0, 1) distribution (not suitable for relu activation).</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_bias_zero</span></td>
+                                            <td class="expand"><span class="params">(d)</span></td>
+                                        </table>
+                                        <p><span class="desc">init bias with zeros.</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_bias_norm</span></td>
+                                            <td class="expand"><span class="params">(d)</span></td>
+                                        </table>
+                                        <p><span class="desc">init bias with N(0, 1) distribution.</span></p>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_weight</span></td>
+                                            <td class="expand"><span class="params">(d1, d2, end=False)</span></td>
+                                        </table>
+                                        <p><span class="desc">initialize linear layer weight based on whether it is follwed by ReLU activation.</span></p>
+                                        <ul class="list">
+                                           <li>end: boolean indicating whether layer is end of model (not followedb y ReLU activation)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_bias</span></td>
+                                            <td class="expand"><span class="params">(d, zero=True)</span></td>
+                                        </table>
+                                        <p><span class="desc">initialize linear layer bias, default to 0 initialization.</span></p>
+                                        <ul class="list">
+                                           <li>zero: whether to simply use zero tensor for initial bias</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_2d_weight</span></td>
+                                            <td class="expand"><span class="params">(shape, leak=1.)</span></td>
+                                        </table>
+                                        <p><span class="desc">initialize 2d weight.</span></p>
+                                        <ul class="list">
+                                           <li>leak: LReLU parameter for computing gain factor for shaping a good std</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">init_4d_weight</span></td>
+                                            <td class="expand"><span class="params">(shape, leak=1.)</span></td>
+                                        </table>
+                                        <p><span class="desc">initialize 4d weight.</span></p>
+                                        <ul class="list">
+                                           <li>leak: LReLU parameter used for computing gain factor for shaping a good std</li>
+                                        </ul>
+                                    </div>
+                                </div>

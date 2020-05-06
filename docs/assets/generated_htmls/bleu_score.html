@@ -1,0 +1,80 @@
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">NGram()</span></td>
+                                            <td class="expand"><span class="params">(n_gram, vocab_size=5000)</span></td>
+                                        </table>
+                                        <p><span class="desc">NGram class for preprocess texts.</span></p>
+                                        <ul class="list">
+                                           <li>n_gram: gram size</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_grams</span></td>
+                                            <td class="expand"><span class="params">(inp, n, vocab_size=5000)</span></td>
+                                        </table>
+                                        <p><span class="desc">Util function for grabbing multiple input NGrams of varying sizes.</span></p>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_correct_n_grams</span></td>
+                                            <td class="expand"><span class="params">(pre, tar, n, vocab_size=5000)</span></td>
+                                        </table>
+                                        <p><span class="desc">Compute number of matching n-grams between two sentences.</span></p>
+                                        <ul class="list">
+                                           <li>pre: predicted sentence</li>
+                                           <li>tar: label sentence</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">bleu</span></td>
+                                            <td class="expand"><span class="params">(pre, tar, max_grams=4, vocab_size=5000)</span></td>
+                                        </table>
+                                        <p><span class="desc">Compute BLEU score between two sentences with length penalty.</span></p>
+                                        <ul class="list">
+                                           <li>pre: predicted sentence</li>
+                                           <li>tar: label sentence</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">corpus_bleu_score</span></td>
+                                            <td class="expand"><span class="params">(pres, tars, max_grams=4, vocab_size=5000)</span></td>
+                                        </table>
+                                        <p><span class="desc">Compute BLEU score between two list of sentences (corpus) with length penalty.</span></p>
+                                        <ul class="list">
+                                           <li>pres: predicted sentences</li>
+                                           <li>tars: label sentences</li>
+                                           <li>max_grams: max gram size to compare</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">BLEUScore(Callback)</span></td>
+                                            <td class="expand"><span class="params">(max_grams=4, vocab_size=5000)</span></td>
+                                        </table>
+                                        <p><span class="desc">Callback to compute BLEU score for training NLP models.</span></p>
+                                        <ul class="list">
+                                           <li>max_grams: max gram size to compare</li>
+                                        </ul>
+                                    </div>
+                                </div>

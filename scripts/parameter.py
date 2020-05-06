@@ -9,8 +9,11 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from utils import *
 
 class Parameter():
-    '''Model parameter class with tensor data and gradient to imitate a basic pytorch tensor'''
     def __init__(self, data, requires_grad=True):
+        '''Model parameter class with tensor data and gradient to imitate a basic pytorch tensor.
+            data: tensor data (with autograd turned off)
+            requires_grad: whether gradient of data is computed
+        '''
         self.data = data if data != None else torch.Tensor()
         self.requires_grad = requires_grad
         self.grad = 0.

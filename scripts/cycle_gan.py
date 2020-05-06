@@ -11,13 +11,30 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from bleu_score import *
 
 def TConvNReLU(i, o, norm, k=3, s=2, b=True):
-    '''Tranpose convolutional layer + normalization layer + ReLU activation'''
+    '''Tranpose convolutional layer + normalization layer + ReLU activation.
+        i: channel in
+        o: channel out
+        norm: normalization layer
+        k: kernel size
+        s: stride size
+        b: whether to have bias or not in TransposeConv
+    '''
     return [nn.ConvTranspose2d(i, o, k, s, padding=1, output_padding=1, bias=b),
             norm(o),
             nn.ReLU(inplace=True)]
 
 def PadConvNReLU(i, o, norm, pad_mode, k=3, s=1, p=1, b=True, act=True, init=nn.init.kaiming_normal_):
-    '''PaddedConvolutional layer + normalization layer + ReLU activation'''
+    '''PaddedConvolutional layer + normalization layer + ReLU activation.
+        i: channel in
+        o: channel out
+        norm: normalization layer
+        k: kernel size
+        s: stride size
+        p: padding size
+        b: bias or not in TransposeConv
+        act: whether to append ReLU after PadConvN
+        init: initialization function
+    '''
     layers = []
     #padding
     if pad_mode == 'reflection':
@@ -39,8 +56,13 @@ def PadConvNReLU(i, o, norm, pad_mode, k=3, s=1, p=1, b=True, act=True, init=nn.
     return layers
 
 class ResnetBlock(nn.Module):
-    '''ResBlock ( y = F(x) + x)'''
     def __init__(self, d, pad_mode, norm=None, dropout=0., b=True):
+        '''ResBlock ( y = F(x) + x).
+            pad_mode: padding mode (either "reflection" or "zero")
+            norm: normalization layer
+            dropout: dropout factor (0 to 1)
+            b: whether to have bias or not in TransposeConv
+        '''
         super().__init__()
         norm = norm if norm else nn.InstanceNorm2d
         layers = PadConvNReLU(d, d, norm, pad_mode, b=b)
@@ -52,7 +74,14 @@ class ResnetBlock(nn.Module):
         return x + self.conv_block(x)
 
 def generator(i, o, c=64, norm=None, dropout=0., depth=6, pad_mode='reflection'):
-    '''Generator of GAN'''
+    '''Generator of GAN (resnet based).
+        i: channel in
+        o: channel out
+        c: start channel (changes are resnet is being built)
+        dropout: dropout factor (0 to 1)
+        depth: resnet depth
+        pad_mode: padding mode (either "reflection" or "zero")
+    '''
     norm = norm if norm else nn.InstanceNorm2d
     b = norm == nn.InstanceNorm2d
     layers = PadConvNReLU(i, c, norm=norm, pad_mode='reflection', k=7, p=3, b=b)
@@ -70,7 +99,18 @@ def generator(i, o, c=64, norm=None, dropout=0., depth=6, pad_mode='reflection')
     return nn.Sequential(*layers)
 
 def ConvNLReLU(i, o, norm, k=3, s=1, p=1, b=True, act=True, slope=0.2, init=nn.init.kaiming_normal_):
-    '''Convolutional layer + normalization layer + ReLU activation'''
+    '''Convolutional layer + normalization layer + ReLU activation.
+        i: channel in
+        o: channel out
+        norm: normalization layer
+        k: kernel size
+        s: stride size
+        p: padding size
+        b: bias or not in TransposeConv
+        act: whether to append ReLU after PadConvN
+        slope: leaky relu slope
+        init: initialization function
+    '''
     layers = []
     #conv
     conv = nn.Conv2d(i, o, k, s, p, bias=b)
@@ -86,7 +126,12 @@ def ConvNLReLU(i, o, norm, k=3, s=1, p=1, b=True, act=True, slope=0.2, init=nn.i
     return layers
 
 def discriminator(i, c=64, norm=None, n_layer=3, act=False):
-    '''Discriminator of GAN'''
+    '''Discriminator of GAN.
+        i: channel in
+        c: start channel (changes as we build the discriminator blocks)
+        norm: normalization layer
+        act: whether to append activation at the end of discriminator
+    '''
     layers = []
     norm = norm if norm else nn.InstanceNorm2d
     b = norm == nn.InstanceNorm2d
@@ -102,8 +147,17 @@ def discriminator(i, c=64, norm=None, n_layer=3, act=False):
     return nn.Sequential(*layers)
 
 class CycleGAN(nn.Module):
-    '''Cycle GAN with two generators and discriminators'''
     def __init__(self, i, o, c=64, norm=None, gen_layers=6, dis_layers=3, dropout=0., lsgan=True):
+        '''Cycle GAN with two generators and discriminators.
+            i: channel in
+            o: channel out
+            c: start channel (dynamic)
+            norm: normalization layer
+            gen_layers: number of generator blocks
+            dis_layer: number of discriminator blocks
+            dropout: dropout factor (0 to 1)
+            lsgan: boolean factor for least square gan (https://arxiv.org/abs/1611.04076)
+        '''
         super().__init__()
         self.G1 = generator(i, o, c, norm, dropout, gen_layers) # domain 2 to 1
         self.G2 = generator(i, o, c, norm, dropout, gen_layers) # domain 1 to 2
@@ -118,8 +172,10 @@ class CycleGAN(nn.Module):
         return [fake1, fake2, iden1, iden2]
 
 class AdaptiveLoss(nn.Module):
-    '''Critic wrapper for creating binary target tensors for loss computation'''
     def __init__(self, critic):
+        '''Critic wrapper for creating binary target tensors for loss computation.
+            critic: loss module
+        '''
         super().__init__()
         self.critic = critic
 
@@ -128,8 +184,13 @@ class AdaptiveLoss(nn.Module):
         return self.critic(out, target, **kwargs)
 
 class CycleGANLoss(nn.Module):
-    '''Cycle GAN loss layer with identity loss, generator loss, and discriminator loss'''
     def __init__(self, cycleGAN, w1=10., w2=10., wi=0.5, lsgan=True):
+        '''Cycle GAN loss layer with identity loss, generator loss, and discriminator loss.
+            w1: lambda factor for loss in domain 1
+            w2: lambda factor for loss in domain 2
+            wi: lambda factor for identity loss
+            lsgan: factor for https://arxiv.org/abs/1611.04076
+        '''
         super().__init__()
         self.cycleGAN, self.w1, self.w2, self.wi = cycleGAN, w1, w2, wi
         self.critic = AdaptiveLoss(F.mse_loss if lsgan else F.binary_cross_entropy)
@@ -154,7 +215,10 @@ class CycleGANLoss(nn.Module):
         return self.iden_loss + self.gen_loss + self.cycle_loss
 
 class CycleGANTrainer(LearnerCallback):
-    '''Callback for the special training procedure of Cycle GAN'''
+    def __init__(self):
+        '''Callback for the special training procedure of Cycle GAN.'''
+        super().__init__()
+
     def _set_trainable(self, D1=False, D2=False):
         gen = (not D1) and (not D2)
         requires_grad(self.learn.model.G1, gen)

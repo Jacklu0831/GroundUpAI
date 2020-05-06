@@ -9,18 +9,21 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from resnet import *
 
 class LSTMCell(nn.Module):
-    '''LSTM cell (naive implementation)'''
-    def __init__(self, i_dim, h_dim):
+    def __init__(self, i, h):
+        '''LSTM cell (naive implementation).
+            i: input data dimension
+            h: number of hidden units in the lstm cell
+        '''
         super().__init__()
-        self.i_dim, self.h_dim = i_dim, h_dim
-        self.Ui = nn.Parameter(init_2d_weight((i_dim, h_dim)))
-        self.Uf = nn.Parameter(init_2d_weight((i_dim, h_dim)))
-        self.Uo = nn.Parameter(init_2d_weight((i_dim, h_dim)))
-        self.Ug = nn.Parameter(init_2d_weight((i_dim, h_dim)))
-        self.Wi = nn.Parameter(init_2d_weight((h_dim, h_dim)))
-        self.Wf = nn.Parameter(init_2d_weight((h_dim, h_dim)))
-        self.Wo = nn.Parameter(init_2d_weight((h_dim, h_dim)))
-        self.Wg = nn.Parameter(init_2d_weight((h_dim, h_dim)))
+        self.i, self.h = i, h
+        self.Ui = nn.Parameter(init_2d_weight((i, h)))
+        self.Uf = nn.Parameter(init_2d_weight((i, h)))
+        self.Uo = nn.Parameter(init_2d_weight((i, h)))
+        self.Ug = nn.Parameter(init_2d_weight((i, h)))
+        self.Wi = nn.Parameter(init_2d_weight((h, h)))
+        self.Wf = nn.Parameter(init_2d_weight((h, h)))
+        self.Wo = nn.Parameter(init_2d_weight((h, h)))
+        self.Wg = nn.Parameter(init_2d_weight((h, h)))
 
     def forward(self, x, state):
         h, c = state
@@ -35,13 +38,16 @@ class LSTMCell(nn.Module):
         return h, (h, c)
 
     def __repr__(self):
-        return f'LSTM({self.i_dim}, {self.h_dim})'
+        return f'LSTM({self.i}, {self.h})'
 
 class LSTMLayer(nn.Module):
-    '''Wrapper for passing different input timestamps into LSTM cell'''
-    def __init__(self, i_dim, h_dim):
+    def __init__(self, i, h):
+        '''Wrapper for passing different input timestamps into LSTM cell
+            i: input data dimension
+            h: number of hidden units in the lstm cell
+        '''
         super().__init__()
-        self.cell = LSTMCell(i_dim, h_dim)
+        self.cell = LSTMCell(i, h)
 
     def forward(self, inps, state):
         outputs = []
@@ -53,13 +59,16 @@ class LSTMLayer(nn.Module):
     def __repr__(self): return f'{self.cell}'
 
 class FastLSTMCell(nn.Module):
-    '''LSTM cell (fast implementation using linear layers)'''
-    def __init__(self, i_dim, h_dim):
+    def __init__(self, i, h):
+        '''LSTM cell (fast implementation using linear layers).
+            i: input data dimension
+            h: number of hidden units in the lstm cell
+        '''
         super().__init__()
-        self.i_dim, self.h_dim = i_dim, h_dim
+        self.i, self.h = i, h
         # also adds a small bias
-        self.x_gates = nn.Linear(i_dim, 4*h_dim)
-        self.h_gates = nn.Linear(i_dim, 4*h_dim)
+        self.x_gates = nn.Linear(i, 4*h)
+        self.h_gates = nn.Linear(i, 4*h)
 
     def forward(self, x, state):
         h, c = state
@@ -74,13 +83,16 @@ class FastLSTMCell(nn.Module):
         h = o * c.tanh()
         return h, (h, c)
 
-    def __repr__(self): return f'LSTM({self.i_dim}, {self.h_dim})'
+    def __repr__(self): return f'LSTM({self.i}, {self.h})'
 
 class FastLSTMLayer(nn.Module):
-    def __init__(self, i_dim, h_dim):
-        '''Wrapper for passing different input timestamps into FastLSTM cell'''
+    def __init__(self, i, h):
+        '''Wrapper for passing different input timestamps into FastLSTM cell
+            i: input data dimension
+            h: number of hidden units in the lstm cell
+        '''
         super().__init__()
-        self.cell = FastLSTMCell(i_dim, h_dim)
+        self.cell = FastLSTMCell(i, h)
 
     def forward(self, inps, state):
         outputs = []

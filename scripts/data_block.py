@@ -21,7 +21,7 @@ image_exts = set(k for k,v in mimetypes.types_map.items() if v.startswith('image
 from collections import OrderedDict
 
 def listify(inp):
-    '''Convert input of different types to a list'''
+    '''Convert input of different types to a list.'''
     if inp is None: return []
     if isinstance(inp, list): return inp
     if isinstance(inp, str): return [inp]
@@ -29,18 +29,26 @@ def listify(inp):
     return [inp]
 
 def setify(inp):
-    '''Convert input of different types to a set'''
+    '''Convert input of different types to a set.'''
     return inp if isinstance(inp, set) else set(listify(inp))
 
 def uniqueify(items, sort=False):
-    '''Convert input of different types to a unique, optionally sorted list with no duplicates'''
+    '''Convert input of different types to a unique, optionally sorted list with no duplicates.'''
     res = list(OrderedDict.fromkeys(items).keys())
     return res.sort() if sort else res
 
 def get_files(path, exts=None, recurse=False, include=None):
-    '''Get files of wanted extensions in specified path'''
+    '''Get files of wanted extensions in specified path.
+        exts: included extensions for filtering files
+        recurse: recursively check inside nested directories
+        include: optional set to selectively include directories
+    '''
     def _get_file_paths(path, files, exts=None):
-        '''Convert filenames to PosixPaths filtered by extensions'''
+        '''Convert filenames to PosixPaths filtered by extensions.
+            path: directory path
+            files: files in directory
+            exts: included extensions for filtering files
+        '''
         path = Path(path)
         in_exts = lambda o: (not exts) or (f".{o.split('.')[-1].lower()}" in exts)
         return [path/f for f in files if not is_hidden(f) and in_exts(f)]
@@ -62,8 +70,9 @@ def get_files(path, exts=None, recurse=False, include=None):
     return files
 
 class ListContainer():
-    '''Imitated numpy list with multi-index select and boolean masking'''
-    def __init__(self, items): self.items = listify(items)
+    def __init__(self, items):
+        '''Imitated numpy list with multi-index select and boolean masking.'''
+        self.items = listify(items)
 
     def __getitem__(self, idx):
         if isinstance(idx, torch.Tensor):
@@ -90,15 +99,18 @@ class ListContainer():
         return res
 
 def compose(item, fns, *args, order_key='_order', **kwargs):
-    '''Apply multiple functions on input items in predefined order'''
+    '''Apply multiple functions on input items in predefined order.'''
     key = lambda o: getattr(o, order_key, 0)
     for fn in sorted(listify(fns), key=key):
         item = fn(item, **kwargs)
     return item
 
 class ItemList(ListContainer):
-    '''List container with option to apply transformation to data'''
     def __init__(self, items, path='.', transforms=None):
+        '''List container with option to apply transformation to data.
+            path: path to directory of items
+            transforms: list of transformation functions to be composed
+        '''
         super().__init__(items)
         self.path = Path(path)
         self.transforms = transforms
@@ -121,6 +133,10 @@ class ItemList(ListContainer):
         return f'Path: {self.path}\n{super().__repr__()}'
 
 class ImageList(ItemList):
+    def __init__(self, files, path, *args, **kwargs):
+        '''List container for images'''
+        super().__init__(files, path, *args, **kwargs)
+
     @classmethod
     def from_files(cls, path, exts=image_exts, recurse=True, include=None, **kwargs):
         files = get_files(path, exts, recurse, include)
@@ -130,27 +146,31 @@ class ImageList(ItemList):
         return PIL.Image.open(fn)
 
 class Transform():
-    '''General transformation class'''
     _order = 0
 
+    def __init__(self):
+        '''General transformation class.'''
+        pass
+
 class ResizeFixed(Transform):
-    '''Resize transformation class'''
     _order = 10
+
     def __init__(self, size):
+        '''Resize transformation class.'''
         self.size = (size, size) if isinstance(size, int) else size
 
     def __call__(self, item):
         return item.resize(self.size, PIL.Image.BILINEAR)
 
 def to_byte_tensor(item):
-    '''Item to byte tensor transformation class'''
+    '''Item to byte tensor transformation class.'''
     w, h = item.size
     byte_tensor = torch.ByteTensor(torch.ByteStorage.from_buffer(item.tobytes()))
     # channel first
     return byte_tensor.view(h, w, -1).permute(2, 0, 1)
 
 def to_float_tensor(item):
-    '''Item to float tensor transformation class (expect item to be byte tensor)'''
+    '''Item to float tensor transformation class (expect item to be byte tensor).'''
     return item.float().div_(255.)
 
 def make_rgb(item):
@@ -162,20 +182,23 @@ to_byte_tensor._order = 20
 to_float_tensor._order = 30
 
 def split_grandparent(filepath, train_name='train', valid_name='valid'):
-    '''Determine data type by grandparent name'''
+    '''Determine data type by grandparent name.
+        train_name: directory name for training data
+        valid_name: directory name for validation data
+    '''
     ret = {valid_name: False, train_name: True}
     return ret.get(filepath.parent.parent.name, None)
 
 def split_by_fn(item_list, fn):
-    '''Split item list with custom function output (expected to be binary) '''
+    '''Split item list with custom function (expected to have binary output).'''
     mask = [fn(o) for o in item_list]
     true  = [o for o, m in zip(item_list, mask) if m == True]
     false = [o for o, m in zip(item_list, mask) if m == False]
     return true, false
 
 class SplitData():
-    '''Splitted Data class with train and valid data'''
     def __init__(self, train, valid):
+        '''Splitted Data class with train and valid data.'''
         self.train = train
         self.valid = valid
 
@@ -193,13 +216,16 @@ class SplitData():
         return f'{self.__class__.__name__}\n\nTRAIN:\n{self.train}\n\nVALID:\n{self.valid}\n'
 
 class Processor():
-    '''General data processor class'''
+    def __init__():
+        '''General data processor class.'''
+        pass
+
     def process(self, items):
         return items
 
 class CategoryProcessor(Processor):
-    '''Categorical data processor to labels'''
     def __init__(self):
+        '''Categorical data processor to labels.'''
         self.vocab = None
 
     # process/deprocess 1 item
@@ -219,16 +245,21 @@ class CategoryProcessor(Processor):
         return [self.deproc(i) for i in idxs]
 
 def p_name(filepath):
-    '''Util function for file parent name'''
+    '''Util function for file parent name.'''
     return filepath.parent.name
 
 def gp_name(filepath):
-    '''Util function for file grandparent name'''
+    '''Util function for file grandparent name.'''
     return filepath.parent.parent.name
 
 class LabeledData():
-    '''Labeled Data class with data and processed data'''
     def __init__(self, x, y, proc_x, proc_y):
+        '''Labeled Data class with data and processed data.
+            x: x training/validation data
+            y: y training/validation data
+            proc_x: list of x processor (fns or callable clss)
+            proc_y: list of y processor (fns or callable clss)
+        '''
         self.x = self.process(x, proc_x)
         self.y = self.process(y, proc_y)
         self.proc_x = proc_x
@@ -262,13 +293,13 @@ class LabeledData():
         return cls(item_list, labels, proc_x, proc_y)
 
 def label_by_fn(splitted_data, fn, proc_x=None, proc_y=None):
-    '''Util function for labelling both train and valid data'''
+    '''Util function for labelling both train and valid data.'''
     train = LabeledData.label_by_fn(splitted_data.train, fn, proc_x, proc_y)
     valid = LabeledData.label_by_fn(splitted_data.valid, fn, proc_x, proc_y)
     return SplitData(train, valid)
 
 def show_image(img, figsize=(3, 3)):
-    '''Show input image with matplotlib'''
+    '''Show input image with matplotlib.'''
     plt.figure(figsize=figsize)
     plt.axis('off')
     plt.imshow(img.permute(1, 2, 0))

@@ -9,12 +9,15 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from pooling import *
 
 def weighted_sum(t1, t2, ratio):
-    '''Util function for linear combination of two elements'''
+    '''Util function for linear combination of two elements.'''
     return t1 * ratio + t2 * (1 - ratio)
 
 class BatchNorm(Module):
-    '''Batch normalization layer'''
     def __init__(self, c, momentum=0.1, epsilon=1e-6):
+        '''Batch normalization layer.
+            momentum: ratio from 0 to 1 for weighted sum of past mean and new value
+            epsilon: small number to prevent exploding weights
+        '''
         super().__init__()
         self.momentum = momentum
         self.epsilon = epsilon
@@ -59,7 +62,9 @@ class BatchNorm(Module):
         return f"{t+'    '}BatchNorm()"
 
 def get_conv_final_model(data_bunch):
-    '''Util function to get convolutional model with pooling and batch normalization layers'''
+    '''Util function to get convolutional model with pooling and batch normalization layers.
+        data_bunch: data bunch with training and validation data
+    '''
     return Sequential(Reshape((1, 28, 28)),
                       Conv(c_in=1, c_out=4, k_s=5, stride=2, pad=1), # 4, 13, 13
                       AvgPool(k_s=2, pad=0), # 4, 12, 12

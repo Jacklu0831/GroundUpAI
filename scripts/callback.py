@@ -11,15 +11,19 @@ from training import *
 import re
 
 def camel2snake(name):
-    '''camel2snake case with regex'''
+    '''Camel case to snake case with regex.'''
     camel_re1 = re.compile('(.)([A-Z][a-z]+)')
     camel_re2 = re.compile('([a-z0-9])([A-Z])')
     s1 = re.sub(camel_re1, r'\1_\2', name)
     return re.sub(camel_re2, r'\1_\2', s1).lower()
 
 class Callback():
-    '''Callback class with order'''
     order = 0
+
+    def __init__(self):
+        '''Callback class with order.'''
+        pass
+
     def __getattr__(self, k):
         # delegate attribute checking to learner
         return getattr(self.learner, k)
@@ -38,7 +42,10 @@ class Callback():
         return False
 
 class TrainEval(Callback):
-    '''Basic training <-> evaluation callback'''
+    def __init__(self):
+        '''Basic training and evaluation callback.'''
+        super().__init__()
+
     def before_train(self):
         self.model.train()
 

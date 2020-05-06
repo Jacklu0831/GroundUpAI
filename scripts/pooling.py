@@ -9,8 +9,12 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from convolution import *
 
 class MaxPool(Module):
-    '''Max Pooling layer'''
     def __init__(self, k_s=3, stride=1, pad=0):
+        '''Max Pooling layer.
+            k_s: kernel size
+            stride: stride size
+            pad: padding size
+        '''
         super().__init__()
         self.k_s, self.stride, self.pad = k_s, stride, pad
 
@@ -49,8 +53,12 @@ class MaxPool(Module):
         return f"{t+'    '}MaxPool({self.k_s}, {self.stride})"
 
 class AvgPool(Module):
-    '''Average Pooling layer'''
     def __init__(self, k_s=3, stride=1, pad=0):
+        '''Average Pooling layer.
+            k_s: kernel size
+            stride: stride size
+            pad: padding size
+        '''
         super().__init__()
         self.k_s, self.stride, self.pad = k_s, stride, pad
 
@@ -84,7 +92,9 @@ class AvgPool(Module):
         return f"{t+'    '}AvgPool({self.k_s}, {self.stride})"
 
 def get_conv_pool_model(data_bunch):
-    '''Util function to get convolution model with average pooling'''
+    '''Util function to get convolution model with average pooling.
+        data_bunch: data bunch with training and validation data
+    '''
     return Sequential(Reshape((1, 28, 28)),
                       Conv(c_in=1, c_out=4, k_s=5, stride=2, pad=1), # 4, 13, 13
                       AvgPool(k_s=2, pad=0), # 4, 12, 12
