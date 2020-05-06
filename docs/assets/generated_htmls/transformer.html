@@ -7,7 +7,7 @@
                                         </table>
                                         <p><span class="desc">Positional encoding layer using sinusoid curve.</span></p>
                                         <ul class="list">
-                                           <li>d: shaping parameter for the sinusoid</li>
+                                           <li><b>d</b>: shaping parameter for the sinusoid</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -20,9 +20,9 @@
                                         </table>
                                         <p><span class="desc">Transformer embedding layer (embedding + positional encoding + dropout).</span></p>
                                         <ul class="list">
-                                           <li>vocab_size: vocabulary size</li>
-                                           <li>emb_size: embedding size</li>
-                                           <li>dropout: dropout factor (0 to 1)</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
+                                           <li><b>emb_size</b>: embedding size</li>
+                                           <li><b>dropout</b>: dropout factor (0 to 1)</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -35,10 +35,10 @@
                                         </table>
                                         <p><span class="desc">Feed forward layer after multi-headed attention (2 * Linear + skip connection + layer norm).</span></p>
                                         <ul class="list">
-                                           <li>model_dim: input dimension input feedforward nn</li>
-                                           <li>inner_dim: number of hidden units in the first linear layer in feedforward nn</li>
-                                           <li>drop_ff: dropout factor (0 to 1)</li>
-                                           <li>double_drop: whether to have dropout layer after first linear layer in feedforward nn</li>
+                                           <li><b>model_dim</b>: input dimension input feedforward nn</li>
+                                           <li><b>inner_dim</b>: number of hidden units in the first linear layer in feedforward nn</li>
+                                           <li><b>drop_ff</b>: dropout factor (0 to 1)</li>
+                                           <li><b>double_drop</b>: whether to have dropout layer after first linear layer in feedforward nn</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -51,13 +51,13 @@
                                         </table>
                                         <p><span class="desc">Multi-Head Attention with key, query, value.</span></p>
                                         <ul class="list">
-                                           <li>num_head: number of attention head</li>
-                                           <li>model_dim: input dimension input feedforward nn</li>
-                                           <li>head_dim: dimension of each attention head</li>
-                                           <li>drop_res: dropout factor (0 to 1) for output of attentions</li>
-                                           <li>drop_att: dropout factor (0 to 1) for attention layers</li>
-                                           <li>bias: whether to allow bias for linear layers</li>
-                                           <li>scale: scaling factor for attention scores</li>
+                                           <li><b>num_head</b>: number of attention head</li>
+                                           <li><b>model_dim</b>: input dimension input feedforward nn</li>
+                                           <li><b>head_dim</b>: dimension of each attention head</li>
+                                           <li><b>drop_res</b>: dropout factor (0 to 1) for output of attentions</li>
+                                           <li><b>drop_att</b>: dropout factor (0 to 1) for attention layers</li>
+                                           <li><b>bias</b>: whether to allow bias for linear layers</li>
+                                           <li><b>scale</b>: scaling factor for attention scores</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -70,16 +70,16 @@
                                         </table>
                                         <p><span class="desc">Encoder block of a Transformer model.</span></p>
                                         <ul class="list">
-                                           <li>num_head: number of attention head</li>
-                                           <li>model_dim: input dimension input feedforward nn</li>
-                                           <li>head_dim: dimension of each attention head</li>
-                                           <li>inner_dim: number of hidden units in the first linear layer in feedforward nn</li>
-                                           <li>drop_res: dropout factor (0 to 1) for output of attentions</li>
-                                           <li>drop_att: dropout factor (0 to 1) for attention layers</li>
-                                           <li>drop_ff:  dropout factor (0 to 1) for feedforward layers</li>
-                                           <li>bias: whether to allow bias for linear layers</li>
-                                           <li>scale: scaling factor for attention scores</li>
-                                           <li>double_drop: whether to have dropout layer after first linear layer in feedforward nn</li>
+                                           <li><b>num_head</b>: number of attention head</li>
+                                           <li><b>model_dim</b>: input dimension input feedforward nn</li>
+                                           <li><b>head_dim</b>: dimension of each attention head</li>
+                                           <li><b>inner_dim</b>: number of hidden units in the first linear layer in feedforward nn</li>
+                                           <li><b>drop_res</b>: dropout factor (0 to 1) for output of attentions</li>
+                                           <li><b>drop_att</b>: dropout factor (0 to 1) for attention layers</li>
+                                           <li><b>drop_ff</b>:  dropout factor (0 to 1) for feedforward layers</li>
+                                           <li><b>bias</b>: whether to allow bias for linear layers</li>
+                                           <li><b>scale</b>: scaling factor for attention scores</li>
+                                           <li><b>double_drop</b>: whether to have dropout layer after first linear layer in feedforward nn</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -92,16 +92,16 @@
                                         </table>
                                         <p><span class="desc">Decoder block of a Transformer model.</span></p>
                                         <ul class="list">
-                                           <li>num_head: number of attention head</li>
-                                           <li>model_dim: input dimension input feedforward nn</li>
-                                           <li>head_dim: dimension of each attention head</li>
-                                           <li>inner_dim: number of hidden units in the first linear layer in feedforward nn</li>
-                                           <li>drop_res: dropout factor (0 to 1) for output of attentions</li>
-                                           <li>drop_att: dropout factor (0 to 1) for attention layers</li>
-                                           <li>drop_ff:  dropout factor (0 to 1) for feedforward layers</li>
-                                           <li>bias: whether to allow bias for linear layers</li>
-                                           <li>scale: scaling factor for attention scores</li>
-                                           <li>double_drop: whether to have dropout layer after first linear layer in feedforward nn</li>
+                                           <li><b>num_head</b>: number of attention head</li>
+                                           <li><b>model_dim</b>: input dimension input feedforward nn</li>
+                                           <li><b>head_dim</b>: dimension of each attention head</li>
+                                           <li><b>inner_dim</b>: number of hidden units in the first linear layer in feedforward nn</li>
+                                           <li><b>drop_res</b>: dropout factor (0 to 1) for output of attentions</li>
+                                           <li><b>drop_att</b>: dropout factor (0 to 1) for attention layers</li>
+                                           <li><b>drop_ff</b>:  dropout factor (0 to 1) for feedforward layers</li>
+                                           <li><b>bias</b>: whether to allow bias for linear layers</li>
+                                           <li><b>scale</b>: scaling factor for attention scores</li>
+                                           <li><b>double_drop</b>: whether to have dropout layer after first linear layer in feedforward nn</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -114,21 +114,21 @@
                                         </table>
                                         <p><span class="desc">Transformer model.</span></p>
                                         <ul class="list">
-                                           <li>vocab_size: vocabulary size</li>
-                                           <li>out_size: output numbers (number of labels)</li>
-                                           <li>n_layers: number of transformer encoder and decoders</li>
-                                           <li>num_head: number of attention head</li>
-                                           <li>model_dim: input dimension input feedforward nn</li>
-                                           <li>head_dim: dimension of each attention head</li>
-                                           <li>inner_dim: number of hidden units in the first linear layer in feedforward nn</li>
-                                           <li>drop_inp: dropout factor (0 tp 1) for embedding layer</li>
-                                           <li>drop_res: dropout factor (0 to 1) for output of attentions</li>
-                                           <li>drop_att: dropout factor (0 to 1) for attention layers</li>
-                                           <li>drop_ff:  dropout factor (0 to 1) for feedforward layers</li>
-                                           <li>bias: whether to allow bias for linear layers</li>
-                                           <li>scale: scaling factor for attention scores</li>
-                                           <li>double_drop: whether to have dropout layer after first linear layer in feedforward nn</li>
-                                           <li>pad_idx: padding index for input masking</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
+                                           <li><b>out_size</b>: output numbers (number of labels)</li>
+                                           <li><b>n_layers</b>: number of transformer encoder and decoders</li>
+                                           <li><b>num_head</b>: number of attention head</li>
+                                           <li><b>model_dim</b>: input dimension input feedforward nn</li>
+                                           <li><b>head_dim</b>: dimension of each attention head</li>
+                                           <li><b>inner_dim</b>: number of hidden units in the first linear layer in feedforward nn</li>
+                                           <li><b>drop_inp</b>: dropout factor (0 tp 1) for embedding layer</li>
+                                           <li><b>drop_res</b>: dropout factor (0 to 1) for output of attentions</li>
+                                           <li><b>drop_att</b>: dropout factor (0 to 1) for attention layers</li>
+                                           <li><b>drop_ff</b>:  dropout factor (0 to 1) for feedforward layers</li>
+                                           <li><b>bias</b>: whether to allow bias for linear layers</li>
+                                           <li><b>scale</b>: scaling factor for attention scores</li>
+                                           <li><b>double_drop</b>: whether to have dropout layer after first linear layer in feedforward nn</li>
+                                           <li><b>pad_idx</b>: padding index for input masking</li>
                                         </ul>
                                     </div>
                                 </div>

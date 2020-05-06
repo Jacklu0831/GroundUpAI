@@ -7,12 +7,12 @@
                                         </table>
                                         <p><span class="desc">Tranpose convolutional layer + normalization layer + ReLU activation.</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>o: channel out</li>
-                                           <li>norm: normalization layer</li>
-                                           <li>k: kernel size</li>
-                                           <li>s: stride size</li>
-                                           <li>b: whether to have bias or not in TransposeConv</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>norm</b>: normalization layer</li>
+                                           <li><b>k</b>: kernel size</li>
+                                           <li><b>s</b>: stride size</li>
+                                           <li><b>b</b>: whether to have bias or not in TransposeConv</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -25,15 +25,16 @@
                                         </table>
                                         <p><span class="desc">PaddedConvolutional layer + normalization layer + ReLU activation.</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>o: channel out</li>
-                                           <li>norm: normalization layer</li>
-                                           <li>k: kernel size</li>
-                                           <li>s: stride size</li>
-                                           <li>p: padding size</li>
-                                           <li>b: bias or not in TransposeConv</li>
-                                           <li>act: whether to append ReLU after PadConvN</li>
-                                           <li>init: initialization function</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>norm</b>: normalization layer</li>
+                                           <li><b>pad_mode</b>: padding mode ('reflection', 'border', or 'zeros')</li>
+                                           <li><b>k</b>: kernel size</li>
+                                           <li><b>s</b>: stride size</li>
+                                           <li><b>p</b>: padding size</li>
+                                           <li><b>b</b>: bias or not in TransposeConv</li>
+                                           <li><b>act</b>: whether to append ReLU after PadConvN</li>
+                                           <li><b>init</b>: initialization function</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -46,10 +47,11 @@
                                         </table>
                                         <p><span class="desc">ResBlock ( y = F(x) + x).</span></p>
                                         <ul class="list">
-                                           <li>pad_mode: padding mode (either "reflection" or "zero")</li>
-                                           <li>norm: normalization layer</li>
-                                           <li>dropout: dropout factor (0 to 1)</li>
-                                           <li>b: whether to have bias or not in TransposeConv</li>
+                                           <li><b>d</b>: channel in</li>
+                                           <li><b>pad_mode</b>: padding mode (either "reflection" or "zero")</li>
+                                           <li><b>norm</b>: normalization layer</li>
+                                           <li><b>dropout</b>: dropout factor (0 to 1)</li>
+                                           <li><b>b</b>: whether to have bias or not in TransposeConv</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -62,12 +64,13 @@
                                         </table>
                                         <p><span class="desc">Generator of GAN (resnet based).</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>o: channel out</li>
-                                           <li>c: start channel (changes are resnet is being built)</li>
-                                           <li>dropout: dropout factor (0 to 1)</li>
-                                           <li>depth: resnet depth</li>
-                                           <li>pad_mode: padding mode (either "reflection" or "zero")</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>c</b>: start channel (changes are resnet is being built)</li>
+                                           <li><b>norm</b>: normalization layer</li>
+                                           <li><b>dropout</b>: dropout factor (0 to 1)</li>
+                                           <li><b>depth</b>: resnet depth</li>
+                                           <li><b>pad_mode</b>: padding mode (either "reflection" or "zero")</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -80,16 +83,16 @@
                                         </table>
                                         <p><span class="desc">Convolutional layer + normalization layer + ReLU activation.</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>o: channel out</li>
-                                           <li>norm: normalization layer</li>
-                                           <li>k: kernel size</li>
-                                           <li>s: stride size</li>
-                                           <li>p: padding size</li>
-                                           <li>b: bias or not in TransposeConv</li>
-                                           <li>act: whether to append ReLU after PadConvN</li>
-                                           <li>slope: leaky relu slope</li>
-                                           <li>init: initialization function</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>norm</b>: normalization layer</li>
+                                           <li><b>k</b>: kernel size</li>
+                                           <li><b>s</b>: stride size</li>
+                                           <li><b>p</b>: padding size</li>
+                                           <li><b>b</b>: bias or not in TransposeConv</li>
+                                           <li><b>act</b>: whether to append ReLU after PadConvN</li>
+                                           <li><b>slope</b>: leaky relu slope</li>
+                                           <li><b>init</b>: initialization function</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -102,10 +105,11 @@
                                         </table>
                                         <p><span class="desc">Discriminator of GAN.</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>c: start channel (changes as we build the discriminator blocks)</li>
-                                           <li>norm: normalization layer</li>
-                                           <li>act: whether to append activation at the end of discriminator</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>c</b>: start channel (changes as we build the discriminator blocks)</li>
+                                           <li><b>norm</b>: normalization layer</li>
+                                           <li><b>n_layer</b>: number of discriminator blocks</li>
+                                           <li><b>act</b>: whether to append activation at the end of discriminator</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -118,14 +122,14 @@
                                         </table>
                                         <p><span class="desc">Cycle GAN with two generators and discriminators.</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>o: channel out</li>
-                                           <li>c: start channel (dynamic)</li>
-                                           <li>norm: normalization layer</li>
-                                           <li>gen_layers: number of generator blocks</li>
-                                           <li>dis_layer: number of discriminator blocks</li>
-                                           <li>dropout: dropout factor (0 to 1)</li>
-                                           <li>lsgan: boolean factor for least square gan (https://arxiv.org/abs/1611.04076)</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>c</b>: start channel (dynamic)</li>
+                                           <li><b>norm</b>: normalization layer</li>
+                                           <li><b>gen_layers</b>: number of generator blocks</li>
+                                           <li><b>dis_layer</b>: number of discriminator blocks</li>
+                                           <li><b>dropout</b>: dropout factor (0 to 1)</li>
+                                           <li><b>lsgan</b>: boolean factor for least square gan (https://arxiv.org/abs/1611.04076)</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -138,7 +142,7 @@
                                         </table>
                                         <p><span class="desc">Critic wrapper for creating binary target tensors for loss computation.</span></p>
                                         <ul class="list">
-                                           <li>critic: loss module</li>
+                                           <li><b>critic</b>: loss module</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -151,10 +155,11 @@
                                         </table>
                                         <p><span class="desc">Cycle GAN loss layer with identity loss, generator loss, and discriminator loss.</span></p>
                                         <ul class="list">
-                                           <li>w1: lambda factor for loss in domain 1</li>
-                                           <li>w2: lambda factor for loss in domain 2</li>
-                                           <li>wi: lambda factor for identity loss</li>
-                                           <li>lsgan: factor for https://arxiv.org/abs/1611.04076</li>
+                                           <li><b>cycleGAN</b>: cycle gan model</li>
+                                           <li><b>w1</b>: lambda factor for loss in domain 1</li>
+                                           <li><b>w2</b>: lambda factor for loss in domain 2</li>
+                                           <li><b>wi</b>: lambda factor for identity loss</li>
+                                           <li><b>lsgan</b>: factor for https://arxiv.org/abs/1611.04076</li>
                                         </ul>
                                     </div>
                                 </div>

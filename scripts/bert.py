@@ -11,7 +11,7 @@ from transformer import *
 
 class BERTEmbLayer(nn.Module):
     def __init__(self, vocab_size, emb_size, seq_len):
-        '''BERT embedding layer (position + token + segment)
+        '''BERT embedding layer (position + token + segment).
             vocab_size: vocabulary size
             emb_size: embedding size
             seq_len: max length of sentence (sequence)
@@ -29,7 +29,7 @@ class BERT(nn.Module):
     def __init__(self, vocab_size, emb_size, seq_len, n_layers=6, num_head=8, model_dim=256,
                 head_dim=32, inner_dim=1024, drop_res=0.1, drop_att=0.1, drop_ff=0.1,
                 bias=True, scale=True, double_drop=True):
-        '''BERT model
+        '''BERT model.
             vocab_size: vocabulary size
             emb_size: embedding size
             seq_len: max length of sentence (sequence)

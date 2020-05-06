@@ -10,22 +10,36 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from lr_search import *
 
 def sgd(param, learning_rate, **kwargs):
-    '''Basic stochastic gradient descent.'''
+    '''Basic stochastic gradient descent.
+        param: model parameters
+        learning_rate: step size of each training iteration
+        kwargs: umbrella for preventing parameter error
+    '''
     param.data -= learning_rate * param.grad
 
 def l2_reg(param, weight_decay, **kwargs):
-    '''L2 regularization.'''
+    '''L2 regularization.
+        param: model parameters
+        weight_decay: weight decay coefficient
+        kwargs: umbrella for preventing parameter error
+    '''
     param.grad += weight_decay * param.data
 
 def compose_inplace(item, fns, **hyper_params):
-    '''Simplified compose function that modifies input item in-place.'''
+    '''Simplified compose function that modifies input item in-place.
+        item: input data
+        fns: list of functions to modify item inplace
+        hyper_params: hyper parameters in the optimizer
+    '''
     for fn in fns:
         fn(item, **hyper_params)
 
 class StatelessOpt():
     def __init__(self, params, steppers=None, **hyper_params):
         '''Improved dynamicOpt that allows different layers to have different hyperparameters.
+            params: model parameters
             steppers: list of stepper functions
+            hyper_params: hyper parameters in the optimizer
         '''
         # list of list of params
         self.params = [params] if isinstance(params, list) else [[params]]
@@ -49,7 +63,7 @@ class StatelessOpt():
 class Recorder(Callback):
     def __init__(self, param_names=['learning_rate']):
         '''Callback for recording specified hyper parameters (good for debugging param scheduler).
-            param_name: names of hyper parameters to be recorded
+            param_names: names of hyper parameters to be recorded
         '''
         self.parameters = {name: [] for name in param_names}
 
@@ -102,6 +116,7 @@ class ParamScheduler(Callback):
     def __init__(self, param_name, schedule_fn):
         '''Callback for scheduling hyper parameter value each epoch.
             param_name: names of hyper parameters to be recorded
+            schedule_fn: function for producing parameter schedule
         '''
         self.param_name = param_name
         self.schedule_fn = schedule_fn

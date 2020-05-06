@@ -9,12 +9,17 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from pooling import *
 
 def weighted_sum(t1, t2, ratio):
-    '''Util function for linear combination of two elements.'''
+    '''Util function for linear combination of two elements.
+        t1: first tensor
+        t2: second tensor
+        ratio: weight for t1
+    '''
     return t1 * ratio + t2 * (1 - ratio)
 
 class BatchNorm(Module):
     def __init__(self, c, momentum=0.1, epsilon=1e-6):
         '''Batch normalization layer.
+            c: number of channels
             momentum: ratio from 0 to 1 for weighted sum of past mean and new value
             epsilon: small number to prevent exploding weights
         '''

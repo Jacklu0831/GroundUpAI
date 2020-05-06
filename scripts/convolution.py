@@ -12,7 +12,11 @@ from torch.nn.functional import pad as torch_pad
 from linear import *
 
 def pad_tensor(inp, pad, value=0):
-    '''Util function for padding inp tensor.'''
+    '''Util function for padding inp tensor.
+        inp: input data
+        pad: padding size
+        value: padding value
+    '''
     return torch_pad(inp, [pad]*4, 'constant', value)
 
 class Reshape(Module):

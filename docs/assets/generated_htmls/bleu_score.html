@@ -7,11 +7,11 @@
                                         </table>
                                         <p><span class="desc">NGram class for preprocess texts.</span></p>
                                         <ul class="list">
-                                           <li>n_gram: gram size</li>
+                                           <li><b>n_gram</b>: gram size</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -20,6 +20,11 @@
                                             <td class="expand"><span class="params">(inp, n, vocab_size=5000)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for grabbing multiple input NGrams of varying sizes.</span></p>
+                                        <ul class="list">
+                                           <li><b>inp</b>: input data</li>
+                                           <li><b>n</b>: max gram size</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -31,8 +36,10 @@
                                         </table>
                                         <p><span class="desc">Compute number of matching n-grams between two sentences.</span></p>
                                         <ul class="list">
-                                           <li>pre: predicted sentence</li>
-                                           <li>tar: label sentence</li>
+                                           <li><b>pre</b>: predicted sentence</li>
+                                           <li><b>tar</b>: label sentence</li>
+                                           <li><b>n</b>: max gram size</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -45,8 +52,10 @@
                                         </table>
                                         <p><span class="desc">Compute BLEU score between two sentences with length penalty.</span></p>
                                         <ul class="list">
-                                           <li>pre: predicted sentence</li>
-                                           <li>tar: label sentence</li>
+                                           <li><b>pre</b>: predicted sentence</li>
+                                           <li><b>tar</b>: label sentence</li>
+                                           <li><b>max_grams</b>: max gram size</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -59,9 +68,10 @@
                                         </table>
                                         <p><span class="desc">Compute BLEU score between two list of sentences (corpus) with length penalty.</span></p>
                                         <ul class="list">
-                                           <li>pres: predicted sentences</li>
-                                           <li>tars: label sentences</li>
-                                           <li>max_grams: max gram size to compare</li>
+                                           <li><b>pres</b>: predicted sentences</li>
+                                           <li><b>tars</b>: label sentences</li>
+                                           <li><b>max_grams</b>: max gram size to compare</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -74,7 +84,8 @@
                                         </table>
                                         <p><span class="desc">Callback to compute BLEU score for training NLP models.</span></p>
                                         <ul class="list">
-                                           <li>max_grams: max gram size to compare</li>
+                                           <li><b>max_grams</b>: max gram size to compare</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
                                         </ul>
                                     </div>
                                 </div>

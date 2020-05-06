@@ -1,4 +1,3 @@
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -7,6 +6,12 @@
                                             <td class="expand"><span class="params">(param, learning_rate, avg_grad, **kwargs)</span></td>
                                         </table>
                                         <p><span class="desc">Momentum Stepping Function.</span></p>
+                                        <ul class="list">
+                                           <li><b>param</b>: model parameters</li>
+                                           <li><b>learning_rate</b>: step size of each training iteration</li>
+                                           <li><b>avg_grad</b>: momentum weighted average gradient</li>
+                                           <li><b>kwargs</b>: umbrella for preventing parameter error</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -18,8 +23,10 @@
                                         </table>
                                         <p><span class="desc">Improved StatelessOpt by allowing past hyperparameters values to be stored in states.</span></p>
                                         <ul class="list">
-                                           <li>steppers: list of stepper functions</li>
-                                           <li>stats: internal optimizer stats (ex. average gradient of parameters)</li>
+                                           <li><b>params</b>: model parameters</li>
+                                           <li><b>steppers</b>: list of stepper functions</li>
+                                           <li><b>stats</b>: internal optimizer stats (ex. average gradient of parameters)</li>
+                                           <li><b>hyper_params</b>: hyper parameters to keep track of</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -56,7 +63,6 @@
                                         <p><span class="desc">Simple measurement to keep track of how many updates were done.</span></p>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -65,9 +71,11 @@
                                             <td class="expand"><span class="params">(dampening=False)</span></td>
                                         </table>
                                         <p><span class="desc">Exponentially weighted moving avg of gradient.</span></p>
+                                        <ul class="list">
+                                           <li><b>dampening</b>: dampening coefficient</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -76,9 +84,11 @@
                                             <td class="expand"><span class="params">(dampening=True)</span></td>
                                         </table>
                                         <p><span class="desc">Exponentially weighted moving avg of squared gradient.</span></p>
+                                        <ul class="list">
+                                           <li><b>dampening</b>: dampening coefficient</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -87,6 +97,11 @@
                                             <td class="expand"><span class="params">(mom, damp, step)</span></td>
                                         </table>
                                         <p><span class="desc">Util function to compute the debias coefficient for adam optimizer.</span></p>
+                                        <ul class="list">
+                                           <li><b>mom</b>: momentum</li>
+                                           <li><b>damp</b>: dampening coefficient</li>
+                                           <li><b>step</b>: number of past optimizer steps</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -98,17 +113,20 @@
                                         </table>
                                         <p><span class="desc">Adam optimizer stepper (for details: https://arxiv.org/abs/1412.6980).</span></p>
                                         <ul class="list">
-                                           <li>mom: momentum for avg</li>
-                                           <li>damp_mom: damping parameter for mom</li>
-                                           <li>step: number of steps taken by optimizer</li>
-                                           <li>sqr_mom: momentum for sqr avg grad</li>
-                                           <li>sqr_damp_mom: damping parameter for sqr_mom</li>
-                                           <li>avg_grad: average (momentum weighted) past gradient of parameter</li>
-                                           <li>sqr_avg_grad: average (momentum weight) past squared gradient of parameter</li>
+                                           <li><b>param</b>: model parameters</li>
+                                           <li><b>learning_rate</b>: step size of each training iteration</li>
+                                           <li><b>mom</b>: momentum for avg</li>
+                                           <li><b>damp_mom</b>: damping parameter for mom</li>
+                                           <li><b>step</b>: number of steps taken by optimizer</li>
+                                           <li><b>sqr_mom</b>: momentum for sqr avg grad</li>
+                                           <li><b>sqr_damp_mom</b>: damping parameter for sqr_mom</li>
+                                           <li><b>avg_grad</b>: average (momentum weighted) past gradient of parameter</li>
+                                           <li><b>sqr_avg_grad</b>: average (momentum weight) past squared gradient of parameter</li>
+                                           <li><b>eps</b>: small epsilon value to prevent gradient explosion</li>
+                                           <li><b>kwargs</b>: other optimizer internal variables</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -117,6 +135,12 @@
                                             <td class="expand"><span class="params">(model, beta1=0.9, beta2=0.99, **kwargs)</span></td>
                                         </table>
                                         <p><span class="desc">Util function to get adam optimizer.</span></p>
+                                        <ul class="list">
+                                           <li><b>model</b>: training model</li>
+                                           <li><b>beta1</b>: adam weighting coefficient (https://arxiv.org/abs/1412.6980)</li>
+                                           <li><b>beta2</b>: adam weight coefficient</li>
+                                           <li><b>kwargs</b>: other optimizer internal variables</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -128,19 +152,21 @@
                                         </table>
                                         <p><span class="desc">LAMB optimizer stepper (https://arxiv.org/abs/1904.00962).</span></p>
                                         <ul class="list">
-                                           <li>mom: momentum for avg</li>
-                                           <li>damp_mom: damping parameter for mom</li>
-                                           <li>step: number of steps taken by optimizer</li>
-                                           <li>sqr_mom: momentum for sqr avg grad</li>
-                                           <li>sqr_damp_mom: damping parameter for sqr_mom</li>
-                                           <li>avg_grad: average (momentum weighted) past gradient of parameter</li>
-                                           <li>sqr_avg_grad: average (momentum weight) past squared gradient of parameter</li>
-                                           <li>weight_decay: weight decay parameter (from L2 regularization)</li>
-                                           <li>eps: small epsilon value to prevent gradient explosion</li>
+                                           <li><b>param</b>: model parameters</li>
+                                           <li><b>learning_rate</b>: step size of each training iteration</li>
+                                           <li><b>mom</b>: momentum for avg</li>
+                                           <li><b>damp_mom</b>: damping parameter for mom</li>
+                                           <li><b>step</b>: number of steps taken by optimizer</li>
+                                           <li><b>sqr_mom</b>: momentum for sqr avg grad</li>
+                                           <li><b>sqr_damp_mom</b>: damping parameter for sqr_mom</li>
+                                           <li><b>avg_grad</b>: average (momentum weighted) past gradient of parameter</li>
+                                           <li><b>sqr_avg_grad</b>: average (momentum weight) past squared gradient of parameter</li>
+                                           <li><b>weight_decay</b>: weight decay parameter (from L2 regularization)</li>
+                                           <li><b>eps</b>: small epsilon value to prevent gradient explosion</li>
+                                           <li><b>kwargs</b>: other optimizer internal variables</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -149,5 +175,11 @@
                                             <td class="expand"><span class="params">(model, beta1=0.9, beta2=0.99, **kwargs)</span></td>
                                         </table>
                                         <p><span class="desc">Util function to get LAMB optimizer.</span></p>
+                                        <ul class="list">
+                                           <li><b>model</b>: training model</li>
+                                           <li><b>beta1</b>: adam/lamb weighting coefficient (https://arxiv.org/abs/1904.00962)</li>
+                                           <li><b>beta2</b>: adam/lamb weight coefficient</li>
+                                           <li><b>kwargs</b>: other optimizer internal variables</li>
+                                        </ul>
                                     </div>
                                 </div>

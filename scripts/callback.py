@@ -11,7 +11,9 @@ from training import *
 import re
 
 def camel2snake(name):
-    '''Camel case to snake case with regex.'''
+    '''Camel case to snake case with regex.
+        name: name of callback
+    '''
     camel_re1 = re.compile('(.)([A-Z][a-z]+)')
     camel_re2 = re.compile('([a-z0-9])([A-Z])')
     s1 = re.sub(camel_re1, r'\1_\2', name)

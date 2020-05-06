@@ -42,7 +42,7 @@ class LSTMCell(nn.Module):
 
 class LSTMLayer(nn.Module):
     def __init__(self, i, h):
-        '''Wrapper for passing different input timestamps into LSTM cell
+        '''Wrapper for passing different input timestamps into LSTM cell.
             i: input data dimension
             h: number of hidden units in the lstm cell
         '''
@@ -87,7 +87,7 @@ class FastLSTMCell(nn.Module):
 
 class FastLSTMLayer(nn.Module):
     def __init__(self, i, h):
-        '''Wrapper for passing different input timestamps into FastLSTM cell
+        '''Wrapper for passing different input timestamps into FastLSTM cell.
             i: input data dimension
             h: number of hidden units in the lstm cell
         '''

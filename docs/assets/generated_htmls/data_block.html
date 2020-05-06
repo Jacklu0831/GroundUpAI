@@ -1,4 +1,3 @@
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -7,9 +6,11 @@
                                             <td class="expand"><span class="params">(inp)</span></td>
                                         </table>
                                         <p><span class="desc">Convert input of different types to a list.</span></p>
+                                        <ul class="list">
+                                           <li><b>inp</b>: input item(s)</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -18,17 +19,23 @@
                                             <td class="expand"><span class="params">(inp)</span></td>
                                         </table>
                                         <p><span class="desc">Convert input of different types to a set.</span></p>
+                                        <ul class="list">
+                                           <li><b>inp</b>: input item(s)</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">uniqueify</span></td>
-                                            <td class="expand"><span class="params">(items, sort=False)</span></td>
+                                            <td class="expand"><span class="params">(inp, sort=False)</span></td>
                                         </table>
                                         <p><span class="desc">Convert input of different types to a unique, optionally sorted list with no duplicates.</span></p>
+                                        <ul class="list">
+                                           <li><b>inp</b>: input item(s)</li>
+                                           <li><b>sort</b>: boolean for whether to sort the items</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -40,13 +47,13 @@
                                         </table>
                                         <p><span class="desc">Get files of wanted extensions in specified path.</span></p>
                                         <ul class="list">
-                                           <li>exts: included extensions for filtering files</li>
-                                           <li>recurse: recursively check inside nested directories</li>
-                                           <li>include: optional set to selectively include directories</li>
+                                           <li><b>path</b>: directory path of data</li>
+                                           <li><b>exts</b>: included extensions for filtering files</li>
+                                           <li><b>recurse</b>: recursively check inside nested directories</li>
+                                           <li><b>include</b>: optional set to selectively include directories</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -55,17 +62,25 @@
                                             <td class="expand"><span class="params">(items)</span></td>
                                         </table>
                                         <p><span class="desc">Imitated numpy list with multi-index select and boolean masking.</span></p>
+                                        <ul class="list">
+                                           <li><b>items</b>: data</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">compose</span></td>
-                                            <td class="expand"><span class="params">(item, fns, *args, order_key='_order', **kwargs)</span></td>
+                                            <td class="expand"><span class="params">(item, fns, order_key='_order', **kwargs)</span></td>
                                         </table>
                                         <p><span class="desc">Apply multiple functions on input items in predefined order.</span></p>
+                                        <ul class="list">
+                                           <li><b>items</b>: data</li>
+                                           <li><b>fns</b>: list of functions to apply to data</li>
+                                           <li><b>order_key</b>: name of the attribute for fn ordering</li>
+                                           <li><b>kwargs</b>: parameters for the fns</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -77,12 +92,12 @@
                                         </table>
                                         <p><span class="desc">List container with option to apply transformation to data.</span></p>
                                         <ul class="list">
-                                           <li>path: path to directory of items</li>
-                                           <li>transforms: list of transformation functions to be composed</li>
+                                           <li><b>items</b>: data</li>
+                                           <li><b>path</b>: path to directory of items</li>
+                                           <li><b>transforms</b>: list of transformation functions to be composed</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -90,7 +105,13 @@
                                             <td><span class="name">ImageList(ItemList)</span></td>
                                             <td class="expand"><span class="params">(files, path, *args, **kwargs)</span></td>
                                         </table>
-                                        <p><span class="desc">List container for images</span></p>
+                                        <p><span class="desc">List container for images.</span></p>
+                                        <ul class="list">
+                                           <li><b>files</b>: image file paths</li>
+                                           <li><b>path</b>: data directory</li>
+                                           <li><b>args</b>: parameters for ItemList init</li>
+                                           <li><b>kwargs</b>: parameters for ItemList init</li>
+                                        </ul>
                                     </div>
                                 </div>
 
@@ -104,7 +125,6 @@
                                         <p><span class="desc">General transformation class.</span></p>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -113,9 +133,11 @@
                                             <td class="expand"><span class="params">(size)</span></td>
                                         </table>
                                         <p><span class="desc">Resize transformation class.</span></p>
+                                        <ul class="list">
+                                           <li><b>size</b>: size to resize image to</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -124,9 +146,11 @@
                                             <td class="expand"><span class="params">(item)</span></td>
                                         </table>
                                         <p><span class="desc">Item to byte tensor transformation class.</span></p>
+                                        <ul class="list">
+                                           <li><b>item</b>: input data</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -135,9 +159,11 @@
                                             <td class="expand"><span class="params">(item)</span></td>
                                         </table>
                                         <p><span class="desc">Item to float tensor transformation class (expect item to be byte tensor).</span></p>
+                                        <ul class="list">
+                                           <li><b>item</b>: input data</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -145,7 +171,10 @@
                                             <td><span class="name">make_rgb</span></td>
                                             <td class="expand"><span class="params">(item)</span></td>
                                         </table>
-                                        <p><span class="desc">Item to RGB image transformation class</span></p>
+                                        <p><span class="desc">Item to RGB image transformation class.</span></p>
+                                        <ul class="list">
+                                           <li><b>item</b>: input data</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -157,12 +186,12 @@
                                         </table>
                                         <p><span class="desc">Determine data type by grandparent name.</span></p>
                                         <ul class="list">
-                                           <li>train_name: directory name for training data</li>
-                                           <li>valid_name: directory name for validation data</li>
+                                           <li><b>filepath</b>: file path of data</li>
+                                           <li><b>train_name</b>: directory name for training data</li>
+                                           <li><b>valid_name</b>: directory name for validation data</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -171,9 +200,12 @@
                                             <td class="expand"><span class="params">(item_list, fn)</span></td>
                                         </table>
                                         <p><span class="desc">Split item list with custom function (expected to have binary output).</span></p>
+                                        <ul class="list">
+                                           <li><b>item_list</b>: data list</li>
+                                           <li><b>fn</b>: filter function that takes in items as parameters</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -182,6 +214,10 @@
                                             <td class="expand"><span class="params">(train, valid)</span></td>
                                         </table>
                                         <p><span class="desc">Splitted Data class with train and valid data.</span></p>
+                                        <ul class="list">
+                                           <li><b>train</b>: training data</li>
+                                           <li><b>valid</b>: validation data</li>
+                                        </ul>
                                     </div>
                                 </div>
 
@@ -206,7 +242,6 @@
                                         <p><span class="desc">Categorical data processor to labels.</span></p>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -215,9 +250,11 @@
                                             <td class="expand"><span class="params">(filepath)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for file parent name.</span></p>
+                                        <ul class="list">
+                                           <li><b>filepath</b>: file path of data</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -226,6 +263,9 @@
                                             <td class="expand"><span class="params">(filepath)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for file grandparent name.</span></p>
+                                        <ul class="list">
+                                           <li><b>filepath</b>: file path of data</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -237,14 +277,13 @@
                                         </table>
                                         <p><span class="desc">Labeled Data class with data and processed data.</span></p>
                                         <ul class="list">
-                                           <li>x: x training/validation data</li>
-                                           <li>y: y training/validation data</li>
-                                           <li>proc_x: list of x processor (fns or callable clss)</li>
-                                           <li>proc_y: list of y processor (fns or callable clss)</li>
+                                           <li><b>x</b>: x training/validation data</li>
+                                           <li><b>y</b>: y training/validation data</li>
+                                           <li><b>proc_x</b>: list of x processor (fns or callable clss)</li>
+                                           <li><b>proc_y</b>: list of y processor (fns or callable clss)</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -253,16 +292,24 @@
                                             <td class="expand"><span class="params">(splitted_data, fn, proc_x=None, proc_y=None)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for labelling both train and valid data.</span></p>
+                                        <ul class="list">
+                                           <li><b>splitted_data</b>: LabeledData object</li>
+                                           <li><b>fn</b>: filter function that takes in items as parameters</li>
+                                           <li><b>proc_x</b>: functions for preprocessing x data</li>
+                                           <li><b>proc_y</b>: functions for preprocessing y data</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">show_image</span></td>
-                                            <td class="expand"><span class="params">(img, figsize=(3, 3))</span></td>
+                                            <td class="expand"><span class="params">(img)</span></td>
                                         </table>
                                         <p><span class="desc">Show input image with matplotlib.</span></p>
+                                        <ul class="list">
+                                           <li><b>img</b>: image data</li>
+                                        </ul>
                                     </div>
                                 </div>

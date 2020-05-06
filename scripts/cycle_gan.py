@@ -28,6 +28,7 @@ def PadConvNReLU(i, o, norm, pad_mode, k=3, s=1, p=1, b=True, act=True, init=nn.
         i: channel in
         o: channel out
         norm: normalization layer
+        pad_mode: padding mode ('reflection', 'border', or 'zeros')
         k: kernel size
         s: stride size
         p: padding size
@@ -58,6 +59,7 @@ def PadConvNReLU(i, o, norm, pad_mode, k=3, s=1, p=1, b=True, act=True, init=nn.
 class ResnetBlock(nn.Module):
     def __init__(self, d, pad_mode, norm=None, dropout=0., b=True):
         '''ResBlock ( y = F(x) + x).
+            d: channel in
             pad_mode: padding mode (either "reflection" or "zero")
             norm: normalization layer
             dropout: dropout factor (0 to 1)
@@ -78,6 +80,7 @@ def generator(i, o, c=64, norm=None, dropout=0., depth=6, pad_mode='reflection')
         i: channel in
         o: channel out
         c: start channel (changes are resnet is being built)
+        norm: normalization layer
         dropout: dropout factor (0 to 1)
         depth: resnet depth
         pad_mode: padding mode (either "reflection" or "zero")
@@ -130,6 +133,7 @@ def discriminator(i, c=64, norm=None, n_layer=3, act=False):
         i: channel in
         c: start channel (changes as we build the discriminator blocks)
         norm: normalization layer
+        n_layer: number of discriminator blocks
         act: whether to append activation at the end of discriminator
     '''
     layers = []
@@ -186,6 +190,7 @@ class AdaptiveLoss(nn.Module):
 class CycleGANLoss(nn.Module):
     def __init__(self, cycleGAN, w1=10., w2=10., wi=0.5, lsgan=True):
         '''Cycle GAN loss layer with identity loss, generator loss, and discriminator loss.
+            cycleGAN: cycle gan model
             w1: lambda factor for loss in domain 1
             w2: lambda factor for loss in domain 2
             wi: lambda factor for identity loss

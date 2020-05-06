@@ -7,7 +7,7 @@
                                         </table>
                                         <p><span class="desc">Decorator function to produce partial function of param schedule.</span></p>
                                         <ul class="list">
-                                           <li>fn: input schedule function with parameters (start, end, position)</li>
+                                           <li><b>fn</b>: input schedule function with parameters (start, end, position)</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -18,10 +18,10 @@
                                             <td><span class="name">schedule_lin</span></td>
                                             <td class="expand"><span class="params">(start, end, position):returnstart+position*(end-start)@annealerdefschedule_cos(start, end, position):returnstart+(1+math.cos(math.pi*(1-position)))*(end-start)/2@annealerdefschedule_none(start, end, position):returnstart@annealerdefschedule_exp(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
                                         </table>
-                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential)</span></p>
+                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
-                                           <li>start: starting value of parameter</li>
-                                           <li>end: ending value of parameter</li>
+                                           <li><b>start</b>: starting value of parameter</li>
+                                           <li><b>end</b>: ending value of parameter</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -32,10 +32,10 @@
                                             <td><span class="name">schedule_cos</span></td>
                                             <td class="expand"><span class="params">(start, end, position):returnstart+(1+math.cos(math.pi*(1-position)))*(end-start)/2@annealerdefschedule_none(start, end, position):returnstart@annealerdefschedule_exp(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
                                         </table>
-                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential)</span></p>
+                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
-                                           <li>start: starting value of parameter</li>
-                                           <li>end: ending value of parameter</li>
+                                           <li><b>start</b>: starting value of parameter</li>
+                                           <li><b>end</b>: ending value of parameter</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -46,10 +46,10 @@
                                             <td><span class="name">schedule_none</span></td>
                                             <td class="expand"><span class="params">(start, end, position):returnstart@annealerdefschedule_exp(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
                                         </table>
-                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential)</span></p>
+                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
-                                           <li>start: starting value of parameter</li>
-                                           <li>end: ending value of parameter</li>
+                                           <li><b>start</b>: starting value of parameter</li>
+                                           <li><b>end</b>: ending value of parameter</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -60,10 +60,10 @@
                                             <td><span class="name">schedule_exp</span></td>
                                             <td class="expand"><span class="params">(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
                                         </table>
-                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential)</span></p>
+                                        <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
-                                           <li>start: starting value of parameter</li>
-                                           <li>end: ending value of parameter</li>
+                                           <li><b>start</b>: starting value of parameter</li>
+                                           <li><b>end</b>: ending value of parameter</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -76,12 +76,11 @@
                                         </table>
                                         <p><span class="desc">Combine multiple schedules with they respective segments and ranges.</span></p>
                                         <ul class="list">
-                                           <li>segments: separation values (must add up to 1)</li>
-                                           <li>ranges: range value for each separation value</li>
+                                           <li><b>segments</b>: separation values (must add up to 1)</li>
+                                           <li><b>ranges</b>: range value for each separation value</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -90,9 +89,11 @@
                                             <td class="expand"><span class="params">(schedule)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for plotting param schedule.</span></p>
+                                        <ul class="list">
+                                           <li><b>schedule</b>: parameter schedule</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -101,6 +102,11 @@
                                             <td class="expand"><span class="params">(start, upper, end)</span></td>
                                         </table>
                                         <p><span class="desc">Wrapper function to create 1-cycle-training param schedule.</span></p>
+                                        <ul class="list">
+                                           <li><b>start</b>: low starting point</li>
+                                           <li><b>upper</b>: max parameter value</li>
+                                           <li><b>end</b>: low ending point</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -112,7 +118,7 @@
                                         </table>
                                         <p><span class="desc">Callback for recording specified hyper parameters (good for debugging param scheduler).</span></p>
                                         <ul class="list">
-                                           <li>param_name: names of hyper parameters to be recorded</li>
+                                           <li><b>param_names</b>: names of hyper parameters to be recorded</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -125,7 +131,8 @@
                                         </table>
                                         <p><span class="desc">Callback for scheduling hyper parameter value each epoch.</span></p>
                                         <ul class="list">
-                                           <li>param_name: names of hyper parameters to be recorded</li>
+                                           <li><b>param_name</b>: names of hyper parameters to be recorded</li>
+                                           <li><b>schedule_fn</b>: function for producing parameter schedule</li>
                                         </ul>
                                     </div>
                                 </div>

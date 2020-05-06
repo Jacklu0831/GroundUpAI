@@ -1,16 +1,45 @@
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_basic_block</span></td>
+                                            <td class="expand"><span class="params">(i, o, s)</span></td>
+                                        </table>
+                                        <p><span class="desc">Get basic ResNet block.</span></p>
+                                        <ul class="list">
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>s</b>: stride size</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_bottleneck</span></td>
+                                            <td class="expand"><span class="params">(i, o)</span></td>
+                                        </table>
+                                        <p><span class="desc">Get bottleneck ResNet block.</span></p>
+                                        <ul class="list">
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
                                            <td><span class="label">&nbsp;CLS</span></td>
                                             <td><span class="name">ResLayer(Module)</span></td>
                                             <td class="expand"><span class="params">(i, o, s, bottleneck)</span></td>
                                         </table>
                                         <p><span class="desc">Get ResLayer (almost a ResBlock but not including the final activation).</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>o: channel out</li>
-                                           <li>s: stride size</li>
-                                           <li>bottleneck: boolean of whether the resblock is basic or bottleneck</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>s</b>: stride size</li>
+                                           <li><b>bottleneck</b>: boolean of whether the resblock is basic or bottleneck</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -23,10 +52,69 @@
                                         </table>
                                         <p><span class="desc">ResBlock (ResLayer + Activation).</span></p>
                                         <ul class="list">
-                                           <li>i: channel in</li>
-                                           <li>o: channel out</li>
-                                           <li>s: stride size</li>
-                                           <li>bottleneck: boolean of whether the resblock is basic or bottleneck</li>
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>s</b>: stride size</li>
+                                           <li><b>bottleneck</b>: boolean of whether the resblock is basic or bottleneck</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">ResBlockGroup(SubModel)</span></td>
+                                            <td class="expand"><span class="params">(i, o, num_blocks, bottleneck)</span></td>
+                                        </table>
+                                        <p><span class="desc">Group of ResBlocks.</span></p>
+                                        <ul class="list">
+                                           <li><b>i</b>: channel in</li>
+                                           <li><b>o</b>: channel out</li>
+                                           <li><b>num_blocks</b>: number of resblockss</li>
+                                           <li><b>bottleneck</b>: boolean of whether the resblocks are basic or bottleneck</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_res_head</span></td>
+                                            <td class="expand"><span class="params">(in_shape, o)</span></td>
+                                        </table>
+                                        <p><span class="desc">ResNet head (before ResBlocks).</span></p>
+                                        <ul class="list">
+                                           <li><b>in_shape</b>: input shape before conv bn relu and pool</li>
+                                           <li><b>o</b>: channel out</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;DEF</span></td>
+                                            <td><span class="name">get_res_tail</span></td>
+                                            <td class="expand"><span class="params">(h, o)</span></td>
+                                        </table>
+                                        <p><span class="desc">ResNet tail (after ResBlocks).</span></p>
+                                        <ul class="list">
+                                           <li><b>h</b>: number of hidden cells</li>
+                                           <li><b>o</b>: channel out</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section-block-small">
+                                    <div class="doc-block">
+                                        <table>
+                                           <td><span class="label">&nbsp;CLS</span></td>
+                                            <td><span class="name">ResNet(SubModel)</span></td>
+                                            <td class="expand"><span class="params">(n_layer, in_shape=(3,28,28), out=100)</span></td>
+                                        </table>
+                                        <p><span class="desc">ResNet model that is able to create ResNets with different number of layers adaptively.</span></p>
+                                        <ul class="list">
+                                           <li><b>n_layer</b>: number of resnet layers (18, 34...)</li>
+                                           <li><b>in_shape</b>: input image shape</li>
+                                           <li><b>out</b>: output number of labels</li>
                                         </ul>
                                     </div>
                                 </div>

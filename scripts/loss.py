@@ -9,26 +9,41 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from initialization import *
 
 def softmax(inp):
-    '''naive softmax fn. Prone to large floating point errors.'''
+    '''naive softmax fn. Prone to large floating point errors.
+        inp: linear layer output
+    '''
     return inp.exp() / inp.exp().sum(-1, keepdim=True)
 
 def log_sum_exp(inp):
-    '''LogSumExp trick (https://en.wikipedia.org/wiki/LogSumExp).'''
+    '''LogSumExp trick (https://en.wikipedia.org/wiki/LogSumExp).
+        inp: linear layer output
+    '''
     e = inp.max(-1)[0]
     return e + (inp - e[:, None]).exp().sum(-1).log()
 
 def log_softmax(inp):
-    '''log softmax fn using logSumExp trick to avoid large floating point errors.'''
+    '''log softmax fn using logSumExp trick to avoid large floating point errors.
+        inp: linear layer output
+    '''
     return inp - log_sum_exp(inp).unsqueeze(-1)
 
 def nll_loss(pre, tar):
-    '''Negative log-likelihood'''
+    '''Negative log-likelihood.
+        pre: predicted labels
+        tar: ground truth labels
+    '''
     return -pre[range(tar.shape[0]), tar].mean()
 
 def cross_entropy(pre, tar):
-    '''Cross entropy loss'''
+    '''Cross entropy loss.
+        pre: predicted labels
+        tar: ground truth labels
+    '''
     return nll_loss(log_softmax(pre), tar)
 
 def compute_accuracy(pre, tar):
-    '''Accuracy'''
+    '''Accuracy.
+        pre: predicted labels
+        tar: ground truth labels
+    '''
     return (torch.argmax(pre, dim=1) == tar).float().mean()

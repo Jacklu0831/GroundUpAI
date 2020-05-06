@@ -11,7 +11,7 @@ from loss import *
 class Sequential():
     def __init__(self, *args):
         '''Sequential Model with stored layers and training status.
-        args: model layers
+            args: model layers
         '''
         assert args, 'empty model'
         self.layers = args[0] if isinstance(args[0], list) else list(args)

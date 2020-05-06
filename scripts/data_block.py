@@ -21,7 +21,9 @@ image_exts = set(k for k,v in mimetypes.types_map.items() if v.startswith('image
 from collections import OrderedDict
 
 def listify(inp):
-    '''Convert input of different types to a list.'''
+    '''Convert input of different types to a list.
+        inp: input item(s)
+    '''
     if inp is None: return []
     if isinstance(inp, list): return inp
     if isinstance(inp, str): return [inp]
@@ -29,16 +31,22 @@ def listify(inp):
     return [inp]
 
 def setify(inp):
-    '''Convert input of different types to a set.'''
+    '''Convert input of different types to a set.
+        inp: input item(s)
+    '''
     return inp if isinstance(inp, set) else set(listify(inp))
 
-def uniqueify(items, sort=False):
-    '''Convert input of different types to a unique, optionally sorted list with no duplicates.'''
-    res = list(OrderedDict.fromkeys(items).keys())
+def uniqueify(inp, sort=False):
+    '''Convert input of different types to a unique, optionally sorted list with no duplicates.
+        inp: input item(s)
+        sort: boolean for whether to sort the items
+    '''
+    res = list(OrderedDict.fromkeys(inp).keys())
     return res.sort() if sort else res
 
 def get_files(path, exts=None, recurse=False, include=None):
     '''Get files of wanted extensions in specified path.
+        path: directory path of data
         exts: included extensions for filtering files
         recurse: recursively check inside nested directories
         include: optional set to selectively include directories
@@ -71,7 +79,9 @@ def get_files(path, exts=None, recurse=False, include=None):
 
 class ListContainer():
     def __init__(self, items):
-        '''Imitated numpy list with multi-index select and boolean masking.'''
+        '''Imitated numpy list with multi-index select and boolean masking.
+            items: data
+        '''
         self.items = listify(items)
 
     def __getitem__(self, idx):
@@ -98,8 +108,13 @@ class ListContainer():
             return res[:-1]+ ' ...]'
         return res
 
-def compose(item, fns, *args, order_key='_order', **kwargs):
-    '''Apply multiple functions on input items in predefined order.'''
+def compose(item, fns, order_key='_order', **kwargs):
+    '''Apply multiple functions on input items in predefined order.
+        items: data
+        fns: list of functions to apply to data
+        order_key: name of the attribute for fn ordering
+        kwargs: parameters for the fns
+    '''
     key = lambda o: getattr(o, order_key, 0)
     for fn in sorted(listify(fns), key=key):
         item = fn(item, **kwargs)
@@ -108,6 +123,7 @@ def compose(item, fns, *args, order_key='_order', **kwargs):
 class ItemList(ListContainer):
     def __init__(self, items, path='.', transforms=None):
         '''List container with option to apply transformation to data.
+            items: data
             path: path to directory of items
             transforms: list of transformation functions to be composed
         '''
@@ -134,7 +150,12 @@ class ItemList(ListContainer):
 
 class ImageList(ItemList):
     def __init__(self, files, path, *args, **kwargs):
-        '''List container for images'''
+        '''List container for images.
+            files: image file paths
+            path: data directory
+            args: parameters for ItemList init
+            kwargs: parameters for ItemList init
+        '''
         super().__init__(files, path, *args, **kwargs)
 
     @classmethod
@@ -156,25 +177,33 @@ class ResizeFixed(Transform):
     _order = 10
 
     def __init__(self, size):
-        '''Resize transformation class.'''
+        '''Resize transformation class.
+            size: size to resize image to
+        '''
         self.size = (size, size) if isinstance(size, int) else size
 
     def __call__(self, item):
         return item.resize(self.size, PIL.Image.BILINEAR)
 
 def to_byte_tensor(item):
-    '''Item to byte tensor transformation class.'''
+    '''Item to byte tensor transformation class.
+        item: input data
+    '''
     w, h = item.size
     byte_tensor = torch.ByteTensor(torch.ByteStorage.from_buffer(item.tobytes()))
     # channel first
     return byte_tensor.view(h, w, -1).permute(2, 0, 1)
 
 def to_float_tensor(item):
-    '''Item to float tensor transformation class (expect item to be byte tensor).'''
+    '''Item to float tensor transformation class (expect item to be byte tensor).
+        item: input data
+    '''
     return item.float().div_(255.)
 
 def make_rgb(item):
-    '''Item to RGB image transformation class'''
+    '''Item to RGB image transformation class.
+        item: input data
+    '''
     return item.convert('RGB')
 
 make_rgb._order = 0
@@ -183,6 +212,7 @@ to_float_tensor._order = 30
 
 def split_grandparent(filepath, train_name='train', valid_name='valid'):
     '''Determine data type by grandparent name.
+        filepath: file path of data
         train_name: directory name for training data
         valid_name: directory name for validation data
     '''
@@ -190,7 +220,10 @@ def split_grandparent(filepath, train_name='train', valid_name='valid'):
     return ret.get(filepath.parent.parent.name, None)
 
 def split_by_fn(item_list, fn):
-    '''Split item list with custom function (expected to have binary output).'''
+    '''Split item list with custom function (expected to have binary output).
+        item_list: data list
+        fn: filter function that takes in items as parameters
+    '''
     mask = [fn(o) for o in item_list]
     true  = [o for o, m in zip(item_list, mask) if m == True]
     false = [o for o, m in zip(item_list, mask) if m == False]
@@ -198,7 +231,10 @@ def split_by_fn(item_list, fn):
 
 class SplitData():
     def __init__(self, train, valid):
-        '''Splitted Data class with train and valid data.'''
+        '''Splitted Data class with train and valid data.
+            train: training data
+            valid: validation data
+        '''
         self.train = train
         self.valid = valid
 
@@ -245,11 +281,15 @@ class CategoryProcessor(Processor):
         return [self.deproc(i) for i in idxs]
 
 def p_name(filepath):
-    '''Util function for file parent name.'''
+    '''Util function for file parent name.
+        filepath: file path of data
+    '''
     return filepath.parent.name
 
 def gp_name(filepath):
-    '''Util function for file grandparent name.'''
+    '''Util function for file grandparent name.
+        filepath: file path of data
+    '''
     return filepath.parent.parent.name
 
 class LabeledData():
@@ -293,13 +333,20 @@ class LabeledData():
         return cls(item_list, labels, proc_x, proc_y)
 
 def label_by_fn(splitted_data, fn, proc_x=None, proc_y=None):
-    '''Util function for labelling both train and valid data.'''
+    '''Util function for labelling both train and valid data.
+        splitted_data: LabeledData object
+        fn: filter function that takes in items as parameters
+        proc_x: functions for preprocessing x data
+        proc_y: functions for preprocessing y data
+    '''
     train = LabeledData.label_by_fn(splitted_data.train, fn, proc_x, proc_y)
     valid = LabeledData.label_by_fn(splitted_data.valid, fn, proc_x, proc_y)
     return SplitData(train, valid)
 
-def show_image(img, figsize=(3, 3)):
-    '''Show input image with matplotlib.'''
-    plt.figure(figsize=figsize)
+def show_image(img):
+    '''Show input image with matplotlib.
+        img: image data
+    '''
+    plt.figure(figsize=(3,3))
     plt.axis('off')
     plt.imshow(img.permute(1, 2, 0))

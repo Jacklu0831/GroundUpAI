@@ -15,7 +15,7 @@ def annealer(fn):
         fn: input schedule function with parameters (start, end, position)
     '''
     def _inner(start, end):
-        '''Param schedule partial function (linear, cosine, none, or exponential)
+        '''Param schedule partial function (linear, cosine, none, or exponential).
             start: starting value of parameter
             end: ending value of parameter
         '''
@@ -56,13 +56,19 @@ def combine_schedules(segments, ranges):
     return _inner
 
 def plot_schedule(schedule):
-    '''Util function for plotting param schedule.'''
+    '''Util function for plotting param schedule.
+        schedule: parameter schedule
+    '''
     a = torch.arange(0, 100)
     p = torch.linspace(0.01, 1, 100)
     plt.plot(a, [schedule(n) for n in p])
 
 def one_cycle_cos(start, upper, end):
-    '''Wrapper function to create 1-cycle-training param schedule.'''
+    '''Wrapper function to create 1-cycle-training param schedule.
+        start: low starting point
+        upper: max parameter value
+        end: low ending point
+    '''
     return [schedule_cos(start, upper), schedule_cos(upper, end)]
 
 class Recorder(Callback):
@@ -95,6 +101,7 @@ class ParamScheduler(Callback):
     def __init__(self, param_name, schedule_fn):
         '''Callback for scheduling hyper parameter value each epoch.
             param_name: names of hyper parameters to be recorded
+            schedule_fn: function for producing parameter schedule
         '''
         self.param_name = param_name
         self.schedule_fn = schedule_fn

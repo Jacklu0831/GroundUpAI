@@ -8,6 +8,32 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 
 from stateful_optim import *
 
+def get_basic_block(i, o, s):
+    '''Get basic ResNet block.
+        i: channel in
+        o: channel out
+        s: stride size
+    '''
+    return Sequential(Conv(i, o, 3, s),
+                      BatchNorm(o),
+                      ReLU(),
+                      Conv(o, o*4, 3, 1),
+                      BatchNorm(o))
+
+def get_bottleneck(i, o):
+    '''Get bottleneck ResNet block.
+        i: channel in
+        o: channel out
+    '''
+    return Sequential(Conv(i, o, 1, 1),
+                      BatchNorm(o),
+                      ReLU(),
+                      Conv(o, o, 3, 1),
+                      BatchNorm(o),
+                      ReLU(),
+                      Conv(o, o*4, 1, 1),
+                      BatchNorm(o))
+
 class ResLayer(Module):
     def __init__(self, i, o, s, bottleneck):
         '''Get ResLayer (almost a ResBlock but not including the final activation).
@@ -53,3 +79,67 @@ class ResBlock(SubModel):
 
     def __repr__(self, t=''):
         return f"{t+'    '}{'Bottleneck' if self.bottleneck else 'BasicBlock'}({self.i}, {self.o}, {self.s})"
+
+class ResBlockGroup(SubModel):
+    def __init__(self, i, o, num_blocks, bottleneck):
+        '''Group of ResBlocks.
+            i: channel in
+            o: channel out
+            num_blocks: number of resblockss
+            bottleneck: boolean of whether the resblocks are basic or bottleneck
+        '''
+        layers = [ResBlock(i, o, 2, bottleneck)]
+        for _ in range(num_blocks-1):
+            layers.append(ResBlock(o, o, 1, bottleneck))
+        self.sub_model = Sequential(*layers)
+
+    def __repr__(self, t=''):
+        return f"{self.sub_model.__repr__(t+'    ')}"
+
+def get_res_head(in_shape, o):
+    '''ResNet head (before ResBlocks).
+        in_shape: input shape before conv bn relu and pool
+        o: channel out
+    '''
+    return [Reshape(in_shape),
+            Conv(in_shape[0], o, 7, 2),
+            BatchNorm(o),
+            ReLU(),
+            MaxPool(3, 2, 1)]
+
+def get_res_tail(h, o):
+    '''ResNet tail (after ResBlocks).
+        h: number of hidden cells
+        o: channel out
+    '''
+    return [AvgPool(1, 1, 0),
+            Flatten(),
+            Linear(h, o, True)]
+
+name2depths = {18:  [2, 2, 2,  2],
+               34:  [3, 4, 6,  3],
+               50:  [3, 4, 6,  3],
+               101: [3, 4, 23, 3],
+               152: [3, 8, 36, 3]}
+
+class ResNet(SubModel):
+    def __init__(self, n_layer, in_shape=(3,28,28), out=100):
+        '''ResNet model that is able to create ResNets with different number of layers adaptively.
+            n_layer: number of resnet layers (18, 34...)
+            in_shape: input image shape
+            out: output number of labels
+        '''
+        self.name = f'ResNet {n_layer}'
+        bottleneck = n_layer > 34
+        channels = [64, 128, 256, 512]
+        depths = name2depths[n_layer]
+
+        head = get_res_head(in_shape, channels[0])
+        body = [ResBlockGroup(channels[0], channels[0], depths[0], bottleneck)]
+        for i, o, depth in zip(channels, channels[1:], depths[1:]):
+            body.append(ResBlockGroup(i, o, depth, bottleneck))
+        tail = get_res_tail(channels[-1]*(4 if bottleneck else 1), out)
+        self.sub_model = Sequential(head + body + tail)
+
+    def __repr__(self, t=''):
+        return f'{t}{self.sub_model}'

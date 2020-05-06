@@ -12,6 +12,7 @@ class Optimizer():
     def __init__(self, parameters, learning_rate):
         '''Vanilla optimizer with basic methods.
             parameters: model parameters
+            learning_rate: step size of each training iteration
         '''
         self.parameters, self.learning_rate = parameters, learning_rate
 

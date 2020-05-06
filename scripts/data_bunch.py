@@ -11,7 +11,10 @@ from data_block import *
 
 class Dataset():
     def __init__(self, x_data, y_data):
-        '''Dataset class to store data and labels.'''
+        '''Dataset class to store data and labels.
+            x_data: input data
+            y_data: output labels
+        '''
         self.x_data = x_data
         self.y_data = y_data
 
@@ -26,6 +29,8 @@ class Sampler():
     def __init__(self, size, batch_size, shuffle):
         '''Simple indices generator with option to randomly sample input data.
             size: total size of data
+            batch_size: number of items per iteration
+            shuffle: boolean of whether to shuffle the data
         '''
         self.size = size
         self.batch_size = batch_size
@@ -42,7 +47,9 @@ class Sampler():
     def __len__(self): return self.batch_size
 
 def collate(batch):
-    '''Util function to stack batches of x and y data.'''
+    '''Util function to stack batches of x and y data.
+        batch: container of input data
+    '''
     x_batch, y_batch = zip(*batch)
     return torch.stack(x_batch), torch.stack(y_batch)
 
@@ -89,10 +96,16 @@ class DataBunch():
 
     def __len__(self): return len(self.train_dl)
 
-def get_data_bunch(x_train, y_train, x_valid, y_valid, batch_size):
-    '''Util function for converting existing data to data bunch class for training.'''
-    train_ds = Dataset(x_train, y_train)
-    valid_ds = Dataset(x_valid, y_valid)
+def get_data_bunch(xt, yt, xv, yv, batch_size):
+    '''Util function for converting existing data to data bunch class for training.
+        xt: x (input) training data
+        yt: y (label) training data
+        xv: x (input) validation data
+        yv: y (label) validation data
+        batch_size: number of items per iteration
+    '''
+    train_ds = Dataset(xt, yt)
+    valid_ds = Dataset(xv, yv)
     train_dl = DataLoader(train_ds, Sampler(len(train_ds), batch_size, True))
     valid_dl = DataLoader(valid_ds, Sampler(len(valid_ds), batch_size*2, False)) # twice batch size (no backprop)
     return DataBunch(train_dl, valid_dl)

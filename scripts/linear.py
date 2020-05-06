@@ -37,6 +37,7 @@ class Linear(Module):
             in_dim: input dimension
             num_hidden: number of hidden units
             end: whether linear layer is not followed by ReLU activation
+            require_grad: boolean of whether to train the linear layer
         '''
         super().__init__()
         self.w = Parameter(init_weight(in_dim, num_hidden, end), require_grad)

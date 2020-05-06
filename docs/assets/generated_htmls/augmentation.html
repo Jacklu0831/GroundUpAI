@@ -1,4 +1,3 @@
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -7,17 +6,23 @@
                                             <td class="expand"><span class="params">(transforms)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for getting image list from path with optional transformation.</span></p>
+                                        <ul class="list">
+                                           <li><b>transforms</b>: list of transformation functions for data</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">show_image_sub</span></td>
-                                            <td class="expand"><span class="params">(img, ax=None, figsize=(3, 3))</span></td>
+                                            <td class="expand"><span class="params">(img, ax=None)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for subplotting image in given figure.</span></p>
+                                        <ul class="list">
+                                           <li><b>img</b>: input image data</li>
+                                           <li><b>ax</b>: subplot position</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -29,9 +34,10 @@
                                         </table>
                                         <p><span class="desc">Util function for plotting batch of images with customizable dimentions of subplot and figure size.</span></p>
                                         <ul class="list">
-                                           <li>batch: container of images</li>
-                                           <li>c: number of subplot columns</li>
-                                           <li>r: number of subplot rows</li>
+                                           <li><b>batch</b>: container of images</li>
+                                           <li><b>c</b>: number of subplot columns</li>
+                                           <li><b>r</b>: number of subplot rows</li>
+                                           <li><b>figsize</b>: figure size</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -46,7 +52,6 @@
                                         <p><span class="desc">General PIL library transformation class.</span></p>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -55,9 +60,11 @@
                                             <td class="expand"><span class="params">(p=0.5)</span></td>
                                         </table>
                                         <p><span class="desc">Horizontal flip transformation class.</span></p>
+                                        <ul class="list">
+                                           <li><b>p</b>: percentage of horizontal flip</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -66,9 +73,11 @@
                                             <td class="expand"><span class="params">(p=0.75)</span></td>
                                         </table>
                                         <p><span class="desc">Random rotation transformation class.</span></p>
+                                        <ul class="list">
+                                           <li><b>p</b>: constant for percentage of rotated images</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -77,9 +86,11 @@
                                             <td class="expand"><span class="params">(size)</span></td>
                                         </table>
                                         <p><span class="desc">Util function to ensure size is two dimensional tuple.</span></p>
+                                        <ul class="list">
+                                           <li><b>size</b>: image size</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -88,6 +99,10 @@
                                             <td class="expand"><span class="params">(w, h)</span></td>
                                         </table>
                                         <p><span class="desc">Util function to obtain crop size from given width and height.</span></p>
+                                        <ul class="list">
+                                           <li><b>w</b>: image width</li>
+                                           <li><b>h</b>: image height</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -99,8 +114,9 @@
                                         </table>
                                         <p><span class="desc">General crop transformation class.</span></p>
                                         <ul class="list">
-                                           <li>size: image size</li>
-                                           <li>crop_size: desired crop size (maximum square by default)</li>
+                                           <li><b>size</b>: image size</li>
+                                           <li><b>crop_size</b>: desired crop size (maximum square by default)</li>
+                                           <li><b>resample</b>: image resampling method</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -113,8 +129,9 @@
                                         </table>
                                         <p><span class="desc">Center crop transformation class.</span></p>
                                         <ul class="list">
-                                           <li>size: image size</li>
-                                           <li>cropping scale: scale</li>
+                                           <li><b>size</b>: image size</li>
+                                           <li><b>scale</b>: cropping scale</li>
+                                           <li><b>resample</b>: image resampling method</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -123,17 +140,17 @@
                                         <table>
                                            <td><span class="label">&nbsp;CLS</span></td>
                                             <td><span class="name">RandomResizedCrop(GeneralCrop)</span></td>
-                                            <td class="expand"><span class="params">(size, scale=(0.08, 1.0), ratio=(3./4., 4./3.), resample=PIL.Image.BILINEAR)</span></td>
+                                            <td class="expand"><span class="params">(size, scale=(0.08,1.0), ratio=(3./4.,4./3.), resample=PIL.Image.BILINEAR)</span></td>
                                         </table>
                                         <p><span class="desc">Randomized crop transformation class (common used on ImageNet data).</span></p>
                                         <ul class="list">
-                                           <li>size: image size</li>
-                                           <li>scale: uniform distribution boundary for sampling scale</li>
-                                           <li>ratio: uniform distribution boundary for sampling ratio</li>
+                                           <li><b>size</b>: image size</li>
+                                           <li><b>scale</b>: uniform distribution boundary for sampling scale</li>
+                                           <li><b>ratio</b>: uniform distribution boundary for sampling ratio</li>
+                                           <li><b>resample</b>: image resampling method</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -142,9 +159,12 @@
                                             <td class="expand"><span class="params">(src, tar)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for obtaining warp coefficients with source and target coordinates.</span></p>
+                                        <ul class="list">
+                                           <li><b>src</b>: source coordinates</li>
+                                           <li><b>tar</b>: target coordinates after transformation</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -153,9 +173,14 @@
                                             <td class="expand"><span class="params">(img, size, src, resample=PIL.Image.BILINEAR)</span></td>
                                         </table>
                                         <p><span class="desc">Warp image by source coordinates and size.</span></p>
+                                        <ul class="list">
+                                           <li><b>img</b>: input image data</li>
+                                           <li><b>size</b>: image size</li>
+                                           <li><b>src</b>: source coordinates</li>
+                                           <li><b>resample</b>: image resampling method</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -164,6 +189,10 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Util function to sample from from uniform distribution.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: left boundary</li>
+                                           <li><b>b</b>: right boundary</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -175,9 +204,10 @@
                                         </table>
                                         <p><span class="desc">Random Warp transformation class.</span></p>
                                         <ul class="list">
-                                           <li>size: image size</li>
-                                           <li>cropping scale: scale</li>
-                                           <li>magnitude: maximum magnitude for warping</li>
+                                           <li><b>size</b>: image size</li>
+                                           <li><b>crop_size</b>: cropping size</li>
+                                           <li><b>magnitude</b>: maximum magnitude for warping</li>
+                                           <li><b>resample</b>: image resampling method</li>
                                         </ul>
                                     </div>
                                 </div>

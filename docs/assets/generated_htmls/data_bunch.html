@@ -1,4 +1,3 @@
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -7,6 +6,10 @@
                                             <td class="expand"><span class="params">(x_data, y_data)</span></td>
                                         </table>
                                         <p><span class="desc">Dataset class to store data and labels.</span></p>
+                                        <ul class="list">
+                                           <li><b>x_data</b>: input data</li>
+                                           <li><b>y_data</b>: output labels</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -18,11 +21,12 @@
                                         </table>
                                         <p><span class="desc">Simple indices generator with option to randomly sample input data.</span></p>
                                         <ul class="list">
-                                           <li>size: total size of data</li>
+                                           <li><b>size</b>: total size of data</li>
+                                           <li><b>batch_size</b>: number of items per iteration</li>
+                                           <li><b>shuffle</b>: boolean of whether to shuffle the data</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -31,6 +35,9 @@
                                             <td class="expand"><span class="params">(batch)</span></td>
                                         </table>
                                         <p><span class="desc">Util function to stack batches of x and y data.</span></p>
+                                        <ul class="list">
+                                           <li><b>batch</b>: container of input data</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -42,9 +49,9 @@
                                         </table>
                                         <p><span class="desc">Data loader class with data/label data and sampler to batch generation.</span></p>
                                         <ul class="list">
-                                           <li>dataset: Dataset class with x and y data</li>
-                                           <li>sampler: Sampler class</li>
-                                           <li>collate_fn: collate function for sampled batches</li>
+                                           <li><b>dataset</b>: Dataset class with x and y data</li>
+                                           <li><b>sampler</b>: Sampler class</li>
+                                           <li><b>collate_fn</b>: collate function for sampled batches</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -57,19 +64,25 @@
                                         </table>
                                         <p><span class="desc">Data bunch class with both training and validation data loaders.</span></p>
                                         <ul class="list">
-                                           <li>train_dl: data loader for training data</li>
-                                           <li>valid_dl: data loader for validation data</li>
+                                           <li><b>train_dl</b>: data loader for training data</li>
+                                           <li><b>valid_dl</b>: data loader for validation data</li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">get_data_bunch</span></td>
-                                            <td class="expand"><span class="params">(x_train, y_train, x_valid, y_valid, batch_size)</span></td>
+                                            <td class="expand"><span class="params">(xt, yt, xv, yv, batch_size)</span></td>
                                         </table>
                                         <p><span class="desc">Util function for converting existing data to data bunch class for training.</span></p>
+                                        <ul class="list">
+                                           <li><b>xt</b>: x (input) training data</li>
+                                           <li><b>yt</b>: y (label) training data</li>
+                                           <li><b>xv</b>: x (input) validation data</li>
+                                           <li><b>yv</b>: y (label) validation data</li>
+                                           <li><b>batch_size</b>: number of items per iteration</li>
+                                        </ul>
                                     </div>
                                 </div>

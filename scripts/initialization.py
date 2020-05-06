@@ -9,35 +9,49 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from augmentation import *
 
 def init_weight_he(d1, d2):
-    '''He init used for linear layer weight initialization before relu activation.'''
+    '''He init used for linear layer weight initialization before relu activation.
+        d1: dimension 1
+        d2: dimension 2
+    '''
     return torch.randn(d1, d2) * (2./d1) ** 0.5
 
 def init_weight_norm(d1, d2):
-    '''init weight with N(0, 1) distribution (not suitable for relu activation).'''
+    '''init weight with N(0, 1) distribution (not suitable for relu activation).
+        d1: dimension 1
+        d2: dimension 2
+    '''
     return torch.randn(d1, d2) / d1 ** 0.5
 
 def init_bias_zero(d):
-    '''init bias with zeros.'''
+    '''init bias with zeros.
+        d: bias dimension
+    '''
     return torch.zeros(d)
 
 def init_bias_norm(d):
-    '''init bias with N(0, 1) distribution.'''
+    '''init bias with N(0, 1) distribution.
+        d: bias dimension
+    '''
     return torch.randn(d)
 
 def init_weight(d1, d2, end=False):
     '''initialize linear layer weight based on whether it is follwed by ReLU activation.
+        d1: dimension 1
+        d2: dimension 2
         end: boolean indicating whether layer is end of model (not followedb y ReLU activation)
     '''
     return init_weight_norm(d1, d2) if end else init_weight_he(d1, d2)
 
 def init_bias(d, zero=True):
     '''initialize linear layer bias, default to 0 initialization.
+        d: bias dimension
         zero: whether to simply use zero tensor for initial bias
     '''
     return init_bias_zero(d) if zero else init_bias_norm(d)
 
 def init_2d_weight(shape, leak=1.):
     '''initialize 2d weight.
+        shape: weight shape
         leak: LReLU parameter for computing gain factor for shaping a good std
     '''
     assert len(shape) == 2
@@ -47,6 +61,7 @@ def init_2d_weight(shape, leak=1.):
 
 def init_4d_weight(shape, leak=1.):
     '''initialize 4d weight.
+        shape: weight shape
         leak: LReLU parameter used for computing gain factor for shaping a good std
     '''
     assert(shape[2] == shape[3])

@@ -35,7 +35,7 @@ class GRUCell(nn.Module):
 
 class GRULayer(nn.Module):
     def __init__(self, i, h):
-        '''Wrapper for passing different input timestamps into GRU cell
+        '''Wrapper for passing different input timestamps into GRU cell.
             i: input data dimension
             h: number of hidden units in the lstm cell
         '''

@@ -15,6 +15,7 @@ class NGram():
     def __init__(self, n_gram, vocab_size=5000):
         '''NGram class for preprocess texts.
             n_gram: gram size
+            vocab_size: vocabulary size
         '''
         self.n_gram, self.vocab_size = n_gram, vocab_size
 
@@ -29,13 +30,19 @@ class NGram():
         return f'{self.n_gram}'
 
 def get_grams(inp, n, vocab_size=5000):
-    '''Util function for grabbing multiple input NGrams of varying sizes.'''
+    '''Util function for grabbing multiple input NGrams of varying sizes.
+        inp: input data
+        n: max gram size
+        vocab_size: vocabulary size
+    '''
     return [NGram(inp[i:i+n], vocab_size) for i in range(len(inp)-n+1)]
 
 def get_correct_n_grams(pre, tar, n, vocab_size=5000):
     '''Compute number of matching n-grams between two sentences.
         pre: predicted sentence
         tar: label sentence
+        n: max gram size
+        vocab_size: vocabulary size
     '''
     pre_grams = get_grams(pre, n, vocab_size)
     tar_grams = get_grams(tar, n, vocab_size)
@@ -47,6 +54,8 @@ def bleu(pre, tar, max_grams=4, vocab_size=5000):
     '''Compute BLEU score between two sentences with length penalty.
         pre: predicted sentence
         tar: label sentence
+        max_grams: max gram size
+        vocab_size: vocabulary size
     '''
     corrects = [get_correct_n_grams(pre, tar, n+1, vocab_size) for n in range(max_grams)]
     precision = reduce(lambda x,y: x*y, [p/l for p,l in corrects])
@@ -58,6 +67,7 @@ def corpus_bleu_score(pres, tars, max_grams=4, vocab_size=5000):
         pres: predicted sentences
         tars: label sentences
         max_grams: max gram size to compare
+        vocab_size: vocabulary size
     '''
     pre_len, tar_len = 0, 0
     precisions, lengths = [0] * max_grams, [0] * max_grams
@@ -76,6 +86,7 @@ class BLEUScore(Callback):
     def __init__(self, max_grams=4, vocab_size=5000):
         '''Callback to compute BLEU score for training NLP models.
             max_grams: max gram size to compare
+            vocab_size: vocabulary size
         '''
         self.vocab_size = vocab_size
         self.max_grams = max_grams

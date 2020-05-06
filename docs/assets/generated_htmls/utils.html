@@ -7,8 +7,10 @@
                                         </table>
                                         <p><span class="desc">Process mnist data with normalization.</span></p>
                                         <ul class="list">
-                                           <li>xt: x (input) validation data</li>
-                                           <li>yt: y (label) validation data</li>
+                                           <li><b>xt</b>: x (input) training data</li>
+                                           <li><b>yt</b>: y (label) training data</li>
+                                           <li><b>xv</b>: x (input) validation data</li>
+                                           <li><b>yv</b>: y (label) validation data</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -23,7 +25,6 @@
                                         <p><span class="desc">Get mnist dataset.</span></p>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -32,9 +33,11 @@
                                             <td class="expand"><span class="params">(name)</span></td>
                                         </table>
                                         <p><span class="desc">Get dataset by name.</span></p>
+                                        <ul class="list">
+                                           <li><b>name</b>: dataset name</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -43,9 +46,11 @@
                                             <td class="expand"><span class="params">(imgs)</span></td>
                                         </table>
                                         <p><span class="desc">Show random image from a batch of images with matplotlib.</span></p>
+                                        <ul class="list">
+                                           <li><b>imgs</b>: container of images to randomly choose from</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -54,9 +59,12 @@
                                             <td class="expand"><span class="params">(data, label)</span></td>
                                         </table>
                                         <p><span class="desc">Plot data vs. epoch and name data with given label.</span></p>
+                                        <ul class="list">
+                                           <li><b>data</b>: range data to be plotted on the y-axis</li>
+                                           <li><b>label</b>: name of the data on the y-axis</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -65,9 +73,14 @@
                                             <td class="expand"><span class="params">(a, b, cmp, cname=None)</span></td>
                                         </table>
                                         <p><span class="desc">General two value test with selectable comparison function.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: first value in comparison</li>
+                                           <li><b>b</b>: second value in comparison</li>
+                                           <li><b>cmp</b>: comparison function</li>
+                                           <li><b>cname</b>: custom comparison function name</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -75,10 +88,13 @@
                                             <td><span class="name">near</span></td>
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
-                                        <p><span class="desc">Function to assert tensor similarity.</span></p>
+                                        <p><span class="desc">Function to assert tensor similarity (very useful for accounting floating point errors.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: first value in comparison</li>
+                                           <li><b>b</b>: second value in comparison</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -87,9 +103,12 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Test whether two tensors are near each other to account for floating point errors.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: first value in comparison</li>
+                                           <li><b>b</b>: second value in comparison</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -98,9 +117,12 @@
                                             <td class="expand"><span class="params">(a, tol=1e-3)</span></td>
                                         </table>
                                         <p><span class="desc">Test whether tensor is near zero tensor size.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: value to be compared to zero tensor</li>
+                                           <li><b>tol</b>: tolerance deviation from zero tensor</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -109,9 +131,12 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Test whether two tensors are exactly equal.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: first value in comparison</li>
+                                           <li><b>b</b>: second value in comparison</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -120,9 +145,12 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Brute force matmul with 3 levels of for loop.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: left tensor</li>
+                                           <li><b>b</b>: right tensor</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -131,9 +159,12 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Sped up matmul_naive by dot producting 1d vectors.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: left tensor</li>
+                                           <li><b>b</b>: right tensor</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -142,9 +173,12 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Sped up matmul_element by leveraging pytorch tensor broadcasting.</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: left tensor</li>
+                                           <li><b>b</b>: right tensor</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -153,9 +187,12 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Sped up matmul_broadcast by using pytorch built-in function (einstein sum notation).</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: left tensor</li>
+                                           <li><b>b</b>: right tensor</li>
+                                        </ul>
                                     </div>
                                 </div>
-
                                 <div class="section-block-small">
                                     <div class="doc-block">
                                         <table>
@@ -164,6 +201,10 @@
                                             <td class="expand"><span class="params">(a, b)</span></td>
                                         </table>
                                         <p><span class="desc">Sped up matmul_broadcast by using pytorch built-in function (the @ operator).</span></p>
+                                        <ul class="list">
+                                           <li><b>a</b>: left tensor</li>
+                                           <li><b>b</b>: right tensor</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="section-block-small">
@@ -175,8 +216,9 @@
                                         </table>
                                         <p><span class="desc">Normalize data.</span></p>
                                         <ul class="list">
-                                           <li>m: mean (default to x.mean())</li>
-                                           <li>s: std (default to x.std())</li>
+                                           <li><b>x</b>: input data</li>
+                                           <li><b>m</b>: mean (default to x.mean())</li>
+                                           <li><b>s</b>: std (default to x.std())</li>
                                         </ul>
                                     </div>
                                 </div>

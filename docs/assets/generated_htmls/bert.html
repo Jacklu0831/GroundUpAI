@@ -5,11 +5,11 @@
                                             <td><span class="name">BERTEmbLayer(nn.Module)</span></td>
                                             <td class="expand"><span class="params">(vocab_size, emb_size, seq_len)</span></td>
                                         </table>
-                                        <p><span class="desc">BERT embedding layer (position + token + segment)</span></p>
+                                        <p><span class="desc">BERT embedding layer (position + token + segment).</span></p>
                                         <ul class="list">
-                                           <li>vocab_size: vocabulary size</li>
-                                           <li>emb_size: embedding size</li>
-                                           <li>seq_len: max length of sentence (sequence)</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
+                                           <li><b>emb_size</b>: embedding size</li>
+                                           <li><b>seq_len</b>: max length of sentence (sequence)</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -20,22 +20,22 @@
                                             <td><span class="name">BERT(nn.Module)</span></td>
                                             <td class="expand"><span class="params">(vocab_size, emb_size, seq_len, n_layers=6, num_head=8, model_dim=256, head_dim=32, inner_dim=1024, drop_res=0.1, drop_att=0.1, drop_ff=0.1, bias=True, scale=True, double_drop=True)</span></td>
                                         </table>
-                                        <p><span class="desc">BERT model</span></p>
+                                        <p><span class="desc">BERT model.</span></p>
                                         <ul class="list">
-                                           <li>vocab_size: vocabulary size</li>
-                                           <li>emb_size: embedding size</li>
-                                           <li>seq_len: max length of sentence (sequence)</li>
-                                           <li>n_layers: number of transformer encoders</li>
-                                           <li>num_head: number of attention head</li>
-                                           <li>model_dim: input dimension input feedforward nn</li>
-                                           <li>head_dim: dimension of each attention head</li>
-                                           <li>inner_dim: number of hidden units in the first linear layer in feedforward nn</li>
-                                           <li>drop_res: dropout factor (0 to 1) for output of attentions</li>
-                                           <li>drop_att: dropout factor (0 to 1) for attention layers</li>
-                                           <li>drop_ff:  dropout factor (0 to 1) for feedforward layers</li>
-                                           <li>bias: whether to allow bias for linear layers</li>
-                                           <li>scale: scaling factor for attention scores</li>
-                                           <li>double_drop: whether to have dropout layer after first linear layer in feedforward nn</li>
+                                           <li><b>vocab_size</b>: vocabulary size</li>
+                                           <li><b>emb_size</b>: embedding size</li>
+                                           <li><b>seq_len</b>: max length of sentence (sequence)</li>
+                                           <li><b>n_layers</b>: number of transformer encoders</li>
+                                           <li><b>num_head</b>: number of attention head</li>
+                                           <li><b>model_dim</b>: input dimension input feedforward nn</li>
+                                           <li><b>head_dim</b>: dimension of each attention head</li>
+                                           <li><b>inner_dim</b>: number of hidden units in the first linear layer in feedforward nn</li>
+                                           <li><b>drop_res</b>: dropout factor (0 to 1) for output of attentions</li>
+                                           <li><b>drop_att</b>: dropout factor (0 to 1) for attention layers</li>
+                                           <li><b>drop_ff</b>:  dropout factor (0 to 1) for feedforward layers</li>
+                                           <li><b>bias</b>: whether to allow bias for linear layers</li>
+                                           <li><b>scale</b>: scaling factor for attention scores</li>
+                                           <li><b>double_drop</b>: whether to have dropout layer after first linear layer in feedforward nn</li>
                                         </ul>
                                     </div>
                                 </div>

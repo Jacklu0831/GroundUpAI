@@ -9,14 +9,21 @@ sys.path.insert(0, '/'.join(sys.path[0].split('/')[:-1] + ['scripts']))
 from stateless_optim import *
 
 def momentum_step(param, learning_rate, avg_grad, **kwargs):
-    '''Momentum Stepping Function.'''
+    '''Momentum Stepping Function.
+        param: model parameters
+        learning_rate: step size of each training iteration
+        avg_grad: momentum weighted average gradient
+        kwargs: umbrella for preventing parameter error
+    '''
     param.data -= learning_rate * avg_grad
 
 class StatefulOpt():
     def __init__(self, params, steppers=None, stats=None, **hyper_params):
         '''Improved StatelessOpt by allowing past hyperparameters values to be stored in states.
+            params: model parameters
             steppers: list of stepper functions
             stats: internal optimizer stats (ex. average gradient of parameters)
+            hyper_params: hyper parameters to keep track of
         '''
         self.params = [params] if isinstance(params, list) else [[params]]
         self.steppers = steppers if steppers != None else [sgd_step]
@@ -86,7 +93,9 @@ class StepCount(Stat):
 
 class ExpWeightedGrad(Stat):
     def __init__(self, dampening=False):
-        '''Exponentially weighted moving avg of gradient.'''
+        '''Exponentially weighted moving avg of gradient.
+            dampening: dampening coefficient
+        '''
         self.dampening = dampening
 
     def init_state(self, param):
@@ -99,7 +108,9 @@ class ExpWeightedGrad(Stat):
 
 class ExpWeightedSqrGrad(Stat):
     def __init__(self, dampening=True):
-        '''Exponentially weighted moving avg of squared gradient.'''
+        '''Exponentially weighted moving avg of squared gradient.
+            dampening: dampening coefficient
+        '''
         self.dampening = dampening
 
     def init_state(self, param):
@@ -111,11 +122,17 @@ class ExpWeightedSqrGrad(Stat):
         return state
 
 def debias(mom, damp, step):
-    '''Util function to compute the debias coefficient for adam optimizer.'''
+    '''Util function to compute the debias coefficient for adam optimizer.
+        mom: momentum
+        damp: dampening coefficient
+        step: number of past optimizer steps
+    '''
     return damp * (1. - mom**step) / (1. - mom)
 
 def adam(param, learning_rate, mom, damp_mom, step, sqr_mom, sqr_damp_mom, avg_grad, sqr_avg_grad, eps=1e-5, **kwargs):
     '''Adam optimizer stepper (for details: https://arxiv.org/abs/1412.6980).
+        param: model parameters
+        learning_rate: step size of each training iteration
         mom: momentum for avg
         damp_mom: damping parameter for mom
         step: number of steps taken by optimizer
@@ -123,6 +140,8 @@ def adam(param, learning_rate, mom, damp_mom, step, sqr_mom, sqr_damp_mom, avg_g
         sqr_damp_mom: damping parameter for sqr_mom
         avg_grad: average (momentum weighted) past gradient of parameter
         sqr_avg_grad: average (momentum weight) past squared gradient of parameter
+        eps: small epsilon value to prevent gradient explosion
+        kwargs: other optimizer internal variables
     '''
     debias1 = debias(mom,     damp_mom,     step)
     debias2 = debias(sqr_mom, sqr_damp_mom, step)
@@ -130,13 +149,20 @@ def adam(param, learning_rate, mom, damp_mom, step, sqr_mom, sqr_damp_mom, avg_g
     return param
 
 def adam_opt(model, beta1=0.9, beta2=0.99, **kwargs):
-    '''Util function to get adam optimizer.'''
+    '''Util function to get adam optimizer.
+        model: training model
+        beta1: adam weighting coefficient (https://arxiv.org/abs/1412.6980)
+        beta2: adam weight coefficient
+        kwargs: other optimizer internal variables
+    '''
     return StatefulOpt(list(model.parameters()), [adam, l2_reg],
                        [ExpWeightedGrad(True), ExpWeightedSqrGrad(), StepCount()],
                        mom=beta1, sqr_mom=beta2, **kwargs)
 
 def lamb_step(param, learning_rate, mom, damp_mom, step, sqr_mom, sqr_damp_mom, avg_grad, sqr_avg_grad, weight_decay, eps=1e-5, **kwargs):
     '''LAMB optimizer stepper (https://arxiv.org/abs/1904.00962).
+        param: model parameters
+        learning_rate: step size of each training iteration
         mom: momentum for avg
         damp_mom: damping parameter for mom
         step: number of steps taken by optimizer
@@ -146,6 +172,7 @@ def lamb_step(param, learning_rate, mom, damp_mom, step, sqr_mom, sqr_damp_mom, 
         sqr_avg_grad: average (momentum weight) past squared gradient of parameter
         weight_decay: weight decay parameter (from L2 regularization)
         eps: small epsilon value to prevent gradient explosion
+        kwargs: other optimizer internal variables
     '''
     debias1 = debias(mom,     damp_mom,     step)
     debias2 = debias(sqr_mom, sqr_damp_mom, step)
@@ -156,7 +183,12 @@ def lamb_step(param, learning_rate, mom, damp_mom, step, sqr_mom, sqr_damp_mom, 
     return param
 
 def lamb_opt(model, beta1=0.9, beta2=0.99, **kwargs):
-    '''Util function to get LAMB optimizer.'''
+    '''Util function to get LAMB optimizer.
+        model: training model
+        beta1: adam/lamb weighting coefficient (https://arxiv.org/abs/1904.00962)
+        beta2: adam/lamb weight coefficient
+        kwargs: other optimizer internal variables
+    '''
     return StatefulOpt(list(model.parameters()), [lamb_step],
                        [ExpWeightedGrad(True), ExpWeightedSqrGrad(), StepCount()],
                        mom=beta1, sqr_mom=beta2, **kwargs)
