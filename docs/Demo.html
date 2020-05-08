@@ -44,15 +44,28 @@
                 <div class="doc-body row">
                     <div class="doc-content col-md-9 col-12 order-1">
                         <div class="content-inner">
+                            <section>
+                                <div class="callout-block callout-info">
+                                    <div class="icon-holder">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div><!--//icon-holder-->
+                                    <div class="content">
+                                        <h4 class="callout-title">Quick Note</h4>
+                                        <p>Though they are not strictly connected, I recommend viewing the 4 sections in order to know how to not only train a model, but to make your own custom training procedure.</p>
+                                    </div><!--//content-->
+                                </div><!--//callout-->
+                            </section>
                             <section id="building-your-model" class="doc-section">
                                 <h2 class="section-title">Building Your Model</h2>
-                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/00_building_your_model.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <p class="source"><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/00_building_your_model.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
                                 <div class="section-block">
                                     <h3 class="block-title">1. Import</h3>
+                                    <p>Importing <i>batch_norm</i> would also recursively import all of it's dependencies. Reducing the need of having many import statements.</p>
                                     <pre><code class="language-python">from batch_norm import *</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">2. Layers</h3>
+                                    <p>Building a model is incredibly simple. The comments in the snippet are the output dimensions of each layer for clarity. Now that we have a model, it will be used in the two final sections of this demo.</p>
                                     <pre><code class="language-python">model = Sequential(Reshape((1, 28, 28)),
                    Conv(c_in=1, c_out=4, k_s=5, stride=2, pad=1), # 4, 13, 13
                    AvgPool(k_s=2, pad=0), # 4, 12, 12
@@ -66,6 +79,7 @@
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">3. Display Model</h3>
+                                    <p>Custom <i>__repr__</i> methods let classes to be neatly displayed. It also works for nested models as shown in this <a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/notebooks/13_sub_model.ipynb">notebook.</a></p>
                                     <pre><code class="language-python">model</code></pre>
                                     <pre><output class="language-none">(Model)
     Reshape(1, 28, 28)
@@ -81,6 +95,7 @@
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">4. Display Parameters</h3>
+                                    <p>Printing out parameters' information is also useful for debugging. Here is how to print out all model parameters.</p>
                                     <pre><code class="language-python">for p in model.parameters():
     print(p)</code></pre>
                                     <pre><output class="language-none">shape: (4, 1, 5, 5), grad: True
@@ -95,6 +110,7 @@ shape: (400, 64), grad: True
 shape: (64,), grad: True
 shape: (64, 10), grad: True
 shape: (10,), grad: True</output></pre>
+                                    <p>If you want to only look into a selected layer, here it is how.</p>
                                     <pre><code class="language-python">print(f'layer2: {model.layers[1]}\n')
 for p in model.layers[1].parameters():
     print(p)</code></pre>
@@ -108,30 +124,37 @@ shape: (4,), grad: True</output></pre>
 
                             <section id="making-a-callback" class="doc-section">
                                 <h2 class="section-title">Making a Callback</h2>
-                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/00_building_your_model.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <p class="source"><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/01_making_a_callback.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
                                 <div class="section-block">
                                     <h3 class="block-title">1. Import</h3>
                                     <pre><code class="language-python">from callback import *</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
-                                    <h3 class="block-title">2. Layers</h3>
-                                    <pre><code class="language-python">#export
-class LearningRateSearch(Callback):
+                                    <h3 class="block-title">2. Making the Callback</h3>
+                                    <p>I decided to use <i>LearningRateSearch</i> as our example since it will be used in the next section of this demo. As shown, before each batch, the callback would try a new learning rate while keeping track of the best learning rate (measured by loss) so far and automatically stop training after loss increases 10x or we have tried enough learning rates.</p>
+                                    <pre><code class="language-python">class LearningRateSearch(Callback):
     def __init__(self, max_iter=1000, min_lr=1e-4, max_lr=1):
-        self.max_iter = max_iter
-        self.min_lr, self.max_lr = min_lr, max_lr
-        self.cur_lr, self.best_lr = min_lr, min_lr
-        self.best_loss = float('inf')
+        self.max_iter = max_iter # max number of candidates learning rates to try
+        self.min_lr = min_lr  # lowest/starting candidate learning rate
+        self.max_lr = max_lr  # highest candidate learning rate
+        self.cur_lr = min_lr  # current candidate learning rate holder 
+        self.best_lr = min_lr # recorded learning rate with the lowest loss
+        self.best_loss = float('inf') # lowest loss so far
         
     def before_batch(self): 
+        # assert training state
         if not self.model.training: return
+        # calculate new candidate learning rate
         position = self.iters_count / self.iters
         self.cur_lr = self.min_lr * (self.max_lr/self.min_lr)**position
+        # set learning rate in optimizer
         self.optimizer.hyper_params['learning_rate'] = self.cur_lr
-            
+        
     def after_step(self):
+        # stop when either tried enough times or loss starts increasing
         if self.iters_count >= self.max_iter or self.loss > self.best_loss*10:
             raise CancelTrainException()
+        # update best loss and best learning rate
         if self.loss < self.best_loss:
             self.best_loss = self.loss
             self.best_lr = self.cur_lr</code></pre>
@@ -141,21 +164,29 @@ class LearningRateSearch(Callback):
 
                             <section id="lr-search" class="doc-section">
                                 <h2 class="section-title">Learning Rate Search</h2>
-                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/02_lr_search_n_training.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <p class="source"><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/02_lr_search_n_training.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
                                 <div class="section-block">
                                     <h3 class="block-title">1. Import</h3>
                                     <pre><code class="language-python">from stateful_optim import *</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">2. Data Bunch, Loss Function</h3>
+                                    <p>Let's retrieve the data bunch and loss function each using just one line. Since we are training on <a href="http://yann.lecun.com/exdb/mnist/">MNIST handwritten digits</a>, cross entropy is an appropriate loss function to use.</p>
                                     <pre><code class="language-python">data_bunch = get_data_bunch(*get_mnist_data(), batch_size=64)
 loss_fn = CrossEntropy()</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">3. Model, Adam, Callbacks, Learner</h3>
+                                    <ul class="list">
+                                        <li>model: grab the model from the first section of the demo.</li>
+                                        <li>optimizer: use the <i>adam_opt</i> util function to grab an adam optimizer</li>
+                                        <li>callbacks: use the <i>LearningRateSearch</i> callback built in the last section and <i>Recorder</i> to record the history values of hyperparameters.</li>
+                                    </ul>
                                     <pre><code class="language-python">model = get_conv_final_model(data_bunch)
 optimizer = adam_opt(model, learning_rate=1e-3, weight_decay=1e-4)
 callbacks = [LearningRateSearch(min_lr=1e-5, max_lr=1e-2), Recorder()]</code></pre>
+                                    <p>For model training, the best practice is to throw all components from above into a learner class, which is able to interact with callbacks in various stages of training.</p>
+                                    <p> By printing out the learner class, again with custom <i>__repr__</i>, we can view details on the <i>data bunch, model architecture, loss function, optimizer steppers, and callbacks</i>.</p>
                                     <pre><code class="language-python">learner = Learner(data_bunch, model, loss_fn, optimizer, callbacks)
 print(learner)</code></pre>
                                     <pre><output class="language-python">(DataBunch) 
@@ -182,23 +213,28 @@ print(learner)</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">4. One Epoch Fit</h3>
+                                    <p>To find our learning rate, simply do a 1 epoch fit. Recall from <i>Making a Callback</i> that the LearningRateSearch callback performs <i>early stopping</i> once it is confident in having the learning rate that yields the lowest loss.</p>
                                     <pre><code class="language-python">learner.fit(1)</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">5. Display Loss vs. Learning Rate</h3>
+                                    <p>By passing the <i>Recorder</i> callback into the util function <i>plot_lr_loss</i>, we can see the relationship between loss vs. learning rate.</p>
                                     <pre><code class="language-python">plot_lr_loss(learner.callbacks[2])</code></pre>
                                     <img class="img-fluid imgout" src="assets/images/demo/loss_vs_lr.png" alt="screenshot" />
-                                    <pre><code class="language-python">lr = learner.callbacks[1].lr
+                                    <br><br>
+                                    <p>Lastly, the <i>LearningRateSearch</i> callback also kept track of the best learning rate candidate for our use in the final section.</p>
+                                    <pre><code class="language-python">lr = learner.callbacks[1].best_lr
 print(f'learning rate found: {lr}')</code></pre>
+                                    <pre><output class="language-none">learning rate found: 0.004283273648329838</output></pre>
                                 </div><!--//section-block-->
                             </section><!--//doc-section-->
 
-
                             <section id="model-training" class="doc-section">
                                 <h2 class="section-title">Model Training</h2>
-                                <p><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/02_lr_search_n_training.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
+                                <p class="source"><a href="https://github.com/Jacklu0831/GroundUpAI/blob/master/demo/02_lr_search_n_training.ipynb" target="_blank"><i class="fas fa-external-link-square-alt"></i> source</a></p>
                                 <div class="section-block">
                                     <h3 class="block-title">1. Import</h3>
+                                    <p>Same as previous sections, import modules, then grab data bunch and loss function.
                                     <pre><code class="language-python">from stateful_optim import *</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
@@ -208,10 +244,12 @@ loss_fn = CrossEntropy()</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">3. Cosine Parameter Scheduling</h3>
+                                    <p>New callback alert! Please refer to the <a href="../BuildingBlocks.html">code documentation</a> to familiarize with the <i>ParamScheduler</i> callback. Here we build a custom cosine schedule for the learning rate that takes place each epoch using the learning rate from the last section.</p>
                                     <pre><code class="language-python">schedule = combine_schedules([0.4, 0.6], one_cycle_cos(lr/3, lr*3, lr/3))</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">4. Model, Adam, Callbacks, Learner</h3>
+                                    <p>Same as before, create model, optimizer, and callbacks. Notice that <i>LearningRateSearch</i> is no longer needed and that the <i>ParamScheduler</i> is now used for training with dynamic learning rate per epoch. I also added <i>StatsLogging</i> to print out loss and accuracy per epoch.</p>
                                     <pre><code class="language-python">model = get_conv_final_model(data_bunch)
 optimizer = adam_opt(model, learning_rate=lr, weight_decay=1e-4)
 callbacks = [ParamScheduler('learning_rate', schedule), StatsLogging(), Recorder()]</code></pre>
@@ -241,6 +279,7 @@ print(learner)</code></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">5. Train Model</h3>
+                                    <p>Training is as simple as just calling the <i>fit</i> method with number of epochs. As shown below, the validation accuracy rises to 97.3 in just 3 epochs.</p>
                                     <pre><code class="language-python">learner.fit(3)</code></pre>
                                     <pre><output class="language-python">Epoch - 1
 train metrics - [5.624208450317383e-06, 0.89082]
@@ -256,8 +295,11 @@ valid metrics - [1.5890932083129882e-05, 0.9731]</output></pre>
                                 </div><!--//section-block-->
                                 <div class="section-block">
                                     <h3 class="block-title">6. Loss and Learning Rate</h3>
+                                    <p>Lastly, plot the loss and learning rate recorded by the <i>Recorder</i> callback.</p>
                                     <pre><code class="language-python">learner.callbacks[3].plot_losses()</code></pre>
                                     <img class="img-fluid imgout" src="assets/images/demo/loss.png" alt="screenshot" />
+                                    <br><br>
+                                    <p>As shown below, the learning rate values make a cosine-ish cycle each epoch, showing that our <i>ParamScheduler</i> callback is working properly.</p>
                                     <pre><code class="language-python">learner.callbacks[3].plot_parameter('learning_rate')</code></pre>
                                     <img class="img-fluid imgout" src="assets/images/demo/lr.png" alt="screenshot" />
                                 </div><!--//section-block-->

@@ -16,7 +16,7 @@
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">schedule_lin</span></td>
-                                            <td class="expand"><span class="params">(start, end, position):returnstart+position*(end-start)@annealerdefschedule_cos(start, end, position):returnstart+(1+math.cos(math.pi*(1-position)))*(end-start)/2@annealerdefschedule_none(start, end, position):returnstart@annealerdefschedule_exp(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
+                                            <td class="expand"><span class="params">(start, end, position)</span></td>
                                         </table>
                                         <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
@@ -30,7 +30,7 @@
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">schedule_cos</span></td>
-                                            <td class="expand"><span class="params">(start, end, position):returnstart+(1+math.cos(math.pi*(1-position)))*(end-start)/2@annealerdefschedule_none(start, end, position):returnstart@annealerdefschedule_exp(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
+                                            <td class="expand"><span class="params">(start, end, position)</span></td>
                                         </table>
                                         <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
@@ -44,7 +44,7 @@
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">schedule_none</span></td>
-                                            <td class="expand"><span class="params">(start, end, position):returnstart@annealerdefschedule_exp(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
+                                            <td class="expand"><span class="params">(start, end, position)</span></td>
                                         </table>
                                         <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
@@ -58,7 +58,7 @@
                                         <table>
                                            <td><span class="label">&nbsp;DEF</span></td>
                                             <td><span class="name">schedule_exp</span></td>
-                                            <td class="expand"><span class="params">(start, end, position):returnstart*(end/start)**positiondefcombine_schedules(segments, ranges)</span></td>
+                                            <td class="expand"><span class="params">(start, end, position)</span></td>
                                         </table>
                                         <p><span class="desc">Param schedule partial function (linear, cosine, none, or exponential).</span></p>
                                         <ul class="list">
