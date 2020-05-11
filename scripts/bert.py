@@ -19,7 +19,7 @@ class BERTEmbLayer(nn.Module):
         super().__init__()
         self.pos_emb = nn.Embedding(seq_len, emb_size)
         self.tok_emb = nn.Embedding(vocab_size, emb_size)
-        self.seg_emb = nn.Embedding(2, emb_size)
+        self.seg_emb = nn.Embedding(2, emb_size) 
 
     def forward(self, inp):
         tokens_ph = torch.zeros_like(inp)

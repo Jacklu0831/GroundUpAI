@@ -1,8 +1,14 @@
 # GroundUpAI
+A deep learning library that is entirely implemented from scratch (even backpropagation) without the help from other libraries/frameworks (except for torch.Tensor due to the subpar FLOPS of plain python), hence the name "ground up". 
+
+GroundUpAI aims to make model training more customizable than ever and to reduce the amount of boilerplate code for deep learning; demonstrated in [this demo](https://jacklu.tech/GroundUpAI/Demo.html).
 
 ## Documentation
 
-[Link to Documentation](https://jacklu0831.github.io/GroundUpAI/)
+[Link to full documentation](https://jacklu.tech/GroundUpAI/)\
+[Link to quick demo](https://jacklu.tech/GroundUpAI/Demo.html)\
+[Link to code documentation](https://jacklu.tech/GroundUpAI/BuildingBlocks.html)
+
 <p align="center">
  	<a href="https://jacklu0831.github.io/GroundUpAI/"><img src="docs/assets/images/home.png"></a>
 </p>
@@ -20,8 +26,8 @@
 ### Directories
 
 <pre>
-- demo        - notebook for the framework for the demo (documentation)
+- demo        - notebook for the library for the demo (documentation)
 - docs        - documentation html, css, and js files
-- notebooks   - notebooks for development of the framework
+- notebooks   - notebooks for development of the library
 - scripts     - scripts generated from the notebooks
 </pre>
