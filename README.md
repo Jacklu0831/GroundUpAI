@@ -1,7 +1,7 @@
 # GroundUpAI
-A deep learning library that is entirely implemented from scratch (even backpropagation) without the help from other libraries/frameworks (except for torch.Tensor due to the subpar FLOPS of plain python), hence the name "ground up". 
+A deep learning library that is entirely implemented from scratch (even backpropagation) without depending on external libraries/frameworks (except for torch.Tensor due to the subpar FLOPS of plain python), hence the name "ground up". 
 
-GroundUpAI aims to make model training more customizable than ever and to reduce the amount of boilerplate code for deep learning; demonstrated in [this demo](https://jacklu.tech/GroundUpAI/Demo.html).
+GroundUpAI aims to make model training more customizable than ever and to reduce the amount of boilerplate code for deep learning. You can look at this [this demo](https://jacklu.tech/GroundUpAI/Demo.html) for some proof. In addition, it also has built-in advanced model architectures (e.g. [ResNet](https://jacklu.tech/GroundUpAI/AdvancedArchitectures.html)).
 
 ## Documentation
 
